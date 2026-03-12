@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Polymarket Alpha — Copy Trading Leaderboard</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0e17; --surface: rgba(255,255,255,0.015); --border: rgba(255,255,255,0.06);
+    --cyan: #22d3ee; --purple: #a78bfa; --green: #34d399; --amber: #f59e0b;
+    --red: #ef4444; --text: #e2e8f0; --muted: #64748b; --dim: #475569;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono','Fira Code',monospace; min-height: 100vh; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(180deg,rgba(34,211,238,0.03) 0%,transparent 100%); flex-wrap: wrap; gap: 12px; }
+  .header h1 { font-family: 'Space Grotesk',sans-serif; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+  .header .sub { color: var(--muted); font-size: 11px; letter-spacing: 0.08em; margin: 4px 0 0 20px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dot.live { background: var(--cyan); box-shadow: 0 0 12px rgba(34,211,238,0.5); }
+  .dot.off { background: var(--muted); }
+
+  .tabs { display: flex; gap: 2px; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 3px; }
+  .tab { padding: 8px 20px; border: none; border-radius: 6px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono',monospace; text-transform: uppercase; letter-spacing: 0.06em; transition: all 0.2s; }
+  .tab.active { background: rgba(34,211,238,0.12); color: var(--cyan); }
+
+  .container { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+
+  .controls { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; align-items: center; }
+  .btn { padding: 7px 14px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #94a3b8; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono',monospace; transition: all 0.15s; }
+  .btn:hover { border-color: rgba(34,211,238,0.3); color: var(--cyan); }
+  .btn.accent { border-color: rgba(34,211,238,0.2); background: rgba(34,211,238,0.08); color: var(--cyan); }
+  .filter-group { display: flex; gap: 3px; background: rgba(255,255,255,0.03); border-radius: 6px; padding: 3px; }
+  .filter-btn { padding: 6px 14px; border: none; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono',monospace; background: transparent; color: var(--muted); transition: all 0.15s; }
+  .filter-btn.active { background: rgba(34,211,238,0.12); color: var(--cyan); }
+
+  .stats { display: flex; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+  .stat { flex: 1 1 130px; padding: 14px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+  .stat .label { color: var(--muted); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .stat .value { font-size: 22px; font-weight: 700; }
+
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+  thead tr { border-bottom: 1px solid var(--border); }
+  th { padding: 11px 10px; text-align: left; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; user-select: none; white-space: nowrap; }
+  th.sortable { cursor: pointer; }
+  th.sortable:hover { color: var(--cyan); }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; transition: background 0.1s; }
+  tbody tr:hover { background: rgba(34,211,238,0.03); }
+  tbody tr.expanded { background: rgba(34,211,238,0.04); }
+  td { padding: 11px 10px; font-size: 12px; }
+
+  .tier { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 5px; font-size: 10px; font-weight: 700; }
+  .wallet-link { color: var(--cyan); text-decoration: none; display: inline-flex; align-items: center; gap: 5px; font-size: 12px; }
+  .wallet-link:hover { color: #67e8f9; }
+  .wallet-sub { color: var(--dim); font-size: 10px; margin-top: 1px; }
+  .cat-tag { padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; display: inline-block; margin: 1px 2px; }
+  .bar-track { width: 44px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.06); overflow: hidden; display: inline-block; vertical-align: middle; }
+  .bar-fill { height: 100%; border-radius: 2px; }
+
+  .expand-panel { padding: 16px 20px; background: rgba(34,211,238,0.02); border-bottom: 2px solid rgba(34,211,238,0.1); animation: fadeIn 0.2s ease; }
+  .expand-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+  .expand-stat { padding: 10px 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; }
+  .expand-stat .el { color: var(--muted); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+  .expand-stat .ev { font-size: 17px; font-weight: 700; }
+
+  .filter-panel { padding: 16px 20px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; animation: fadeIn 0.2s ease; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+  .filter-panel label { color: #94a3b8; font-size: 11px; display: flex; align-items: center; gap: 6px; }
+  .filter-panel input[type="number"] { width: 60px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--text); font-size: 12px; font-family: 'JetBrains Mono',monospace; }
+  .filter-panel input[type="checkbox"] { accent-color: var(--purple); }
+
+  .loading { padding: 60px; text-align: center; color: var(--muted); }
+  .spinner { width: 36px; height: 36px; border: 2px solid rgba(34,211,238,0.2); border-top-color: var(--cyan); border-radius: 50%; margin: 0 auto 16px; animation: spin 0.8s linear infinite; }
+  .timestamp { color: var(--dim); font-size: 10px; }
+  .auto-badge { display: inline-block; padding: 2px 8px; background: rgba(34,211,238,0.08); border: 1px solid rgba(34,211,238,0.15); border-radius: 4px; color: var(--cyan); font-size: 10px; margin-left: 8px; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="loading"><div class="spinner"></div>Loading dashboard...</div>
+</div>
+
+<script>
+// ============================
+// POLYMARKET ALPHA DASHBOARD
+// ============================
+
+const DATA_URL = 'polymarket_wallets.json';
+const REFRESH_INTERVAL = 5 * 60 * 1000; // Auto-refresh every 5 minutes
+
+const catColors = {
+  Sports:      { bg: 'rgba(34,211,238,0.1)',  fg: '#22d3ee' },
+  Politics:    { bg: 'rgba(167,139,250,0.1)', fg: '#a78bfa' },
+  Geopolitics: { bg: 'rgba(245,158,11,0.1)',  fg: '#f59e0b' },
+  Crypto:      { bg: 'rgba(239,68,68,0.1)',   fg: '#ef4444' },
+  Economics:   { bg: 'rgba(52,211,153,0.1)',   fg: '#34d399' },
+  Tech:        { bg: 'rgba(99,102,241,0.1)',   fg: '#818cf8' },
+  Culture:     { bg: 'rgba(244,114,182,0.1)',  fg: '#f472b6' },
+  Weather:     { bg: 'rgba(56,189,248,0.1)',   fg: '#38bdf8' },
+  Finance:     { bg: 'rgba(251,191,36,0.1)',   fg: '#fbbf24' },
+  Other:       { bg: 'rgba(100,116,139,0.1)',  fg: '#64748b' },
+};
+
+function tierColor(i) { return i < 3 ? '#22d3ee' : i < 8 ? '#a78bfa' : i < 15 ? '#f59e0b' : '#64748b'; }
+function tierLabel(i) { return i < 3 ? 'S' : i < 8 ? 'A' : i < 15 ? 'B' : 'C'; }
+function truncAddr(a) { return a ? a.slice(0,6) + '...' + a.slice(-4) : '—'; }
+function fmtPnl(p) { if (p == null) return '—'; const n = +p; const s = n >= 0 ? '+' : ''; return Math.abs(n) >= 1e6 ? s+'$'+(n/1e6).toFixed(2)+'M' : Math.abs(n) >= 1e3 ? s+'$'+(n/1e3).toFixed(1)+'k' : s+'$'+n.toFixed(0); }
+function fmtVol(v) { if (!v) return '—'; const n = +v; return n >= 1e6 ? '$'+(n/1e6).toFixed(2)+'M' : n >= 1e3 ? '$'+(n/1e3).toFixed(1)+'k' : '$'+n.toFixed(0); }
+
+function makeSpark(data, color) {
+  if (!data || data.length < 2) return '<span style="color:#475569;font-size:10px">—</span>';
+  const max = Math.max(...data), min = Math.min(...data), r = max - min || 1;
+  const pts = data.map((v,i) => `${(i/(data.length-1))*72},${36-((v-min)/r)*36}`).join(' ');
+  return `<svg width="72" height="36" viewBox="0 0 72 36"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+}
+
+// State
+let state = {
+  wallets: [], metadata: null, tab: 'leaderboard',
+  sortBy: 'scoredRank', sortDir: 'asc', expanded: null,
+  filters: { minRoi: 0, minWinRate: 0, minTrades: 0, excludeCryptoOnly: false },
+  showFilters: false, applyFilters: false, loading: true, error: null, lastRefresh: null,
+};
+
+async function loadData() {
+  try {
+    const res = await fetch(DATA_URL + '?t=' + Date.now());
+    if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+    const data = await res.json();
+    state.wallets = data.wallets || [];
+    state.metadata = data.metadata || null;
+    state.loading = false;
+    state.error = null;
+    state.lastRefresh = new Date();
+    render();
+  } catch (e) {
+    state.error = 'Failed to load data: ' + e.message;
+    state.loading = false;
+    render();
+  }
+}
+
+function getFiltered() {
+  if (!state.applyFilters) return state.wallets;
+  return state.wallets.filter(w => {
+    const e = w.enriched;
+    if (!e) return false;
+    if (state.filters.minRoi && e.roi < state.filters.minRoi) return false;
+    if (state.filters.minWinRate && e.winRate < state.filters.minWinRate) return false;
+    if (state.filters.minTrades && e.totalTrades < state.filters.minTrades) return false;
+    if (state.filters.excludeCryptoOnly && e.hasCrypto && e.categories.length === 1 && e.categories[0] === 'Crypto') return false;
+    return true;
+  });
+}
+
+function getSorted(list) {
+  return [...list].sort((a, b) => {
+    const d = state.sortDir === 'asc' ? 1 : -1;
+    const eA = a.enriched || {}, eB = b.enriched || {};
+    const map = {
+      scoredRank: (a.scoredRank||999) - (b.scoredRank||999),
+      rank: (+a.rank||999) - (+b.rank||999),
+      pnl: (+a.pnl||0) - (+b.pnl||0),
+      vol: (+a.vol||0) - (+b.vol||0),
+      roi: (eA.roi||0) - (eB.roi||0),
+      winRate: (eA.winRate||0) - (eB.winRate||0),
+      sharpe: (eA.sharpe||0) - (eB.sharpe||0),
+      consistency: (eA.consistency||0) - (eB.consistency||0),
+    };
+    return (map[state.sortBy] || 0) * d;
+  });
+}
+
+function toggleSort(col) {
+  if (state.sortBy === col) state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+  else { state.sortBy = col; state.sortDir = (col === 'scoredRank' || col === 'rank') ? 'asc' : 'desc'; }
+  render();
+}
+
+function arrow(col) { return state.sortBy === col ? (state.sortDir === 'asc' ? ' ↑' : ' ↓') : ''; }
+
+function renderCatTags(cats, hasCrypto) {
+  if (!cats) return '<span style="color:#475569;font-size:10px">—</span>';
+  let html = '';
+  for (const c of cats) {
+    const col = catColors[c] || catColors.Other;
+    const strike = c === 'Crypto' ? '' : '';
+    html += `<span class="cat-tag" style="background:${col.bg};color:${col.fg};${strike}">${c}</span>`;
+  }
+  return html;
+}
+
+function renderExpandPanel(w) {
+  const e = w.enriched;
+  if (!e) return '<div style="padding:16px;color:#64748b">No enrichment data.</div>';
+  const stats = [
+    { l: 'ROI', v: e.roi+'%', c: e.roi >= 50 ? '#34d399' : '#f59e0b' },
+    { l: 'Win Rate', v: e.winRate+'%', c: e.winRate >= 55 ? '#34d399' : '#f59e0b' },
+    { l: 'Total Trades', v: e.totalTrades, c: '#e2e8f0' },
+    { l: 'Wins / Losses', v: e.wins+' / '+e.losses, c: '#a78bfa' },
+    { l: 'Sharpe', v: e.sharpe, c: '#22d3ee' },
+    { l: 'Consistency', v: e.consistency, c: '#f59e0b' },
+    { l: 'Max Drawdown', v: '$'+Math.abs(e.maxDrawdown||0).toFixed(0), c: '#ef4444' },
+    { l: 'Open Pos.', v: e.openPositions||0, c: '#94a3b8' },
+    { l: 'Closed Pos.', v: e.closedPositions||0, c: '#94a3b8' },
+    { l: 'Last Active', v: e.lastTradeAge||'—', c: '#22d3ee' },
+    { l: 'Trades (24h)', v: e.tradesInWindow||0, c: '#34d399' },
+    { l: 'Invested', v: fmtVol(e.totalInvested), c: '#64748b' },
+  ];
+  return `
+    <div class="expand-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div>
+          <span style="color:#22d3ee;font-size:14px;font-weight:600">${w.userName || truncAddr(w.proxyWallet)}</span>
+          <span style="color:#475569;font-size:11px;margin-left:10px">${w.proxyWallet}</span>
+        </div>
+        <a href="https://polymarket.com/profile/${w.proxyWallet}" target="_blank" rel="noopener" class="btn accent">VIEW ON POLYMARKET →</a>
+      </div>
+      <div class="expand-grid">
+        ${stats.map(s => `<div class="expand-stat"><div class="el">${s.l}</div><div class="ev" style="color:${s.c}">${s.v}</div></div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function render() {
+  const app = document.getElementById('app');
+  const m = state.metadata;
+  const enriched = state.wallets.filter(w => w.enriched);
+  const eCount = enriched.length;
+
+  if (state.loading) {
+    app.innerHTML = '<div class="loading"><div class="spinner"></div>Loading leaderboard data...</div>';
+    return;
+  }
+
+  const filtered = getFiltered();
+  const sorted = getSorted(filtered);
+
+  // Compute stats
+  const avgWr = eCount > 0 ? (enriched.reduce((s,w) => s + (w.enriched?.winRate||0), 0) / eCount).toFixed(1) : '—';
+  const topPnl = state.wallets.length > 0 ? fmtPnl(Math.max(...state.wallets.map(w => +(w.pnl||0)))) : '—';
+
+  let html = `
+    <div class="header">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="dot ${state.wallets.length > 0 ? 'live' : 'off'}"></span>
+          <h1>POLYMARKET ALPHA</h1>
+        </div>
+        <p class="sub">
+          LIVE COPY TRADING LEADERBOARD
+          ${m ? ` · ${m.category} · ${m.time_period} · ${m.active_after_filter || m.total_wallets} wallets` : ''}
+          <span class="auto-badge">AUTO-REFRESH</span>
+        </p>
+      </div>
+      <div class="tabs">
+        <button class="tab ${state.tab==='leaderboard'?'active':''}" onclick="state.tab='leaderboard';render()">Leaderboard</button>
+        <button class="tab ${state.tab==='about'?'active':''}" onclick="state.tab='about';render()">About</button>
+      </div>
+    </div>
+    <div class="container">`;
+
+  if (state.tab === 'leaderboard') {
+    // Controls
+    html += `<div class="controls">
+      <button class="btn ${state.showFilters?'accent':''}" onclick="state.showFilters=!state.showFilters;render()">◇ FILTERS${state.applyFilters?' ('+filtered.length+'/'+state.wallets.length+')':''}</button>
+      <div style="flex:1"></div>
+      ${state.lastRefresh ? '<span class="timestamp">Last refresh: '+state.lastRefresh.toLocaleTimeString()+'</span>' : ''}
+      <button class="btn" onclick="loadData()">↻ REFRESH</button>
+    </div>`;
+
+    // Filter panel
+    if (state.showFilters) {
+      html += `<div class="filter-panel">
+        <label>Min ROI: <input type="number" value="${state.filters.minRoi}" onchange="state.filters.minRoi=+this.value;render()" />%</label>
+        <label>Min Win Rate: <input type="number" value="${state.filters.minWinRate}" onchange="state.filters.minWinRate=+this.value;render()" />%</label>
+        <label>Min Trades: <input type="number" value="${state.filters.minTrades}" onchange="state.filters.minTrades=+this.value;render()" /></label>
+        <label style="cursor:pointer"><input type="checkbox" ${state.filters.excludeCryptoOnly?'checked':''} onchange="state.filters.excludeCryptoOnly=this.checked;render()" /> Exclude crypto-only</label>
+        <div style="flex:1"></div>
+        <button class="btn ${state.applyFilters?'accent':''}" onclick="state.applyFilters=!state.applyFilters;render()">${state.applyFilters?'✓ FILTERS ON':'APPLY FILTERS'}</button>
+      </div>`;
+    }
+
+    if (state.error) {
+      html += `<div style="padding:14px 18px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;color:#f87171;font-size:12px;margin-bottom:14px">${state.error}</div>`;
+    }
+
+    // Stats
+    html += `<div class="stats">
+      <div class="stat"><div class="label">Wallets</div><div class="value" style="color:#22d3ee">${filtered.length}</div></div>
+      <div class="stat"><div class="label">Top PNL</div><div class="value" style="color:#34d399">${topPnl}</div></div>
+      <div class="stat"><div class="label">Avg Win Rate</div><div class="value" style="color:#f59e0b">${avgWr}%</div></div>
+      <div class="stat"><div class="label">Enriched</div><div class="value" style="color:#a78bfa">${eCount}</div></div>
+    </div>`;
+
+    // Table
+    const cols = [
+      { k: 'scoredRank', l: 'SCORE' }, { k: 'rank', l: 'LB RANK' }, { k: null, l: 'WALLET' },
+      { k: 'pnl', l: 'PNL' }, { k: 'vol', l: 'VOLUME' }, { k: 'roi', l: 'ROI' },
+      { k: 'winRate', l: 'WIN %' }, { k: 'sharpe', l: 'SHARPE' }, { k: 'consistency', l: 'CONSIST.' },
+      { k: null, l: 'PNL TREND' }, { k: null, l: 'ACTIVE' }, { k: null, l: 'CATEGORIES' },
+    ];
+
+    html += `<div class="table-wrap"><div class="table-scroll"><table>
+      <thead><tr>${cols.map(c => `<th ${c.k ? 'class="sortable" onclick="toggleSort(\''+c.k+'\')"' : ''}>${c.l}${c.k ? arrow(c.k) : ''}</th>`).join('')}</tr></thead>
+      <tbody>`;
+
+    for (let idx = 0; idx < sorted.length; idx++) {
+      const w = sorted[idx];
+      const e = w.enriched || {};
+      const tc = tierColor(idx);
+      const isExp = state.expanded === w.proxyWallet;
+      const pn = +(w.pnl||0);
+
+      html += `<tr class="${isExp?'expanded':''}" onclick="state.expanded=state.expanded==='${w.proxyWallet}'?null:'${w.proxyWallet}';render()">
+        <td><div style="display:flex;align-items:center;gap:6px"><span class="tier" style="background:${tc}18;color:${tc}">${tierLabel(idx)}</span><span style="color:#e2e8f0;font-size:12px;font-weight:600">#${w.scoredRank||idx+1}</span></div></td>
+        <td><span style="color:#64748b;font-size:11px">#${w.rank}</span></td>
+        <td><div style="display:flex;align-items:center;gap:8px">
+          ${w.profileImage ? `<img src="${w.profileImage}" style="width:24px;height:24px;border-radius:50%;border:1px solid rgba(255,255,255,0.1)" onerror="this.style.display='none'" />` : ''}
+          <div>
+            <a href="https://polymarket.com/profile/${w.proxyWallet}" target="_blank" rel="noopener" class="wallet-link" onclick="event.stopPropagation()">
+              ${w.userName || truncAddr(w.proxyWallet)}${w.verifiedBadge ? '<span style="font-size:10px">✓</span>' : ''}
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3L3 9M9 3H5M9 3V7"/></svg>
+            </a>
+            <div class="wallet-sub">${truncAddr(w.proxyWallet)}${w.xUsername ? ' · @'+w.xUsername : ''}</div>
+          </div>
+        </div></td>
+        <td><span style="color:${pn>=0?'#34d399':'#ef4444'};font-weight:700;font-size:13px">${fmtPnl(w.pnl)}</span></td>
+        <td>${fmtVol(w.vol)}</td>
+        <td>${e.roi !== undefined ? `<span style="color:${e.roi>=50?'#34d399':e.roi>=0?'#f59e0b':'#ef4444'};font-weight:600">${e.roi}%</span>` : '—'}</td>
+        <td>${e.winRate !== undefined ? `<span style="color:${e.winRate>=55?'#34d399':e.winRate>=50?'#f59e0b':'#ef4444'}">${e.winRate}%</span>` : '—'}</td>
+        <td>${e.sharpe !== undefined ? `<span style="color:${e.sharpe>=1?'#22d3ee':e.sharpe>=0.5?'#a78bfa':'#64748b'};font-weight:600">${e.sharpe}</span>` : '—'}</td>
+        <td>${e.consistency !== undefined ? `<div style="display:flex;align-items:center;gap:6px"><span class="bar-track"><span class="bar-fill" style="width:${e.consistency}%;background:${e.consistency>=70?'#34d399':e.consistency>=50?'#f59e0b':'#ef4444'}"></span></span><span style="color:#94a3b8;font-size:10px">${e.consistency}</span></div>` : '—'}</td>
+        <td>${makeSpark(e.sparkline, tc)}</td>
+        <td>${e.lastTradeAge ? `<span style="color:${e.tradesInWindow>20?'#34d399':e.tradesInWindow>5?'#f59e0b':'#64748b'};font-size:10px">${e.lastTradeAge}</span>` : '—'}</td>
+        <td>${renderCatTags(e.categories, e.hasCrypto)}</td>
+      </tr>`;
+
+      if (isExp) {
+        html += `<tr><td colspan="12" style="padding:0">${renderExpandPanel(w)}</td></tr>`;
+      }
+    }
+
+    html += '</tbody></table></div></div>';
+
+    if (sorted.length === 0) {
+      html += '<div style="padding:60px;text-align:center;color:#475569;font-size:13px">No wallets match your filters.</div>';
+    }
+
+  } else if (state.tab === 'about') {
+    html += `
+      <div style="max-width:700px;margin:40px auto;line-height:1.8;color:#94a3b8;font-size:13px">
+        <h2 style="font-family:'Space Grotesk',sans-serif;color:#e2e8f0;font-size:22px;margin-bottom:20px">About Polymarket Alpha</h2>
+        <p>This leaderboard scrapes the top 100 wallets from the <a href="https://polymarket.com/leaderboard" target="_blank" style="color:#22d3ee">Polymarket leaderboard</a>, filters for wallets active in the last 24 hours, and enriches each with detailed position data.</p>
+        <p style="margin-top:16px"><strong style="color:#e2e8f0">Metrics computed:</strong></p>
+        <p style="margin-top:8px"><span style="color:#34d399">ROI</span> — Return on investment from closed positions<br>
+        <span style="color:#34d399">Win Rate</span> — Percentage of closed positions with positive realized PNL<br>
+        <span style="color:#22d3ee">Sharpe Ratio</span> — Risk-adjusted returns (mean PNL / std deviation)<br>
+        <span style="color:#f59e0b">Consistency</span> — Composite of win rate stability and drawdown<br>
+        <span style="color:#a78bfa">Score Rank</span> — Weighted composite of ROI, win rate, Sharpe, consistency, and activity</p>
+        <p style="margin-top:16px"><strong style="color:#e2e8f0">Categories detected:</strong> Sports, Politics, Geopolitics, Crypto, Economics, Tech, Culture, Weather, Finance</p>
+        <p style="margin-top:16px"><strong style="color:#e2e8f0">Data freshness:</strong> The scraper runs automatically every hour via GitHub Actions. Each run filters to only wallets with trades in the last 24 hours.</p>
+        ${m ? `<p style="margin-top:16px" class="timestamp">Last scrape: ${new Date(m.scraped_at).toLocaleString()} · ${m.leaderboard_pulled} pulled → ${m.active_after_filter} active → ${m.enriched_wallets} enriched</p>` : ''}
+        <p style="margin-top:24px;color:#475569;font-size:11px">Built for copy trading research. Not financial advice. DYOR.</p>
+      </div>`;
+  }
+
+  html += '</div>';
+  app.innerHTML = html;
+}
+
+// Init
+loadData();
+setInterval(loadData, REFRESH_INTERVAL);
+</script>
+</body>
+</html>
