@@ -34,20 +34,23 @@ scene_pool:
     weather: snow
     keyword: "Gentle Snowfall & Crackling Fireplace"
     audio_hint: "soft winter wind + crackling fireplace, NO rain"
-    still_prompt: "exterior of a small log cabin alone in a snowy pine forest at night, warm amber fireplace glow spilling softly from the windows, heavy snow falling, deep blue night, minimal and uncluttered, wide establishing shot, {film_look}"
-    motion_prompt: "heavy snow falling steadily and evenly across the whole frame, the warm window glow flickering gently like firelight inside, everything else still, {motion_principle}, no people"
+    # PNW reference: log/A-frame cabin nestled in a DENSE snow-laden pine forest,
+    # actively snowing; windows read as flickering FIRELIGHT (not a steady bulb,
+    # the fire itself not the focus / not really visible).
+    still_prompt: "exterior of a cozy log cabin nestled deep in a dense Pacific Northwest forest of tall snow-laden pine and evergreen trees at night, fresh snow actively falling, warm orange firelight glow flickering softly in the windows like a fire dancing inside (not a steady bulb, the fire itself not visible), deep blue snowy night, minimal and uncluttered, {film_look}"
+    motion_prompt: "thick snow falling steadily and continuously across the whole frame, the warm window light flickering and dancing like firelight casting shifting warm glow (not a static light), snow-laden pine branches utterly still, {motion_principle}, no people"
   - id: cabin_window_glow_rain          # exterior rain variant
     weather: rain
     keyword: "Heavy Rain & Distant Thunder"
     audio_hint: "heavy rain + distant thunder + faint fireplace"
-    still_prompt: "exterior of a cozy log cabin at night in a rain-soaked pine forest, warm fireplace light glowing through the windows, heavy rain falling, simple uncluttered scene, dark wet trees, {film_look}"
-    motion_prompt: "heavy rain falling steadily and evenly across the frame, warm window glow flickering, water dripping from the roof edge, occasional faint distant lightning glow, {motion_principle}, no people"
+    still_prompt: "exterior of a cozy log cabin nestled in a dense Pacific Northwest forest of tall pines at night, heavy rain actively falling, warm orange firelight glow flickering in the windows like a fire dancing inside (not a steady bulb, fire not visible), dark wet evergreens, simple uncluttered scene, {film_look}"
+    motion_prompt: "heavy rain falling steadily and continuously across the frame, the warm window light flickering and dancing like firelight, water dripping from the roof edge, occasional faint distant lightning glow, {motion_principle}, no people"
   - id: frozen_lake_cabin               # sparse snowy vista
     weather: snow
     keyword: "Snowfall & Fireplace"
     audio_hint: "gentle wind + crackling fire, NO rain"
-    still_prompt: "a lone log cabin on the shore of a frozen lake at night, warm light glowing in the windows, gentle snowfall, dark pine forest behind, vast quiet minimal scene, {film_look}"
-    motion_prompt: "snow drifting down softly and evenly, the warm window light flickering, the lake still and dark, {motion_principle}, serene, no people"
+    still_prompt: "a lone log cabin on the shore of a frozen lake at night, backed by a dense forest of tall snow-laden pines, snow actively falling, warm orange firelight glow flickering in the windows like a fire dancing inside (not a steady bulb, fire not visible), vast quiet minimal scene, {film_look}"
+    motion_prompt: "snow falling steadily and continuously, the warm window light flickering and dancing like firelight, the lake still and dark, {motion_principle}, serene, no people"
   - id: porch_storm                     # KEEPER (operator liked it)
     weather: storm
     keyword: "Rain & Thunderstorm"
