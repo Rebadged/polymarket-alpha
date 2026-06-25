@@ -1,4 +1,4 @@
-# Channel 1 (LEAD) — Cozy Cabin Ambience (rain / storm / snow)
+# Channel 1 (LEAD) — Cabin Comforts (rain / storm / snow cozy-cabin ambience)
 # Research pick #1: biggest evergreen search demand x CK's motion moat x broad
 # job-to-be-done (sleep + focus + relaxation). No character, no narration.
 #
@@ -10,13 +10,15 @@
 
 channel:
   slug: rain_cabin
-  name: "Cozy Cabin Ambience"          # covers rain, storm AND snow (seasonal range)
+  name: "Cabin Comforts"               # covers rain, storm AND snow (seasonal range)
   lane: rain_storm_cozy
-  youtube_handle: ""                  # fill once the channel exists
+  youtube_handle: "@CabinComforts"     # confirm availability when creating; else @CabinComfortsTV etc
   youtube_channel_id: ""
   oauth_secret_env: YT_RAINCABIN_REFRESH_TOKEN   # separate Brand Account / email (hygiene)
   language: en
   audience_geo_hint: "US/UK/CA/AU"    # English metadata -> high-CPM markets
+  # Channel "About" / bio:
+  bio: "Cozy cabin ambience for sleep, study, and relaxation. Rain, thunderstorms, crackling fireplaces, and gentle snowfall from cabins tucked deep in the world's most beautiful forests. Dim the lights, get comfortable, and let the quiet take over. New ambiences every week."
 
 identity:
   mood: "cozy, safe, sheltered-from-the-storm; warm cabin while it pours/snows outside"
@@ -117,11 +119,11 @@ metadata:
     - "{keyword} | Cozy {location} | {dur} (No Mid-Roll Ads)"
     - "{keyword} for Sleep & Relaxation | {location} | {dur} (Cinematic)"
   description: |
-    Heavy rain, distant thunder, and a crackling fireplace inside a cozy cabin — for deep sleep, studying, reading, or relaxing.
+    Welcome to Cabin Comforts. 🌲🔥 Heavy rain, distant thunder, gentle snowfall, and a crackling fireplace at a cozy cabin in the woods — for deep sleep, studying, reading, or relaxing.
 
     No interruptions while you drift off. New ambiences every week.
 
-    ▶ Playlists: Rain for Deep Sleep · 8-Hour Storms · Cozy Cabin Nights
+    ▶ Playlists: Rain for Deep Sleep · 8-Hour Storms · Snowy Cabin Nights
 
     #rain #rainsounds #fireplace #sleepsounds #thunderstorm #ambience #studymusic #cozy
   tags: ["rain sounds", "rain and thunder", "fireplace sounds", "cozy cabin", "rain for sleeping", "thunderstorm sounds", "sleep sounds", "rain on window", "ambience", "study sounds"]
