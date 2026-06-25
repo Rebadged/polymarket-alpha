@@ -2,3 +2,10 @@ __pycache__/
 *.pyc
 venv/
 .env
+
+# Faceless fleet — generated media & secrets never get committed
+faceless_fleet/output/
+faceless_fleet/secrets/
+client_secret*.json
+token*.json
+*_refresh_token.txt

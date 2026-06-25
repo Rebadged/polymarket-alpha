@@ -1,0 +1,24 @@
+# Faceless Fleet — VPS crontab (Chicago box).  Install with:  crontab crontab.example
+# Times are server-local. Stagger channels; never bulk-publish on the same minute.
+#
+# Set these in the crontab environment or the scripts' own env:
+#   ANTHROPIC_API_KEY=...        (only if you fulfil manifests via `claude -p`)
+#   HIGGSFIELD_API_KEY=...       (only if generation backend=rest)
+#   YT_2AM_REFRESH_TOKEN=...     (per-channel YouTube refresh tokens)
+#   YT_MEDITATION_REFRESH_TOKEN=...
+
+REPO=/opt/faceless-fleet           # adjust to your checkout path
+
+# --- generation + assembly (heavy; off-peak) ---------------------------------
+# 2am-without-her: render a new long-form three mornings a week.
+30 4 * * 1,3,5  cd $REPO && bash faceless_fleet/deploy/run_channel.sh 2am_without_her 3h   >> /var/log/fleet-2am.log 2>&1
+# midnight-meditations: twice a week, offset so renders don't collide.
+15 5 * * 2,6    cd $REPO && bash faceless_fleet/deploy/run_channel.sh midnight_meditations script >> /var/log/fleet-med.log 2>&1
+
+# --- upload drip (light; jittered publishAt handles the real spacing) ---------
+# Drip at most one approved video per channel per run, at staggered hours.
+0 14 * * *  cd $REPO && python3 -m faceless_fleet.pipeline.run upload 2am_without_her --limit 1       >> /var/log/fleet-2am.log 2>&1
+0 17 * * *  cd $REPO && python3 -m faceless_fleet.pipeline.run upload midnight_meditations --limit 1  >> /var/log/fleet-med.log 2>&1
+
+# --- TikTok token refresh (if/when you wire cross-posting; tokens expire 24h) -
+# 0 */6 * * *  cd $REPO && python3 -m faceless_fleet.pipeline.tiktok_refresh   >> /var/log/fleet-tt.log 2>&1

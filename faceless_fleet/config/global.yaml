@@ -1,0 +1,50 @@
+# Global fleet settings shared by every channel.
+# Channel-specific files in config/channels/*.yaml override these.
+
+paths:
+  # All work happens under faceless_fleet/output (gitignored).
+  output_root: output
+  # Stage folders (the human review gate lives between pending_review and approved).
+  raw: output/raw                 # fresh model outputs (stills, clips, audio)
+  pending_review: output/pending_review  # assembled videos awaiting your approval
+  approved: output/approved       # approved, queued for upload
+  published: output/published     # uploaded, with the YouTube video id recorded
+
+generation:
+  # Default Higgsfield models (verified live via models_explore, 2026-06).
+  # Stills: z_image = fast/budget; recraft-v4-1 = photoreal premium.
+  image_model: z_image
+  # Image-to-video: grok_video_v15 (Grok Imagine 1.5, native audio, 2-15s) is the
+  # cheap cinematic workhorse; seedance_2_0 for hero shots / reference identity.
+  video_model: grok_video_v15
+  video_resolution: 720p
+  clip_seconds: 10               # short source clip; ffmpeg loops it to long-form
+  aspect_ratio: "16:9"
+  # 'manifest' = emit a JSON job for a Claude Code/MCP session to fulfill (works today,
+  # MCP-only, no API key). 'rest' = call Higgsfield REST API unattended (needs key).
+  backend: manifest
+
+assembly:
+  fps: 30
+  width: 1920
+  height: 1080
+  # Ken Burns slow-zoom applied to stills before/instead of motion clips.
+  kenburns_zoom_per_frame: 0.0005
+  kenburns_max_zoom: 1.5
+  crossfade_seconds: 3
+  # Narration mixed over the music bed at this gain (0.35 works for sleep).
+  bed_gain_under_narration: 0.35
+
+upload:
+  # Anti-spam: drip-publish, never bulk-drop. publishAt gets per-video jitter.
+  privacy_status: private        # flips public automatically at publishAt
+  notify_subscribers: false
+  category_id: "10"              # Music
+  base_publish_hour_utc: 2       # nominal slot; jitter widens it
+  jitter_minutes: 50             # +/- random offset around the base slot
+  min_hours_between_uploads: 20  # human-plausible cadence per channel
+
+policy:
+  # YouTube July 2025 "inauthentic content" guardrails enforced by review.py.
+  require_distinct_from_last: true   # block near-duplicate scene+track+title
+  ai_disclosure_default: false       # ambient art is exempt; narration w/ real-looking people = true

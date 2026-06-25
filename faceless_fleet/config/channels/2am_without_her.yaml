@@ -1,0 +1,71 @@
+# Channel 1 — "2am without her"  (ambient / sleep / lofi loops)
+# Your existing channel. This file is the single source of truth for its brand.
+# Drop your real channel handle / logo / existing track references in here.
+
+channel:
+  slug: 2am_without_her
+  name: "2am without her"
+  lane: ambient_sleep_lofi
+  youtube_handle: ""          # e.g. "@2amwithouther" — fill in
+  youtube_channel_id: ""      # UC... — fill in once known
+  oauth_secret_env: YT_2AM_REFRESH_TOKEN   # name of the env var holding this channel's refresh token
+  language: en
+  audience_geo_hint: "US/UK/CA/AU"   # English metadata to attract high-RPM geos
+
+identity:
+  # The consistent "feel" every video must share — but never be identical.
+  mood: "lonely, warm, nocturnal, bittersweet lofi after midnight"
+  palette: ["#0b1026", "#1b2447", "#3a2f5b", "#c98b6b", "#e8c4a0"]
+  visual_motifs:
+    - "rain on a window with city bokeh behind it"
+    - "a single warm desk lamp in a dark room"
+    - "empty bed, moonlight through blinds"
+    - "neon sign reflected in a wet street, seen from a high window"
+    - "a coffee mug going cold next to an open notebook"
+  negative: "no people's faces, no text artifacts, no warped hands, no logos/watermarks"
+
+# Scene pool — generate.py picks an UNUSED combo each run so no two videos match.
+# This pool is the engine of policy-required per-video variation.
+scene_pool:
+  - id: rain_window_blue
+    still_prompt: "cinematic photoreal nighttime bedroom, rain streaming down a large window, soft city bokeh lights beyond, a single warm amber lamp glowing, cool blue shadows, moody, shallow depth of field, 16:9, film grain"
+    motion_prompt: "extremely slow gentle camera drift toward the window, rain trickling down the glass, subtle flicker of the lamp, calm, no people"
+  - id: lamp_desk_amber
+    still_prompt: "cinematic photoreal dark cozy room at 2am, a warm desk lamp lighting an open notebook and a cold coffee mug, rest of the room in deep blue shadow, dust motes in the light, 16:9, film grain"
+    motion_prompt: "barely-perceptible slow push-in on the desk, dust motes drifting through the lamp light, steam fading from the mug, still and quiet"
+  - id: empty_bed_moon
+    still_prompt: "cinematic photoreal empty unmade bed, moonlight through half-open blinds casting soft striped shadows, muted teal and lavender tones, melancholic, 16:9, film grain"
+    motion_prompt: "very slow vertical drift across the bed, faint shift of moonlight as a cloud passes, gentle, no people, no motion artifacts"
+  - id: neon_wet_street
+    still_prompt: "cinematic photoreal view from a high apartment window onto a rainy street at night, neon signs reflected in wet asphalt, warm and cool color contrast, lonely, 16:9, film grain"
+    motion_prompt: "slow subtle parallax over the street, neon reflections shimmering in the rain, distant headlights, calm ambient mood"
+
+audio:
+  # Music bed. Higgsfield video models can emit native audio, but for long sleep loops
+  # prefer a dedicated lofi bed. If/when Suno is wired, drop its track here.
+  bed_source: higgsfield_native   # 'higgsfield_native' | 'suno' | 'file'
+  bed_prompt: "slow lonely lofi at ~60 bpm, soft rhodes piano, warm vinyl crackle, distant rain, no drums or minimal brushed kick, seamless loopable, melancholic and calming"
+  bed_file: ""                    # used when bed_source: file
+
+longform:
+  target_hours: 3                 # stream_loop short clip up to this length
+  variants: ["1h", "3h", "8h"]    # also export these via -t cuts for re-titling variation
+
+metadata:
+  title_templates:
+    - "rain at 2am ~ lofi to fall asleep to (no ads in the middle) [{scene_human}]"
+    - "{scene_human} ~ 3 hours of rain & lofi for sleep | 2am without her"
+    - "missing you at 2am ~ {scene_human} lofi rain for deep sleep"
+  description: |
+    3 hours of slow lofi and rain to help you fall asleep, study, or just sit with the quiet.
+    No mid-roll interruptions in the calm sections.
+
+    🌧️ Made for late nights. Subscribe for a new one every few days.
+
+    #lofi #rain #sleep #studymusic #ambient
+  tags: ["lofi", "rain sounds", "sleep music", "study music", "ambient", "lofi hip hop", "rain for sleeping", "2am"]
+  made_for_kids: false
+  ai_disclosure: false            # stylized ambient art — exempt from YouTube AI disclosure
+
+cadence:
+  uploads_per_week: 3             # drip; never bulk-drop
