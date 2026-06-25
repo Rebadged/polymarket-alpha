@@ -1,0 +1,88 @@
+# Channel 1 (LEAD) — Rain / Storm + Cozy Cabin Ambiance
+# Research pick #1: biggest evergreen search demand x CK's motion moat (rain,
+# fire flicker, lightning all far better with motion than stills) x broad
+# job-to-be-done (sleep + focus + relaxation). No character, no narration.
+# Differentiation = real motion + seamless loops + audio consistency.
+
+channel:
+  slug: rain_cabin
+  name: "Rainy Cabin Ambience"        # simple, generic, search-optimized (rename freely)
+  lane: rain_storm_cozy
+  youtube_handle: ""                  # fill once the channel exists
+  youtube_channel_id: ""
+  oauth_secret_env: YT_RAINCABIN_REFRESH_TOKEN   # separate Brand Account / email (hygiene)
+  language: en
+  audience_geo_hint: "US/UK/CA/AU"    # English metadata -> high-CPM markets
+
+identity:
+  mood: "cozy, safe, sheltered-from-the-storm; warm cabin while it pours outside"
+  palette: ["#0d1b2a", "#1b2a3a", "#3a2a1a", "#c8772b", "#e0a050"]   # storm-blue + firelight amber
+  film_look: "cinematic photoreal, shot on film, warm interior light vs cool storm outside, shallow depth of field, subtle grain, 16:9"
+  negative: "no people, no text on any surface, no signage, no labels, no readable screens, no warped geometry, no melting objects, no watermarks, no logos, no fast or jarring motion"
+
+# Scene pool — each upload picks an UNUSED scene (per-video variation = the
+# compliance backbone). All cozy-cabin x rain/storm, motion-forward.
+scene_pool:
+  - id: window_fire_rain
+    still_prompt: "cozy log cabin interior at night, heavy rain streaming down a large window, a stone fireplace glowing warm amber on the left, a worn armchair and blanket, soft lamplight, storm-blue light outside vs warm firelight inside, {film_look}"
+    motion_prompt: "rain streaming and trickling down the window glass, fire flickering and crackling in the fireplace, faint flicker of warm light across the room, occasional distant lightning glow outside, slow gentle ambience, no people"
+  - id: porch_storm
+    still_prompt: "covered wooden cabin porch during a heavy thunderstorm at dusk, rain pouring off the roof eaves in sheets, a hanging lantern glowing warm, misty pine forest beyond, puddles rippling, {film_look}"
+    motion_prompt: "rain pouring off the eaves, lantern swaying slightly, puddles rippling from raindrops, distant lightning flashes followed by soft glow, drifting mist, calm and steady, no people"
+  - id: forest_cabin_lightning
+    still_prompt: "small warm-lit cabin nestled in a dark pine forest during a night thunderstorm, glowing windows, heavy rain, a mountain silhouette behind, dramatic but cozy, {film_look}"
+    motion_prompt: "heavy rain falling across the scene, warm window light flickering gently, periodic distant lightning illuminating the clouds and mountains, slow drifting storm clouds, no people, no fast motion"
+  - id: rainy_reading_nook
+    still_prompt: "a cozy reading nook by a rain-streaked cabin window, a single warm candle and a steaming mug on the sill, soft wool blankets, grey storm light outside, intimate and warm, {film_look}"
+    motion_prompt: "rain trickling down the window, candle flame flickering softly, steam rising and curling from the mug, the faintest drift of light, deeply calm, no people"
+  - id: fireplace_closeup
+    still_prompt: "close-up of a stone fireplace with crackling logs in a dark cozy cabin, embers glowing, warm amber light, faint sound-of-rain mood, {film_look}"
+    motion_prompt: "logs burning and crackling, flames dancing slowly, embers drifting upward, warm light pulsing gently on the stone, hypnotic and calm, no people"
+
+audio:
+  # Sound design (rain + thunder + fire crackle), layered. Suno for any tonal bed;
+  # rain/thunder/fire foley can be Suno 'ambient soundscape' prompts or free SFX.
+  bed_source: file                    # drop your assembled soundscape WAV here
+  bed_file: ""
+  bed_prompt: "immersive rain and distant rolling thunder with a crackling fireplace, no music, no melody, seamless and loopable, deep and calming, for sleep and focus"
+  loudness_lufs: -14                  # consistent loudness; no spikes that wake sleepers
+
+longform:
+  # Length ladder — round hours ARE the search convention here ("8 hours rain").
+  variants: ["1h", "3h", "8h"]
+  seamless_loop: true                 # crossfade the short clip end->start (invisible seam)
+
+metadata:
+  # Put the search keyword in the first 60 chars. Consistent template builds recognition.
+  title_templates:
+    - "Rain & Fireplace Sounds for Sleep | Cozy Cabin in a Thunderstorm ({dur})"
+    - "Heavy Rain on a Cabin Window | {scene_human} for Deep Sleep ({dur})"
+    - "Cozy Cabin Ambience | Rain, Thunder & Crackling Fire ({dur})"
+    - "Thunderstorm & Fireplace | {scene_human} to Sleep, Study, Relax ({dur})"
+  description: |
+    Heavy rain, distant thunder, and a crackling fireplace inside a cozy cabin — for deep sleep, studying, reading, or relaxing.
+
+    No interruptions while you drift off. New ambiences every week.
+
+    ▶ Playlists: Rain for Deep Sleep · 8-Hour Storms · Cozy Cabin Nights
+
+    #rain #rainsounds #fireplace #sleepsounds #thunderstorm #ambience #studymusic #cozy
+  tags: ["rain sounds", "rain and thunder", "fireplace sounds", "cozy cabin", "rain for sleeping", "thunderstorm sounds", "sleep sounds", "rain on window", "ambience", "study sounds"]
+  made_for_kids: false
+  ai_disclosure: false                # non-realistic ambient visuals; disclose if a scene ever reads as a real place/event
+
+ads:
+  # Deep-sleep/overnight length -> minimize interruptions (research ad table).
+  pre_roll: true
+  mid_rolls: false                    # 1h/3h/8h sleep lengths: off
+  post_roll: false                    # post-roll at end of a sleep journey = #1 complaint
+  note: "If a 20-60min focus cut is made, enable sparse mid-rolls (~every 12-15min) on THAT cut only."
+
+cadence:
+  uploads_per_week: 3                 # 2-3 distinct long-form + 4-5 Shorts/week (funnel)
+  shorts_per_week: 5
+
+# Discovery funnel (CK's 50+ hook library across curiosity/POV/bold/FOMO/comment-bait).
+funnel:
+  shorts_source: "10-30s vertical cut of the motion clip + hook overlay"
+  playlists: ["Rain for Deep Sleep", "8-Hour Storms", "Cozy Cabin Nights"]

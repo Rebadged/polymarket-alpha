@@ -31,6 +31,62 @@ def _run(cmd: list[str]) -> None:
     subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
 
 
+def _probe_duration(path: Path) -> float:
+    for entries in ("format=duration", "stream=duration"):
+        out = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", entries,
+             "-of", "default=noprint_wrappers=1:nokey=1", str(path)],
+            capture_output=True, text=True).stdout.strip().splitlines()
+        for line in out:
+            try:
+                return float(line)
+            except ValueError:
+                continue
+    raise ValueError(f"could not probe duration of {path}")
+
+
+def make_seamless_video(clip: Path, out: Path, xfade: float, fps: int) -> Path:
+    """Crossfade the clip's end-wrap into its start so a stream_loop has NO visible
+    seam. Technique: with D=duration, X=xfade, take tail=clip[X:D] and head=clip[0:X]
+    and xfade(tail, head, offset=D-2X). The result starts AND ends on the same frame
+    (clip @ time X), so looping it is seamless; the true end->start wrap is hidden in
+    the mid-clip crossfade. Output length = D - X."""
+    d = _probe_duration(clip)
+    if xfade <= 0 or d <= 2 * xfade + 0.1:   # too short to wrap-fade; leave as-is
+        _run(["ffmpeg", "-y", "-i", str(clip), "-c", "copy", str(out)])
+        return out
+    fc = (f"[0:v]trim=0:{xfade},setpts=PTS-STARTPTS[head];"
+          f"[0:v]trim={xfade}:{d},setpts=PTS-STARTPTS[tail];"
+          f"[tail][head]xfade=transition=fade:duration={xfade}:offset={d - 2*xfade}[v]")
+    _run(["ffmpeg", "-y", "-i", str(clip), "-filter_complex", fc, "-map", "[v]",
+          "-r", str(fps), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "20", str(out)])
+    return out
+
+
+def make_seamless_audio(bed: Path, out: Path, xfade: float, lufs: float) -> Path:
+    """Seamless audio loop unit + loudness normalization. Wraps the bed's end into
+    its start so a stream_loop has no audible seam: take tail=bed[X:D] and head=
+    bed[0:X], acrossfade(tail, head) -> unit that starts AND ends on the sample @
+    time X. loudnorm pins output loudness so no volume spike wakes a sleeper.
+
+    NOTE: acrossfade starves if both inputs are atrim branches of the same source,
+    so head/tail are extracted to temp WAVs first (crossfading two files is robust)."""
+    d = _probe_duration(bed)
+    norm = f"loudnorm=I={lufs}:TP=-1.5:LRA=11"
+    if xfade <= 0 or d <= 2 * xfade + 0.1:
+        _run(["ffmpeg", "-y", "-i", str(bed), "-af", norm,
+              "-c:a", "aac", "-b:a", "192k", str(out)])
+        return out
+    head = out.with_name("_ahead.wav")
+    tail = out.with_name("_atail.wav")
+    _run(["ffmpeg", "-y", "-i", str(bed), "-t", str(xfade), "-c:a", "pcm_s16le", str(head)])
+    _run(["ffmpeg", "-y", "-ss", str(xfade), "-i", str(bed), "-c:a", "pcm_s16le", str(tail)])
+    _run(["ffmpeg", "-y", "-i", str(tail), "-i", str(head),
+          "-filter_complex", f"[0:a][1:a]acrossfade=d={xfade}:c1=tri:c2=tri[ax];[ax]{norm}[a]",
+          "-map", "[a]", "-c:a", "aac", "-b:a", "192k", str(out)])
+    return out
+
+
 def kenburns_from_still(still: Path, out: Path, cfg: dict, seconds: int) -> Path:
     """Make a gently zooming clip from a single still (fallback when there's no motion clip)."""
     a = cfg["assembly"]
@@ -45,18 +101,6 @@ def kenburns_from_still(still: Path, out: Path, cfg: dict, seconds: int) -> Path
 def loop_to_length(clip: Path, out: Path, seconds: int) -> Path:
     """stream_loop the source clip up to `seconds` with no re-encode."""
     _run(["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(clip),
-          "-t", str(seconds), "-c", "copy", str(out)])
-    return out
-
-
-def loop_audio(bed: Path, out: Path, seconds: int, crossfade: int) -> Path:
-    """Loop a music bed to length WITHOUT re-encoding the whole thing.
-
-    Encode the short bed to AAC once, then stream_loop -c copy to the target
-    length. A 3h loop then takes ~a second instead of re-encoding 3h of audio."""
-    unit = out.with_name("_bed_unit.m4a")
-    _run(["ffmpeg", "-y", "-i", str(bed), "-c:a", "aac", "-b:a", "192k", str(unit)])
-    _run(["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(unit),
           "-t", str(seconds), "-c", "copy", str(out)])
     return out
 
@@ -104,6 +148,9 @@ def assemble(slug: str, variant: str = "3h") -> Path:
     work = raw / "_work"
     work.mkdir(exist_ok=True)
 
+    seamless = cfg.get("longform", {}).get("seamless_loop", False)
+    lufs = cfg.get("audio", {}).get("loudness_lufs", a.get("default_loudness_lufs", -14))
+
     # --- video base: prefer the motion clip, else Ken Burns the still ---
     if (raw / "scene.mp4").exists():
         base_clip = raw / "scene.mp4"
@@ -113,13 +160,20 @@ def assemble(slug: str, variant: str = "3h") -> Path:
         raise FileNotFoundError(
             f"No scene.mp4 or scene.png in {raw}. Fulfill the generation manifest first."
         )
+    # Seamless loop unit: crossfade the wrap so the seam is invisible across hours.
+    if seamless:
+        base_clip = make_seamless_video(
+            base_clip, work / "video_unit.mp4", a["loop_video_xfade_seconds"], a["fps"])
     looped_v = loop_to_length(base_clip, work / "video_long.mp4", seconds)
 
-    # --- audio base ---
+    # --- audio base (seamless unit + loudness-normalized) ---
     bed = raw / "bed.wav"
     if not bed.exists():
         raise FileNotFoundError(f"No bed.wav in {raw}.")
-    looped_a = loop_audio(bed, work / "audio_long.m4a", seconds, a["crossfade_seconds"])
+    audio_unit = make_seamless_audio(
+        bed, work / "audio_unit.m4a",
+        a["loop_audio_xfade_seconds"] if seamless else 0.0, lufs)
+    looped_a = loop_to_length(audio_unit, work / "audio_long.m4a", seconds)
 
     if plan.get("narration_enabled") and (raw / "narration.wav").exists():
         looped_a = mix_narration_over_bed(

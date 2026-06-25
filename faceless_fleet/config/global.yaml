@@ -34,6 +34,13 @@ assembly:
   crossfade_seconds: 3
   # Narration mixed over the music bed at this gain (0.35 works for sleep).
   bed_gain_under_narration: 0.35
+  # Seamless looping (research's #1 retention lever): crossfade the short clip's
+  # end into its start so the loop seam is invisible/inaudible across hours.
+  loop_video_xfade_seconds: 0.5   # ~short video crossfade masks the visual seam
+  loop_audio_xfade_seconds: 0.4   # equal-power audio crossfade hides the bed seam
+  # Consistent loudness so no volume spike wakes a sleeper. Per-channel override
+  # via audio.loudness_lufs; this is the fleet default.
+  default_loudness_lufs: -14
 
 upload:
   # Anti-spam: drip-publish, never bulk-drop. publishAt gets per-video jitter.
