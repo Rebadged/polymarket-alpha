@@ -132,6 +132,10 @@ def upload_one(slug: str, video: Path, dry_run: bool = False) -> str | None:
     plan = json.loads(plan_path.read_text()) if plan_path.exists() else {}
     md = plan.get("metadata", cfg["metadata"])
     title = plan.get("title") or md.get("title_templates", ["untitled"])[0]
+    # Fill the {dur} placeholder left by generate.py, from the filename's variant.
+    variant = video.stem.split("__")[-1]
+    dur_label = {"1h": "1 Hour", "3h": "3 Hours", "8h": "8 Hours", "12h": "12 Hours"}.get(variant, "")
+    title = title.replace("{dur}", dur_label).replace("()", "").replace("  ", " ").strip()
     publish_at = next_publish_at(cfg, seed=video.name)
 
     body = {

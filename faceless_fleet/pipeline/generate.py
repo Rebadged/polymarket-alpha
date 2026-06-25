@@ -21,22 +21,33 @@ from .config import load_channel, output_dirs
 from .higgsfield_client import GenJob, HiggsfieldClient
 
 
-def _fmt(text: str, identity: dict) -> str:
-    """Inject {character}/{film_look} etc. from identity into a prompt template."""
-    tokens = {"character": identity.get("character", ""),
-              "film_look": identity.get("film_look", ""),
-              "mood": identity.get("mood", "")}
-    try:
-        return text.format(**tokens)
-    except (KeyError, IndexError):
-        return text
+class _SafeDict(dict):
+    """format_map helper: leave unknown {tokens} (e.g. {dur}) untouched for later."""
+    def __missing__(self, key):
+        return "{" + key + "}"
 
 
-def build_jobs(cfg: dict, scene: dict) -> list[GenJob]:
+def _tokens(cfg: dict, location: str = "") -> dict:
+    identity = cfg["identity"]
+    return {"character": identity.get("character", ""),
+            "film_look": identity.get("film_look", ""),
+            "mood": identity.get("mood", ""),
+            "location": location}
+
+
+def _fmt(text: str, tokens: dict) -> str:
+    """Inject {character}/{film_look}/{location} etc., leaving unknown tokens intact."""
+    return text.format_map(_SafeDict(tokens))
+
+
+def build_jobs(cfg: dict, scene: dict, tokens: dict) -> list[GenJob]:
     g = cfg["generation"]
     identity = cfg["identity"]
-    still_prompt = _fmt(scene["still_prompt"], identity) + " -- " + identity["negative"]
-    motion_prompt = _fmt(scene["motion_prompt"], identity)
+    still_prompt = _fmt(scene["still_prompt"], tokens)
+    if tokens.get("location"):                       # depict the rotated named place
+        still_prompt += f", set in {tokens['location']}"
+    still_prompt += " -- " + identity["negative"]
+    motion_prompt = _fmt(scene["motion_prompt"], tokens)
     jobs = [
         GenJob(
             kind="image",
@@ -81,16 +92,18 @@ def build_jobs(cfg: dict, scene: dict) -> list[GenJob]:
     return jobs
 
 
-def choose_title(cfg: dict, scene: dict, st: dict) -> str:
-    human = scene["id"].replace("_", " ")
-    templates = cfg["metadata"]["title_templates"]
+def choose_title(cfg: dict, scene: dict, st: dict, tokens: dict) -> str:
+    # {dur} is intentionally left for upload.py to fill per length variant.
+    human = (tokens.get("location") or scene["id"].replace("_", " "))
+    base = {**tokens, "scene_human": scene["id"].replace("_", " ")}
+    templates = list(cfg["metadata"]["title_templates"])
     used = set(st.get("used_titles", []))
     random.shuffle(templates)
     for t in templates:
-        title = t.format(scene_human=human)
+        title = t.format_map(_SafeDict({**base, "scene_human": human}))
         if title not in used:
             return title
-    return templates[0].format(scene_human=human)
+    return templates[0].format_map(_SafeDict({**base, "scene_human": human}))
 
 
 def main(slug: str) -> dict:
@@ -99,8 +112,10 @@ def main(slug: str) -> dict:
     st = state.load(slug)
 
     scene = state.next_scene(cfg, st)
-    title = choose_title(cfg, scene, st)
-    jobs = build_jobs(cfg, scene)
+    location = state.next_location(cfg, st)
+    tokens = _tokens(cfg, location)
+    title = choose_title(cfg, scene, st, tokens)
+    jobs = build_jobs(cfg, scene, tokens)
 
     client = HiggsfieldClient(cfg["generation"]["backend"], dirs["raw"])
     result = client.run(jobs)
@@ -108,6 +123,7 @@ def main(slug: str) -> dict:
     plan = {
         "slug": slug,
         "scene_id": scene["id"],
+        "location": location,
         "title": title,
         "raw_dir": str(dirs["raw"]),
         "backend": cfg["generation"]["backend"],
@@ -119,9 +135,9 @@ def main(slug: str) -> dict:
     }
     (dirs["raw"] / "plan.json").write_text(json.dumps(plan, indent=2))
 
-    state.record(slug, st, scene["id"], title)
+    state.record(slug, st, scene["id"], title, location)
 
-    print(f"[generate] {slug}: scene={scene['id']} title={title!r}")
+    print(f"[generate] {slug}: scene={scene['id']} location={location!r} title={title!r}")
     if cfg["generation"]["backend"] == "manifest":
         print(f"[generate] manifest written -> {result}")
         print("[generate] NEXT: have a Claude Code/MCP session fulfill jobs.json, "

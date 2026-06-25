@@ -39,6 +39,16 @@ scene_pool:
     still_prompt: "close-up of a stone fireplace with crackling logs in a dark cozy cabin, embers glowing, warm amber light, faint sound-of-rain mood, {film_look}"
     motion_prompt: "logs burning and crackling, flames dancing slowly, embers drifting upward, warm light pulsing gently on the stone, hypnotic and calm, no people"
 
+# Named-location rotation (each upload depicts a different real cozy cold-climate
+# place -> extra per-video variation + draws Tier-1 English search traffic).
+# PLACEHOLDER list pending the geography deep-research; curate after that.
+location_pool:
+  - "a remote cabin in the snowy mountains of British Columbia, Canada"
+  - "a log cabin in the pine forests of the Pacific Northwest"
+  - "a cozy cottage in the Scottish Highlands"
+  - "a wooden cabin by a fjord in northern Norway"
+  - "a snowbound cabin in the Canadian Rockies near Banff"
+
 audio:
   # Sound design (rain + thunder + fire crackle), layered. Suno for any tonal bed;
   # rain/thunder/fire foley can be Suno 'ambient soundscape' prompts or free SFX.
