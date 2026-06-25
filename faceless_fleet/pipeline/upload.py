@@ -35,13 +35,57 @@ def _client_secret_path() -> Path:
     return SECRETS / "client_secret.json"
 
 
-def interactive_auth(slug: str) -> None:
-    """One-time: open a browser, consent, print the refresh token to store as a secret."""
-    from google_auth_oauthlib.flow import InstalledAppFlow
-    flow = InstalledAppFlow.from_client_secrets_file(str(_client_secret_path()), SCOPES)
-    creds = flow.run_local_server(port=0)
+def interactive_auth(slug: str, manual: bool = False,
+                     redirect_host: str | None = None, port: int = 8080) -> None:
+    """One-time: consent and print the refresh token to store as a secret.
+
+    Three modes — pick the one that fits how you'll click "approve":
+
+      (default) desktop browser on the SAME machine running this:
+          python -m faceless_fleet.pipeline.upload <ch> --auth
+
+      --redirect-host <VPS_PUBLIC_IP>  (PHONE-FRIENDLY, recommended):
+          Run this on the VPS. It serves on 0.0.0.0:<port> and prints ONE link.
+          Open that link on your phone, tap Approve, and Google redirects back to
+          the VPS which captures the token automatically — no copy-paste.
+          Register  http://<VPS_PUBLIC_IP>:<port>/  as an Authorized redirect URI
+          on a "Web application" OAuth client, and open the port in the firewall.
+
+      --manual  (works anywhere, incl. phone, with one paste):
+          Prints a link. Open on phone, Approve, then copy the FULL redirected
+          URL (it'll fail to load — that's fine) and paste it back here.
+    """
     cfg = load_channel(slug)
     env_name = cfg["channel"]["oauth_secret_env"]
+
+    if manual:
+        from urllib.parse import parse_qs, urlparse
+
+        from google_auth_oauthlib.flow import Flow
+        flow = Flow.from_client_secrets_file(str(_client_secret_path()), SCOPES)
+        flow.redirect_uri = "http://localhost"
+        auth_url, _ = flow.authorization_url(prompt="consent", access_type="offline")
+        print("\n1) On your phone, open this link and tap Approve:\n\n", auth_url, "\n")
+        print("2) It will redirect to a 'localhost' page that won't load — that's expected.")
+        print("3) Copy the FULL URL from the address bar and paste it below.\n")
+        resp = input("Paste the redirected URL (or just the code): ").strip()
+        code = parse_qs(urlparse(resp).query).get("code", [resp])[0]
+        flow.fetch_token(code=code)
+        creds = flow.credentials
+    else:
+        from google_auth_oauthlib.flow import InstalledAppFlow
+        flow = InstalledAppFlow.from_client_secrets_file(str(_client_secret_path()), SCOPES)
+        if redirect_host:
+            creds = flow.run_local_server(
+                host="0.0.0.0", port=port, open_browser=False,
+                redirect_uri_trailing_slash=True,
+                authorization_prompt_message=(
+                    f"\n>>> Open this on your phone and tap Approve:\n{{url}}\n"
+                    f"(redirects to http://{redirect_host}:{port}/ — register that URI)\n"),
+                bind_addr="0.0.0.0")
+        else:
+            creds = flow.run_local_server(port=0)
+
     print("\n=== STORE THIS as the secret/env var below (keep it private) ===")
     print(f"{env_name}={creds.refresh_token}")
 
@@ -138,10 +182,14 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("channel")
     ap.add_argument("--auth", action="store_true", help="one-time interactive OAuth")
+    ap.add_argument("--manual", action="store_true", help="phone: approve + paste the redirected URL")
+    ap.add_argument("--redirect-host", help="phone: VPS public IP to redirect back to")
+    ap.add_argument("--port", type=int, default=8080, help="port for --redirect-host mode")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--limit", type=int, default=1, help="max videos to drip this run")
     args = ap.parse_args()
     if args.auth:
-        interactive_auth(args.channel)
+        interactive_auth(args.channel, manual=args.manual,
+                         redirect_host=args.redirect_host, port=args.port)
     else:
         upload_queue(args.channel, dry_run=args.dry_run, limit=args.limit)
