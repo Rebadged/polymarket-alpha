@@ -21,20 +21,34 @@ from .config import load_channel, output_dirs
 from .higgsfield_client import GenJob, HiggsfieldClient
 
 
+def _fmt(text: str, identity: dict) -> str:
+    """Inject {character}/{film_look} etc. from identity into a prompt template."""
+    tokens = {"character": identity.get("character", ""),
+              "film_look": identity.get("film_look", ""),
+              "mood": identity.get("mood", "")}
+    try:
+        return text.format(**tokens)
+    except (KeyError, IndexError):
+        return text
+
+
 def build_jobs(cfg: dict, scene: dict) -> list[GenJob]:
     g = cfg["generation"]
+    identity = cfg["identity"]
+    still_prompt = _fmt(scene["still_prompt"], identity) + " -- " + identity["negative"]
+    motion_prompt = _fmt(scene["motion_prompt"], identity)
     jobs = [
         GenJob(
             kind="image",
             model=g["image_model"],
-            prompt=scene["still_prompt"] + " -- " + cfg["identity"]["negative"],
+            prompt=still_prompt,
             out_name="scene.png",
             params={"aspect_ratio": g["aspect_ratio"]},
         ),
         GenJob(
             kind="video",
             model=g["video_model"],
-            prompt=scene["motion_prompt"],
+            prompt=motion_prompt,
             out_name="scene.mp4",
             input_media="scene.png",            # resolved to the produced still
             params={"resolution": g["video_resolution"], "duration": g["clip_seconds"]},
