@@ -15,7 +15,9 @@ credits, and is independently testable.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import random
 import subprocess
 from pathlib import Path
 
@@ -76,13 +78,28 @@ def mux(video: Path, audio: Path, out: Path) -> Path:
     return out
 
 
+def _resolve_seconds(slug: str, cfg: dict, variant: str) -> int:
+    """Fixed HOURS variant, or an ORGANIC length from config (target_seconds +/- jitter).
+    Jitter is seeded per-slug so a given channel's length is stable across re-runs but
+    never an exactly-round number (avoids the 'suspiciously exact 3:00:00' tell)."""
+    if variant in HOURS:
+        return HOURS[variant]
+    lf = cfg.get("longform", {})
+    base = int(lf.get("target_seconds", HOURS["3h"]))
+    jitter = int(lf.get("jitter_seconds", 0))
+    if jitter:
+        rng = random.Random(hashlib.sha256(f"{slug}:{variant}".encode()).hexdigest())
+        base += rng.randint(-jitter, jitter)
+    return base
+
+
 def assemble(slug: str, variant: str = "3h") -> Path:
     cfg = load_channel(slug)
     dirs = output_dirs(cfg)
     raw = dirs["raw"]
     plan = json.loads((raw / "plan.json").read_text()) if (raw / "plan.json").exists() else {}
 
-    seconds = HOURS.get(variant, HOURS["3h"])
+    seconds = _resolve_seconds(slug, cfg, variant)
     a = cfg["assembly"]
     work = raw / "_work"
     work.mkdir(exist_ok=True)
