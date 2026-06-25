@@ -39,15 +39,22 @@ scene_pool:
     still_prompt: "close-up of a stone fireplace with crackling logs in a dark cozy cabin, embers glowing, warm amber light, faint sound-of-rain mood, {film_look}"
     motion_prompt: "logs burning and crackling, flames dancing slowly, embers drifting upward, warm light pulsing gently on the stone, hypnotic and calm, no people"
 
-# Named-location rotation (each upload depicts a different real cozy cold-climate
-# place -> extra per-video variation + draws Tier-1 English search traffic).
-# PLACEHOLDER list pending the geography deep-research; curate after that.
+# Named-location rotation. Per the geography research: location is per-video
+# VARIATION + SEO seasoning, NOT an RPM lever (RPM = viewer country, set by the
+# LANGUAGE of metadata). So: short evocative place names paired with the generic
+# keyword in titles; the descriptive `prompt` form drives the image only.
+# `title` = short (goes in the video title); `prompt` = descriptive (goes to Higgsfield).
 location_pool:
-  - "a remote cabin in the snowy mountains of British Columbia, Canada"
-  - "a log cabin in the pine forests of the Pacific Northwest"
-  - "a cozy cottage in the Scottish Highlands"
-  - "a wooden cabin by a fjord in northern Norway"
-  - "a snowbound cabin in the Canadian Rockies near Banff"
+  # Canadian / North American cozy
+  - {title: "Canadian Rockies Cabin",   prompt: "a snowbound log cabin in the Canadian Rockies near Banff"}
+  - {title: "British Columbia Cabin",    prompt: "a remote cabin in the snowy mountains of British Columbia, Canada"}
+  - {title: "Pacific Northwest Cabin",   prompt: "a log cabin in the rainy pine forests of the Pacific Northwest"}
+  # British Isles (high English affinity, NH winter)
+  - {title: "Scottish Highlands Cabin",  prompt: "a stone cottage in the Scottish Highlands during a storm"}
+  - {title: "Lake District Cottage",     prompt: "a cozy cottage in the English Lake District in the rain"}
+  # Alpine / European aesthetic (English titles — for the LOOK, not to capture EU viewers)
+  - {title: "Swiss Alps Cabin",          prompt: "a wooden chalet in the Swiss Alps during a snowfall"}
+  - {title: "Norwegian Fjord Cabin",     prompt: "a wooden cabin by a fjord in northern Norway"}
 
 audio:
   # Sound design (rain + thunder + fire crackle), layered. Suno for any tonal bed;
@@ -63,12 +70,15 @@ longform:
   seamless_loop: true                 # crossfade the short clip end->start (invisible seam)
 
 metadata:
-  # Put the search keyword in the first 60 chars. Consistent template builds recognition.
+  # Research title convention: [Sound + Benefit] | [short Location] | [Duration] [+ modifier].
+  # Generic high-volume keyword LEADS (first ~60 chars); the place name is seasoning.
+  # Modifiers reflect OUR edge (cinematic motion, crackling fire) — never "Black Screen"
+  # (we're the opposite) and never "No Ads" (we run pre-roll); "No Mid-Roll Ads" is honest.
   title_templates:
-    - "Rain & Fireplace Sounds for Sleep | Cozy Cabin in a Thunderstorm ({dur})"
-    - "Heavy Rain on a Cabin Window | {scene_human} for Deep Sleep ({dur})"
-    - "Cozy Cabin Ambience | Rain, Thunder & Crackling Fire ({dur})"
-    - "Thunderstorm & Fireplace | {scene_human} to Sleep, Study, Relax ({dur})"
+    - "Heavy Rain & Distant Thunder for Deep Sleep | {location} | {dur}"
+    - "Rain & Crackling Fireplace for Sleep | Cozy {location} | {dur}"
+    - "Heavy Rain on a Cabin Window | {location} | {dur} (No Mid-Roll Ads)"
+    - "Rain, Thunder & Fireplace Sounds | {location} | {dur} (Cinematic)"
   description: |
     Heavy rain, distant thunder, and a crackling fireplace inside a cozy cabin — for deep sleep, studying, reading, or relaxing.
 

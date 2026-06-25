@@ -38,19 +38,26 @@ def next_scene(cfg: dict, state: dict) -> dict:
     return min(pool, key=lambda s: order.get(s["id"], -1))
 
 
-def next_location(cfg: dict, state: dict) -> str:
-    """Rotate named locations (e.g. a different cozy cold-climate place each video).
-    Returns '' if the channel has no location_pool. Picks least-recently-used so each
-    upload depicts a distinct place — extra per-video variation + audience targeting."""
+def _loc_key(entry) -> str:
+    """A location pool entry is either a string or {title, prompt}. Dedup by title."""
+    return entry["title"] if isinstance(entry, dict) else entry
+
+
+def next_location(cfg: dict, state: dict):
+    """Rotate named locations (a different place each video) for per-video variation
+    + SEO seasoning. Returns a {title, prompt} dict (or '' if no pool). Per the
+    geography research: location is variation/search seasoning, NOT an RPM lever."""
     pool = cfg.get("location_pool") or []
     if not pool:
         return ""
     used = state.get("used_locations", [])
-    unused = [loc for loc in pool if loc not in used]
+    unused = [e for e in pool if _loc_key(e) not in used]
     if unused:
-        return unused[0]
-    order = {loc: i for i, loc in enumerate(used)}
-    return min(pool, key=lambda loc: order.get(loc, -1))
+        chosen = unused[0]
+    else:
+        order = {k: i for i, k in enumerate(used)}
+        chosen = min(pool, key=lambda e: order.get(_loc_key(e), -1))
+    return chosen if isinstance(chosen, dict) else {"title": chosen, "prompt": chosen}
 
 
 def record(slug: str, state: dict, scene_id: str, title: str, location: str = "") -> None:

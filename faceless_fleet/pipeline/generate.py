@@ -40,12 +40,12 @@ def _fmt(text: str, tokens: dict) -> str:
     return text.format_map(_SafeDict(tokens))
 
 
-def build_jobs(cfg: dict, scene: dict, tokens: dict) -> list[GenJob]:
+def build_jobs(cfg: dict, scene: dict, tokens: dict, location_prompt: str = "") -> list[GenJob]:
     g = cfg["generation"]
     identity = cfg["identity"]
     still_prompt = _fmt(scene["still_prompt"], tokens)
-    if tokens.get("location"):                       # depict the rotated named place
-        still_prompt += f", set in {tokens['location']}"
+    if location_prompt:                              # depict the rotated named place (descriptive form)
+        still_prompt += f", set in {location_prompt}"
     still_prompt += " -- " + identity["negative"]
     motion_prompt = _fmt(scene["motion_prompt"], tokens)
     jobs = [
@@ -112,10 +112,12 @@ def main(slug: str) -> dict:
     st = state.load(slug)
 
     scene = state.next_scene(cfg, st)
-    location = state.next_location(cfg, st)
-    tokens = _tokens(cfg, location)
+    location = state.next_location(cfg, st)          # {title, prompt} or ''
+    loc_title = location["title"] if isinstance(location, dict) else ""
+    loc_prompt = location["prompt"] if isinstance(location, dict) else ""
+    tokens = _tokens(cfg, loc_title)                 # short form -> titles
     title = choose_title(cfg, scene, st, tokens)
-    jobs = build_jobs(cfg, scene, tokens)
+    jobs = build_jobs(cfg, scene, tokens, loc_prompt)  # descriptive form -> image
 
     client = HiggsfieldClient(cfg["generation"]["backend"], dirs["raw"])
     result = client.run(jobs)
@@ -123,7 +125,7 @@ def main(slug: str) -> dict:
     plan = {
         "slug": slug,
         "scene_id": scene["id"],
-        "location": location,
+        "location": loc_title,
         "title": title,
         "raw_dir": str(dirs["raw"]),
         "backend": cfg["generation"]["backend"],
@@ -135,9 +137,9 @@ def main(slug: str) -> dict:
     }
     (dirs["raw"] / "plan.json").write_text(json.dumps(plan, indent=2))
 
-    state.record(slug, st, scene["id"], title, location)
+    state.record(slug, st, scene["id"], title, loc_title)
 
-    print(f"[generate] {slug}: scene={scene['id']} location={location!r} title={title!r}")
+    print(f"[generate] {slug}: scene={scene['id']} location={loc_title!r} title={title!r}")
     if cfg["generation"]["backend"] == "manifest":
         print(f"[generate] manifest written -> {result}")
         print("[generate] NEXT: have a Claude Code/MCP session fulfill jobs.json, "
