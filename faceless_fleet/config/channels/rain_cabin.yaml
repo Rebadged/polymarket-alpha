@@ -17,10 +17,12 @@ channel:
 identity:
   mood: "cozy, safe, sheltered-from-the-storm; warm cabin while it pours/snows outside"
   palette: ["#0d1b2a", "#1b2a3a", "#3a2a1a", "#c8772b", "#e0a050"]   # storm-blue + firelight amber
-  film_look: "cinematic photoreal, shot on film, warm window glow vs cool night, shallow depth of field, subtle grain, 16:9"
+  # Chosen look: cinematic STYLIZED painterly realism (grounded but idealized — hides
+  # AI artifacts, more ownable/recognizable brand, cozier). Not photoreal, not cartoon.
+  film_look: "cinematic stylized painterly realism, idealized cozy, shot on film, warm window glow vs cool night, shallow depth of field, subtle grain, 16:9"
   # KEEP SCENES SPARSE: few objects (object-heavy interiors produce gibberish text +
   # fake-looking props). Favor exteriors + simple textures.
-  negative: "no people, no text on any surface, no signage, no books, no labels, no readable screens, no clutter, minimal objects, no warped geometry, no melting objects, no watermarks, no logos, no fast or jarring motion"
+  negative: "no people, no text on any surface, no signage, no books, no labels, no readable screens, no clutter, minimal objects, no large close-up tree trunks, no bare tree bark in the foreground, no trees crowding or blocking the cabin, no warped geometry, no melting objects, no watermarks, no logos, no fast or jarring motion"
   # MOTION PRINCIPLE (operator feedback): camera mostly LOCKED OFF — no push-in/out,
   # at most the faintest pivot. The loop comes from the AMBIENT ELEMENT (falling snow,
   # falling rain, dancing fire), not camera movement. Element motion loops seamlessly.
@@ -37,8 +39,8 @@ scene_pool:
     # PNW reference: log/A-frame cabin nestled in a DENSE snow-laden pine forest,
     # actively snowing; windows read as flickering FIRELIGHT (not a steady bulb,
     # the fire itself not the focus / not really visible).
-    still_prompt: "exterior of a cozy log cabin nestled deep in a dense Pacific Northwest forest of tall snow-laden pine and evergreen trees at night, fresh snow actively falling, warm orange firelight glow flickering softly in the windows like a fire dancing inside (not a steady bulb, the fire itself not visible), deep blue snowy night, minimal and uncluttered, {film_look}"
-    motion_prompt: "thick snow falling steadily and continuously across the whole frame, the warm window light flickering and dancing like firelight casting shifting warm glow (not a static light), snow-laden pine branches utterly still, {motion_principle}, no people"
+    still_prompt: "exterior of a cozy log cabin in an open snowy clearing at night, tall snow-laden pine trees set BACK in the background and to the sides framing the scene (not close to the camera, no foreground trunks), an open foreground of fresh untouched snow where the warm window light spills out and reflects across the snow, fresh snow actively falling, warm orange firelight flickering in the windows like a fire dancing inside (fire itself not visible), deep blue snowy night, minimal and uncluttered, {film_look}"
+    motion_prompt: "thick snow falling steadily and continuously across the whole frame, the warm window light flickering and dancing like firelight, its warm glow shimmering on the snow in the foreground, distant pine branches still, {motion_principle}, no people"
   - id: cabin_window_glow_rain          # exterior rain variant
     weather: rain
     keyword: "Heavy Rain & Distant Thunder"
