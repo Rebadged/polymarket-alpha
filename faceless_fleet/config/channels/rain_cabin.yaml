@@ -1,8 +1,12 @@
-# Channel 1 (LEAD) — Rain / Storm + Cozy Cabin Ambiance
-# Research pick #1: biggest evergreen search demand x CK's motion moat (rain,
-# fire flicker, lightning all far better with motion than stills) x broad
+# Channel 1 (LEAD) — Cozy Cabin Ambience (rain / storm / snow)
+# Research pick #1: biggest evergreen search demand x CK's motion moat x broad
 # job-to-be-done (sleep + focus + relaxation). No character, no narration.
-# Differentiation = real motion + seamless loops + audio consistency.
+#
+# LOOK LOCKED (operator-approved 2026-06-25): cinematic STYLIZED painterly cozy;
+# cabin in an open snowy/wet clearing, DENSE forest as a backdrop behind it (no
+# foreground trunks), warm firelight FLICKERING in the windows + reflecting on the
+# snow/ground; locked camera, the falling snow/rain + firelight flicker are the loop.
+# Reference approved still: 047a7022 (snowy_cabin_exterior, Canadian/BC).
 
 channel:
   slug: rain_cabin
@@ -45,14 +49,14 @@ scene_pool:
     weather: rain
     keyword: "Heavy Rain & Distant Thunder"
     audio_hint: "heavy rain + distant thunder + faint fireplace"
-    still_prompt: "exterior of a cozy log cabin nestled in a dense Pacific Northwest forest of tall pines at night, heavy rain actively falling, warm orange firelight glow flickering in the windows like a fire dancing inside (not a steady bulb, fire not visible), dark wet evergreens, simple uncluttered scene, {film_look}"
-    motion_prompt: "heavy rain falling steadily and continuously across the frame, the warm window light flickering and dancing like firelight, water dripping from the roof edge, occasional faint distant lightning glow, {motion_principle}, no people"
+    still_prompt: "exterior of a cozy log cabin in a clearing at night, a dense thick forest of tall pine trees forming a full continuous backdrop behind and around the cabin, heavy rain actively falling, warm orange firelight flickering in the windows like a fire dancing inside (fire itself not visible), the warm light spilling and reflecting on the wet ground in the open foreground, absolutely no trees or trunks between the camera and the cabin, dark wet evergreens, deep blue rainy night, {film_look}"
+    motion_prompt: "heavy rain falling steadily and continuously across the frame, the warm window light noticeably flickering and pulsing like a real fire, casting dancing warm glow and reflections on the wet ground, water dripping from the roof edge, occasional faint distant lightning glow, distant forest still, {motion_principle}, no people"
   - id: frozen_lake_cabin               # sparse snowy vista
     weather: snow
     keyword: "Snowfall & Fireplace"
     audio_hint: "gentle wind + crackling fire, NO rain"
-    still_prompt: "a lone log cabin on the shore of a frozen lake at night, backed by a dense forest of tall snow-laden pines, snow actively falling, warm orange firelight glow flickering in the windows like a fire dancing inside (not a steady bulb, fire not visible), vast quiet minimal scene, {film_look}"
-    motion_prompt: "snow falling steadily and continuously, the warm window light flickering and dancing like firelight, the lake still and dark, {motion_principle}, serene, no people"
+    still_prompt: "a lone cozy log cabin on the shore of a frozen lake at night, a dense thick forest of snow-covered pines forming a full backdrop behind the cabin, snow actively falling, warm orange firelight flickering in the windows like a fire dancing inside (fire itself not visible), the warm light reflecting across the open snowy foreground and the frozen lake, no trees between the camera and the cabin, deep blue snowy night, {film_look}"
+    motion_prompt: "snow falling steadily and continuously, the warm window light noticeably flickering and pulsing like firelight, its glow shimmering on the snow and the frozen lake, distant forest still, {motion_principle}, serene, no people"
   - id: porch_storm                     # KEEPER (operator liked it)
     weather: storm
     keyword: "Rain & Thunderstorm"
