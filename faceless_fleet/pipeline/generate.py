@@ -32,6 +32,7 @@ def _tokens(cfg: dict, location: str = "") -> dict:
     return {"character": identity.get("character", ""),
             "film_look": identity.get("film_look", ""),
             "mood": identity.get("mood", ""),
+            "motion_principle": identity.get("motion_principle", ""),
             "location": location}
 
 
@@ -95,7 +96,8 @@ def build_jobs(cfg: dict, scene: dict, tokens: dict, location_prompt: str = "") 
 def choose_title(cfg: dict, scene: dict, st: dict, tokens: dict) -> str:
     # {dur} is intentionally left for upload.py to fill per length variant.
     human = (tokens.get("location") or scene["id"].replace("_", " "))
-    base = {**tokens, "scene_human": scene["id"].replace("_", " ")}
+    base = {**tokens, "keyword": scene.get("keyword", ""),
+            "scene_human": scene["id"].replace("_", " ")}
     templates = list(cfg["metadata"]["title_templates"])
     used = set(st.get("used_titles", []))
     random.shuffle(templates)
@@ -125,6 +127,8 @@ def main(slug: str) -> dict:
     plan = {
         "slug": slug,
         "scene_id": scene["id"],
+        "weather": scene.get("weather", ""),
+        "audio_hint": scene.get("audio_hint", ""),   # which Suno bed to make/use
         "location": loc_title,
         "title": title,
         "raw_dir": str(dirs["raw"]),
