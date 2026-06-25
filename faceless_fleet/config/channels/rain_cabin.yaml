@@ -42,6 +42,7 @@ scene_pool:
     weather: snow
     keyword: "Gentle Snowfall & Crackling Fireplace"
     audio_hint: "soft winter wind + crackling fireplace, NO rain"
+    audio_layers: [{el: wind, gain: 0.55}, {el: fireplace, gain: 0.8}]
     # PNW reference: log/A-frame cabin nestled in a DENSE snow-laden pine forest,
     # actively snowing; windows read as flickering FIRELIGHT (not a steady bulb,
     # the fire itself not the focus / not really visible).
@@ -51,24 +52,28 @@ scene_pool:
     weather: rain
     keyword: "Heavy Rain & Distant Thunder"
     audio_hint: "heavy rain + distant thunder + faint fireplace"
+    audio_layers: [{el: rain_heavy, gain: 1.0}, {el: thunder, gain: 0.5}, {el: fireplace, gain: 0.25}]
     still_prompt: "exterior of a cozy log cabin in a clearing at night, a dense thick forest of tall pine trees forming a full continuous backdrop behind and around the cabin, heavy rain actively falling, warm orange firelight flickering in the windows like a fire dancing inside (fire itself not visible), the warm light spilling and reflecting on the wet ground in the open foreground, absolutely no trees or trunks between the camera and the cabin, dark wet evergreens, deep blue rainy night, {film_look}"
     motion_prompt: "heavy rain falling steadily and continuously across the frame, the warm window light noticeably flickering and pulsing like a real fire, casting dancing warm glow and reflections on the wet ground, water dripping from the roof edge, occasional faint distant lightning glow, distant forest still, {motion_principle}, no people"
   - id: frozen_lake_cabin               # sparse snowy vista
     weather: snow
     keyword: "Snowfall & Fireplace"
     audio_hint: "gentle wind + crackling fire, NO rain"
+    audio_layers: [{el: wind, gain: 0.5}, {el: fireplace, gain: 0.75}]
     still_prompt: "a lone cozy log cabin on the shore of a frozen lake at night, a dense thick forest of snow-covered pines forming a full backdrop behind the cabin, snow actively falling, warm orange firelight flickering in the windows like a fire dancing inside (fire itself not visible), the warm light reflecting across the open snowy foreground and the frozen lake, no trees between the camera and the cabin, deep blue snowy night, {film_look}"
     motion_prompt: "snow falling steadily and continuously, the warm window light noticeably flickering and pulsing like firelight, its glow shimmering on the snow and the frozen lake, distant forest still, {motion_principle}, serene, no people"
   - id: porch_storm                     # KEEPER (operator liked it)
     weather: storm
     keyword: "Rain & Thunderstorm"
     audio_hint: "rain on porch roof + rolling thunder"
+    audio_layers: [{el: rain_heavy, gain: 1.0}, {el: thunder, gain: 0.7}]
     still_prompt: "covered wooden cabin porch during a heavy thunderstorm at night, rain pouring off the roof eaves in even sheets, a single hanging lantern glowing warm, misty dark pine forest beyond, {film_look}"
     motion_prompt: "rain pouring steadily off the eaves in even sheets, lantern swaying very slightly, puddles rippling from raindrops, occasional distant lightning, {motion_principle}, no people"
   - id: fireplace_closeup               # KEEPER (operator liked it)
     weather: fire
     keyword: "Crackling Fireplace"
     audio_hint: "crackling fire + faint rain outside"
+    audio_layers: [{el: fireplace, gain: 1.0}, {el: rain_light, gain: 0.2}]
     still_prompt: "close-up of a stone fireplace with crackling burning logs in a dark cozy cabin at night, glowing embers, warm amber firelight on the stone, simple and uncluttered, {film_look}"
     motion_prompt: "logs burning, flames dancing slowly and continuously, embers drifting upward, warm light pulsing on the stone, {motion_principle}, hypnotic, no people"
 
@@ -96,10 +101,18 @@ audio:
   #   - NOT Suno (that's music -> the sleep_ambient channel) and NOT ElevenLabs
   #     (that's voice/TTS -> the future meditation/narration channel).
   #   - audio_hint on each scene says which mix to build (rain vs snow-wind vs fire).
-  bed_source: file                    # drop your assembled soundscape WAV here
+  bed_source: file                    # 'file' bed.wav fallback, or SFX layers below
   bed_file: ""
-  bed_prompt: "layered: heavy rain + distant rolling thunder + crackling fireplace, no music, no voice, seamless and loopable, deep and calming for sleep"
   loudness_lufs: -14                  # consistent loudness; no spikes that wake sleepers
+  # Grab these 5 element files ONCE (Pixabay, see LAUNCH_PLAN.md) into sfx_dir.
+  # Each scene's `audio_layers` mixes them at sleep-safe levels into that video's bed.
+  sfx_dir: assets/sfx
+  sfx_library:
+    rain_heavy: rain_heavy.wav
+    rain_light: rain_light.wav
+    thunder: thunder_distant.wav
+    fireplace: fireplace.wav
+    wind: wind_winter.wav
 
 longform:
   # Length ladder — round hours ARE the search convention here ("8 hours rain").

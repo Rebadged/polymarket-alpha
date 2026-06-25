@@ -21,7 +21,7 @@ import random
 import subprocess
 from pathlib import Path
 
-from .config import load_channel, output_dirs
+from .config import ROOT, load_channel, output_dirs
 
 HOURS = {"1h": 3600, "3h": 10800, "8h": 28800}
 
@@ -60,6 +60,45 @@ def make_seamless_video(clip: Path, out: Path, xfade: float, fps: int) -> Path:
           f"[tail][head]xfade=transition=fade:duration={xfade}:offset={d - 2*xfade}[v]")
     _run(["ffmpeg", "-y", "-i", str(clip), "-filter_complex", fc, "-map", "[v]",
           "-r", str(fps), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "20", str(out)])
+    return out
+
+
+def build_sfx_bed(layers: list[dict], library: dict, sfx_dir: Path, out: Path,
+                  unit_seconds: int = 90) -> Path:
+    """Mix reusable SFX elements (rain/thunder/fire/wind) into one bed at per-scene
+    levels. Each layer = {el, gain}; el maps to a file via `library`. Every element
+    is looped to a common unit length, gain-staged, mixed, and limited to avoid
+    clipping. The result (a ~90s wav) feeds the normal seamless-loop audio path, so
+    you grab ~5 element files ONCE and the pipeline builds every video's bed.
+
+    sleep-safe gains live in the scene config (e.g. thunder 0.5, fire 0.25)."""
+    def _resolve(name: str):
+        p = sfx_dir / name
+        if p.exists():
+            return p
+        stem = Path(name).stem                       # tolerate .mp3 vs .wav etc.
+        for ext in (".wav", ".mp3", ".flac", ".ogg", ".m4a", ".aac"):
+            c = sfx_dir / (stem + ext)
+            if c.exists():
+                return c
+        return None
+
+    present = [(l, _resolve(library.get(l["el"], ""))) for l in layers]
+    present = [(l, f) for l, f in present if f]
+    if not present:
+        raise FileNotFoundError(
+            f"No SFX element files found in {sfx_dir} for layers {[l['el'] for l in layers]}. "
+            f"Download them (see LAUNCH_PLAN.md) or drop a ready bed.wav in the raw dir.")
+    inputs, filt = [], []
+    for i, (layer, f) in enumerate(present):
+        inputs += ["-stream_loop", "-1", "-i", str(f)]
+        filt.append(f"[{i}:a]volume={layer.get('gain', 1.0)}[a{i}]")
+    mix = "".join(f"[a{i}]" for i in range(len(present)))
+    fc = (";".join(filt) +
+          f";{mix}amix=inputs={len(present)}:normalize=0:duration=shortest,"
+          f"alimiter=limit=0.95[out]")
+    _run(["ffmpeg", "-y", *inputs, "-filter_complex", fc, "-map", "[out]",
+          "-t", str(unit_seconds), "-c:a", "pcm_s16le", str(out)])
     return out
 
 
@@ -167,9 +206,22 @@ def assemble(slug: str, variant: str = "3h") -> Path:
     looped_v = loop_to_length(base_clip, work / "video_long.mp4", seconds)
 
     # --- audio base (seamless unit + loudness-normalized) ---
+    # Prefer building the bed from reusable SFX elements at per-scene levels; fall
+    # back to a ready-made bed.wav dropped in the raw dir.
     bed = raw / "bed.wav"
+    audio_cfg = cfg.get("audio", {})
+    scene = next((s for s in cfg.get("scene_pool", []) if s["id"] == plan.get("scene_id")), {})
+    layers = scene.get("audio_layers")
+    if layers and audio_cfg.get("sfx_library"):
+        sfx_dir = ROOT / audio_cfg.get("sfx_dir", "assets/sfx")
+        try:
+            bed = build_sfx_bed(layers, audio_cfg["sfx_library"], sfx_dir, work / "bed_sfx.wav")
+        except FileNotFoundError as e:
+            if not bed.exists():
+                raise
+            print(f"[assemble] SFX layers unavailable ({e}); using bed.wav")
     if not bed.exists():
-        raise FileNotFoundError(f"No bed.wav in {raw}.")
+        raise FileNotFoundError(f"No SFX elements and no bed.wav in {raw}.")
     audio_unit = make_seamless_audio(
         bed, work / "audio_unit.m4a",
         a["loop_audio_xfade_seconds"] if seamless else 0.0, lufs)
