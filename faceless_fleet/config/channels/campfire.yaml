@@ -1,0 +1,111 @@
+# Fleet channel — Campfire (focal_point: campfire)
+# Same engine as Cabin Comforts: scene = campfire x weather, audio layered,
+# playlists by experience. The vibe: sitting by a fire under the trees.
+# NAME is a placeholder — confirm + check @handle availability before creating.
+
+channel:
+  slug: campfire
+  name: "Campfire Comforts"
+  focal_point: campfire
+  lane: campfire_cozy
+  youtube_handle: "@CampfireComforts"
+  youtube_channel_id: ""
+  oauth_secret_env: YT_CAMPFIRE_REFRESH_TOKEN
+  bio: "Cozy campfire ambience for sleep, study, and relaxation. Crackling fires under the stars, gentle rain sizzling on the flames, and quiet nights deep in the forest. Get comfortable and let the fire carry you off. New ambiences every week."
+  language: en
+  audience_geo_hint: "US/UK/CA/AU"
+
+identity:
+  mood: "around a campfire at night, warm and safe under the trees and stars"
+  palette: ["#0d1626", "#1b2a3a", "#3a2310", "#c8651b", "#e8a040"]
+  film_look: "cinematic stylized painterly realism, idealized cozy, shot on film, warm firelight vs cool night, shallow depth of field, subtle grain, 16:9"
+  negative: "no people, no text on any surface, no signage, no labels, no clutter, minimal objects, no foreground tree trunks, no dark vertical trunks framing the shot, no warped geometry, no melting objects, no watermarks, no logos, no fast or jarring motion"
+  motion_principle: "camera locked and static; the dancing fire + falling rain/snow are the motion that loops"
+
+scene_pool:
+  - id: campfire_clearing
+    weather: clear
+    keyword: "Crackling Campfire & Nature Night"
+    audio_hint: "fire crackle + crickets + faint wind, NO rain"
+    audio_layers: [{el: fireplace, gain: 1.0}, {el: crickets, gain: 0.3}, {el: wind, gain: 0.25}]
+    still_prompt: "a warm campfire burning in an open forest clearing at night under a sky full of stars, glowing embers and dancing flames, tall dark pines set back around the clearing, open foreground, deep blue night, cozy, {film_look}"
+    motion_prompt: "the campfire flames dancing and flickering continuously, embers and sparks drifting upward, faint twinkle of stars, the warm firelight pulsing on the surrounding trees, {motion_principle}, no people"
+  - id: campfire_rain                   # the 'ptsss' sizzle idea
+    weather: rain
+    keyword: "Campfire & Light Rain"
+    audio_hint: "fire crackle + light rain sizzling on the fire"
+    audio_layers: [{el: fireplace, gain: 1.0}, {el: rain_light, gain: 0.55}]
+    still_prompt: "a warm campfire burning in a forest clearing at night, light rain falling and sizzling on the flames, steam rising off the embers, tall dark wet pines set back, open foreground, deep blue rainy night, cozy, {film_look}"
+    motion_prompt: "the campfire flames dancing and flickering, light rain falling into the fire and sizzling, steam and embers rising, the warm light pulsing on the wet trees, {motion_principle}, no people"
+  - id: campfire_snow
+    weather: snow
+    keyword: "Campfire in the Snow"
+    audio_hint: "fire crackle + soft winter wind, NO rain"
+    audio_layers: [{el: fireplace, gain: 1.0}, {el: wind, gain: 0.4}]
+    still_prompt: "a warm campfire burning in a snowy forest clearing at night, snow falling softly around it, glowing embers, tall snow-laden pines set back, open snow foreground reflecting the firelight, deep blue night, cozy, {film_look}"
+    motion_prompt: "the campfire flames dancing, snow falling steadily and softly around the fire, embers drifting up, warm firelight shimmering on the snow, {motion_principle}, no people"
+  - id: campfire_lakeside
+    weather: clear
+    keyword: "Campfire by the Lake"
+    audio_hint: "fire crackle + gentle lake water + crickets"
+    audio_layers: [{el: fireplace, gain: 1.0}, {el: water, gain: 0.4}, {el: crickets, gain: 0.25}]
+    still_prompt: "a warm campfire on the shore of a calm lake at night, the fire's reflection shimmering on the still water, dark pine forest behind, stars above, open foreground, deep blue night, cozy, {film_look}"
+    motion_prompt: "the campfire flames dancing, its glow shimmering on the calm rippling lake, embers rising, faint star twinkle, {motion_principle}, serene, no people"
+
+location_pool:
+  - {title: "Canadian Rockies", prompt: "in the snowy Canadian Rockies near Banff"}
+  - {title: "Pacific Northwest", prompt: "in the Pacific Northwest pine forest"}
+  - {title: "Scottish Highlands", prompt: "in the Scottish Highlands"}
+  - {title: "Norwegian Forest", prompt: "in a remote Norwegian pine forest"}
+
+weather_map:
+  clear: {season: any,    playlist: "Campfire Under the Stars"}
+  rain:  {season: any,    playlist: "Campfire & Rain"}
+  snow:  {season: winter, playlist: "Snowy Campfire Nights"}
+playlists:
+  - "Campfire Under the Stars"
+  - "Campfire & Rain"
+  - "Snowy Campfire Nights"
+  - "8-Hour Campfire Ambience"
+
+audio:
+  bed_source: file
+  bed_file: ""
+  loudness_lufs: -14
+  sfx_dir: assets/sfx
+  sfx_library:
+    fireplace: fireplace.wav
+    rain_light: rain_light.wav
+    wind: wind_winter.wav
+    crickets: crickets.wav
+    water: lake_water.wav
+
+longform:
+  variants: ["1h", "3h", "8h"]
+  seamless_loop: true
+
+metadata:
+  title_templates:
+    - "{keyword} for Deep Sleep | {location} | {dur}"
+    - "{keyword} Sounds for Sleeping | {location} | {dur}"
+    - "{keyword} | {location} | {dur} (No Mid-Roll Ads)"
+    - "{keyword} for Sleep & Relaxation | {location} | {dur} (Cinematic)"
+  description: |
+    Welcome to Campfire Comforts. 🔥✨ A crackling campfire under the trees — for deep sleep, studying, reading, or relaxing.
+    No interruptions while you drift off. New ambiences every week.
+
+    ▶ Playlists: Campfire Under the Stars · Campfire & Rain · Snowy Campfire Nights
+
+    #campfire #firesounds #sleepsounds #ambience #studymusic #cozy #nature
+  tags: ["campfire sounds", "fire sounds", "crackling fire", "sleep sounds", "campfire ambience", "nature sounds", "fire for sleeping", "rain on fire"]
+  made_for_kids: false
+  ai_disclosure: false
+
+ads:
+  pre_roll: true
+  mid_rolls: false
+  post_roll: false
+
+cadence:
+  uploads_per_week: 3
+  shorts_per_week: 5
