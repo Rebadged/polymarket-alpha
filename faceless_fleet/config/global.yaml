@@ -51,6 +51,15 @@ upload:
   jitter_minutes: 50             # +/- random offset around the base slot
   min_hours_between_uploads: 20  # human-plausible cadence per channel
 
+# The zero-touch loop (pipeline/auto.py). Stocked occasionally (clip batch + SFX),
+# then runs itself on a jittered cron.
+auto:
+  clips_dir: assets/clips        # per-channel subfolder of pre-generated clips
+  default_variant: "8h"
+  auto_approve: true             # skip the manual gate; uploads go private+publishAt
+                                 # (the scheduled-private window is your safety net)
+  publish: true                  # actually upload in the loop
+
 policy:
   # YouTube July 2025 "inauthentic content" guardrails enforced by review.py.
   require_distinct_from_last: true   # block near-duplicate scene+track+title

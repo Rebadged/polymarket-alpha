@@ -1,24 +1,24 @@
-# Faceless Fleet — VPS crontab (Chicago box).  Install with:  crontab crontab.example
-# Times are server-local. Stagger channels; never bulk-publish on the same minute.
+# Cabin Comforts fleet — VPS crontab (Chicago box).  Install:  crontab crontab.example
+# Times are server-local. The `auto` loop = pick clip -> build bed -> assemble 8h ->
+# approve -> upload (private + jittered publishAt). One line per channel per run day.
 #
-# Set these in the crontab environment or the scripts' own env:
-#   ANTHROPIC_API_KEY=...        (only if you fulfil manifests via `claude -p`)
-#   HIGGSFIELD_API_KEY=...       (only if generation backend=rest)
-#   YT_2AM_REFRESH_TOKEN=...     (per-channel YouTube refresh tokens)
-#   YT_MEDITATION_REFRESH_TOKEN=...
+# Put these in the cron environment (e.g. an .env the box loads, or here):
+#   YT_RAINCABIN_REFRESH_TOKEN=...      (per-channel YouTube refresh tokens)
+#   FREESOUND_API_KEY=...               (only needed when (re)stocking audio)
+#   # YT_SLEEP_REFRESH_TOKEN / YT_PETDOG_REFRESH_TOKEN for channels 2 & 3
 
-REPO=/opt/faceless-fleet           # adjust to your checkout path
+REPO=/opt/cabin-comforts            # adjust to your checkout path
+PY=$REPO/venv/bin/python3           # the venv python
 
-# --- generation + assembly (heavy; off-peak) ---------------------------------
-# 2am-without-her: render a new long-form three mornings a week.
-30 4 * * 1,3,5  cd $REPO && bash faceless_fleet/deploy/run_channel.sh 2am_without_her 3h   >> /var/log/fleet-2am.log 2>&1
-# midnight-meditations: twice a week, offset so renders don't collide.
-15 5 * * 2,6    cd $REPO && bash faceless_fleet/deploy/run_channel.sh midnight_meditations script >> /var/log/fleet-med.log 2>&1
+# --- the zero-touch loop: 3 distinct videos/week, jittered, staggered by channel ---
+# Cabin Comforts (rain/storm/snow). Mon/Wed/Fri, off-peak.
+40 4 * * 1,3,5  cd $REPO && $PY -m faceless_fleet.pipeline.run auto rain_cabin --publish >> /var/log/cabin.log 2>&1
+# (Channels 2 & 3 once they exist — different days/times so no bulk-publish.)
+# 20 5 * * 2,6   cd $REPO && $PY -m faceless_fleet.pipeline.run auto sleep_ambient   --publish >> /var/log/sleep.log 2>&1
+# 10 6 * * 3,0   cd $REPO && $PY -m faceless_fleet.pipeline.run auto pet_calming_dogs --publish >> /var/log/pet.log 2>&1
 
-# --- upload drip (light; jittered publishAt handles the real spacing) ---------
-# Drip at most one approved video per channel per run, at staggered hours.
-0 14 * * *  cd $REPO && python3 -m faceless_fleet.pipeline.run upload 2am_without_her --limit 1       >> /var/log/fleet-2am.log 2>&1
-0 17 * * *  cd $REPO && python3 -m faceless_fleet.pipeline.run upload midnight_meditations --limit 1  >> /var/log/fleet-med.log 2>&1
+# --- audio: re-stock occasionally for variety (optional) ---------------------------
+# 0 3 1 * *  cd $REPO && $PY -m faceless_fleet.pipeline.run fetch-sfx --count 3 >> /var/log/cabin.log 2>&1
 
-# --- TikTok token refresh (if/when you wire cross-posting; tokens expire 24h) -
-# 0 */6 * * *  cd $REPO && python3 -m faceless_fleet.pipeline.tiktok_refresh   >> /var/log/fleet-tt.log 2>&1
+# NOTE: the clip library (assets/clips/<channel>/) is stocked in batches separately
+# (Claude/Cowork generate + download). The loop above just consumes it.

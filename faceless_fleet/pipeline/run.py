@@ -37,6 +37,16 @@ def main() -> None:
             p.add_argument("--limit", type=int, default=1)
     sub.add_parser("channels")
 
+    pa = sub.add_parser("auto")          # the zero-touch loop
+    pa.add_argument("channel")
+    pa.add_argument("--variant", default="8h")
+    pa.add_argument("--no-approve", dest="approve", action="store_false")
+    pa.add_argument("--publish", action="store_true")
+
+    pf = sub.add_parser("fetch-sfx")     # auto-download CC0 audio
+    pf.add_argument("--only")
+    pf.add_argument("--count", type=int, default=1)
+
     args = ap.parse_args()
     if args.cmd == "channels":
         print("\n".join(list_channels()))
@@ -50,6 +60,12 @@ def main() -> None:
         review_mod.approve(args.channel, args.file)
     elif args.cmd == "upload":
         upload_mod.upload_queue(args.channel, dry_run=args.dry_run, limit=args.limit)
+    elif args.cmd == "auto":
+        from . import auto as auto_mod
+        auto_mod.auto(args.channel, args.variant, approve=args.approve, publish=args.publish)
+    elif args.cmd == "fetch-sfx":
+        from . import sfx_fetch
+        sfx_fetch.fetch(args.only, args.count)
 
 
 if __name__ == "__main__":
