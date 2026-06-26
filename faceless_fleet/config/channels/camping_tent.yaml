@@ -1,0 +1,120 @@
+# Fleet channel — Tent Comforts (focal_point: tent)
+# The vibe: tucked inside a warm tent while it rains/snows outside.
+# Engine: scene = tent x weather/SEASON; focal sound (rain-on-tent, fire, water)
+# + the season's ambient palette. Tent rain audio = "rain on tent/tarp" (the drum).
+
+channel:
+  slug: camping_tent
+  name: "Tent Comforts"                # "[Focal] Comforts" family for cross-linking
+  focal_point: tent
+  lane: tent_cozy
+  youtube_handle: "@TentComforts"
+  youtube_channel_id: ""
+  oauth_secret_env: YT_TENT_REFRESH_TOKEN
+  bio: "Cozy camping ambience for sleep and relaxation. Rain drumming on the tent, summer nights full of crickets and frogs by the lake, a campfire just outside, and quiet snowy nights in the wild. Crawl in, get warm, and let it carry you off. New ambiences every week."
+  language: en
+  audience_geo_hint: "US/UK/CA/AU"
+
+identity:
+  mood: "warm and dry inside a glowing tent while the forest breathes outside"
+  palette: ["#0a1422", "#16263a", "#2a3a2a", "#c89030", "#e8c060"]
+  film_look: "cinematic stylized painterly realism, idealized cozy, shot on film, warm lantern glow vs cool night, shallow depth of field, subtle grain, 16:9"
+  negative: "no people, no text on any surface, no signage, no labels, no clutter, minimal objects, no foreground tree trunks, no dark vertical trunks framing the shot, no warped geometry, no melting objects, no watermarks, no logos, no fast or jarring motion"
+  motion_principle: "camera locked and static; the falling rain/snow + flickering lantern are the motion that loops"
+
+season_audio:
+  summer: [{el: crickets, gain: 0.4}, {el: frogs, gain: 0.3}]
+  fall:   [{el: rain_light, gain: 0.4}, {el: wind, gain: 0.3}, {el: thunder, gain: 0.4}]
+  winter: [{el: wind, gain: 0.5}]
+
+scene_pool:
+  - id: tent_rain                     # autumn rain on the canvas
+    weather: rain
+    keyword: "Heavy Rain on a Tent"
+    audio_hint: "rain on tent/tarp (focal) + light rain + wind + distant thunder"
+    audio_layers: [{el: rain_tent, gain: 1.0}]
+    still_prompt: "a cozy camping tent glowing warmly from a lantern inside, pitched in an open forest clearing at night, heavy rain falling, tall dark pines set back as a backdrop, wet ground reflecting the warm tent glow, deep blue rainy night, {film_look}"
+    motion_prompt: "heavy rain falling steadily and continuously, the warm tent glow flickering gently like a lantern inside, rain running down the tent canvas, {motion_principle}, no people"
+  - id: tent_campfire                 # summer night
+    weather: clear
+    keyword: "Tent & Campfire Summer Night"
+    audio_hint: "campfire (focal) + crickets + frogs (summer)"
+    audio_layers: [{el: fireplace, gain: 0.9}]
+    still_prompt: "a glowing camping tent beside a small warm campfire in an open forest clearing at night under the stars, dark pines set back, open foreground, deep blue summer night, cozy, {film_look}"
+    motion_prompt: "the campfire flames dancing beside the tent, the tent glowing warmly and flickering, embers drifting up, faint star twinkle, {motion_principle}, no people"
+  - id: tent_lakeside_stars          # summer by the lake
+    weather: clear
+    keyword: "Tent by the Lake Under the Stars"
+    audio_hint: "lake water (focal) + crickets + frogs (summer)"
+    audio_layers: [{el: water, gain: 0.55}]
+    still_prompt: "a warmly glowing camping tent on the shore of a calm lake at night under a sky full of stars, the tent glow reflecting on the still water, dark pine forest behind, deep blue summer night, {film_look}"
+    motion_prompt: "the warm tent glow flickering gently, its reflection shimmering on the calm rippling lake, faint star twinkle, {motion_principle}, serene, no people"
+  - id: tent_snow                     # winter
+    weather: snow
+    keyword: "Snowy Tent & Winter Wind"
+    audio_hint: "faint lantern warmth + soft winter wind"
+    audio_layers: [{el: fireplace, gain: 0.3}]
+    still_prompt: "a warmly glowing camping tent pitched in a snowy forest clearing at night, snow falling softly, tall snow-laden pines set back, open snow foreground reflecting the warm glow, deep blue night, {film_look}"
+    motion_prompt: "snow falling steadily and softly around the tent, the warm tent glow flickering gently, {motion_principle}, serene, no people"
+
+location_pool:
+  - {title: "Pacific Northwest", prompt: "in the Pacific Northwest pine forest"}
+  - {title: "Canadian Rockies", prompt: "in the Canadian Rockies"}
+  - {title: "Scottish Highlands", prompt: "in the Scottish Highlands"}
+  - {title: "Norwegian Forest", prompt: "by a fjord in a Norwegian forest"}
+
+weather_map:
+  rain:  {season: fall,   playlist: "Rain on the Tent"}
+  clear: {season: summer, playlist: "Summer Camping Nights"}
+  snow:  {season: winter, playlist: "Snowy Camping Nights"}
+playlists:
+  - "Rain on the Tent"
+  - "Summer Camping Nights"
+  - "Snowy Camping Nights"
+  - "8-Hour Camping Ambience"
+
+audio:
+  bed_source: file
+  bed_file: ""
+  loudness_lufs: -14
+  sfx_dir: assets/sfx
+  sfx_library:
+    rain_tent: rain_on_tent.wav
+    rain_light: rain_light.wav
+    fireplace: fireplace.wav
+    wind: wind_winter.wav
+    thunder: thunder_distant.wav
+    crickets: crickets.wav
+    frogs: frogs.wav
+    water: lake_water.wav
+
+longform:
+  variants: ["1h", "3h", "8h"]
+  seamless_loop: true
+
+metadata:
+  title_templates:
+    - "{keyword} for Deep Sleep | {location} | {dur}"
+    - "{keyword} Sounds for Sleeping | {location} | {dur}"
+    - "{keyword} | {location} | {dur} (No Mid-Roll Ads)"
+    - "{keyword} for Sleep & Relaxation | {location} | {dur} (Cinematic)"
+  description: |
+    Welcome to Tent Comforts. ⛺🌧️ Rain on the tent, a warm lantern glow, the quiet of the forest — for deep sleep, studying, or relaxing.
+    No interruptions while you drift off. New ambiences every week.
+
+    ▶ Playlists: Rain on the Tent · Summer Camping Nights · Snowy Camping Nights
+    🌲 Sister channels: Cabin Comforts · Campfire Comforts
+
+    #rainontent #camping #rainsounds #sleepsounds #ambience #cozy #nature
+  tags: ["rain on tent", "camping sounds", "rain sounds", "sleep sounds", "tent rain", "camping ambience", "rain for sleeping", "crickets", "frogs"]
+  made_for_kids: false
+  ai_disclosure: false
+
+ads:
+  pre_roll: true
+  mid_rolls: false
+  post_roll: false
+
+cadence:
+  uploads_per_week: 3
+  shorts_per_week: 5

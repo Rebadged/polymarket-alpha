@@ -1,0 +1,62 @@
+name: Fleet — Upload Drip
+
+# Light control-plane job: drip ONE approved video per channel onto YouTube with
+# a jittered publishAt. Heavy generation/rendering stays on the VPS (multi-GB
+# files don't live in the repo). Use this when approved media is reachable by the
+# runner (e.g. synced from object storage in the "fetch media" step below).
+
+on:
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: "channel slug"
+        required: true
+        default: "2am_without_her"
+      dry_run:
+        description: "dry run (no real upload)"
+        type: boolean
+        default: true
+  # Jittered-ish schedule: a couple of off-peak slots. publishAt adds the real jitter.
+  schedule:
+    - cron: "17 14 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: |
+          pip install -r faceless_fleet/requirements.txt
+
+      - name: Restore client secret
+        run: |
+          mkdir -p faceless_fleet/secrets
+          printf '%s' '${{ secrets.YT_CLIENT_SECRET_JSON }}' > faceless_fleet/secrets/client_secret.json
+
+      # The approved/ media is NOT in git. Make it reachable here, e.g.:
+      #   - rclone/aws s3 sync from the bucket your VPS pushes renders to, OR
+      #   - run this workflow only after a job that produced short content on the runner.
+      - name: Fetch approved media
+        run: |
+          echo "TODO: sync faceless_fleet/output/approved/ from your storage bucket."
+          echo "Skipping real upload if nothing is present."
+
+      - name: Upload drip
+        env:
+          YT_2AM_REFRESH_TOKEN: ${{ secrets.YT_2AM_REFRESH_TOKEN }}
+          YT_MEDITATION_REFRESH_TOKEN: ${{ secrets.YT_MEDITATION_REFRESH_TOKEN }}
+        run: |
+          CH="${{ github.event.inputs.channel || '2am_without_her' }}"
+          DRY="${{ github.event.inputs.dry_run }}"
+          ARGS="$CH --limit 1"
+          if [ "$DRY" != "false" ]; then ARGS="$ARGS --dry-run"; fi
+          python -m faceless_fleet.pipeline.run upload $ARGS

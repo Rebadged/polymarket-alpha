@@ -1,0 +1,175 @@
+# Channel 1 (LEAD) — Cabin Comforts (rain / storm / snow cozy-cabin ambience)
+# Research pick #1: biggest evergreen search demand x CK's motion moat x broad
+# job-to-be-done (sleep + focus + relaxation). No character, no narration.
+#
+# LOOK LOCKED (operator-approved 2026-06-25): cinematic STYLIZED painterly cozy;
+# cabin in an open snowy/wet clearing, DENSE forest as a backdrop behind it (no
+# foreground trunks), warm firelight FLICKERING in the windows + reflecting on the
+# snow/ground; locked camera, the falling snow/rain + firelight flicker are the loop.
+# Reference approved still: 047a7022 (snowy_cabin_exterior, Canadian/BC).
+
+channel:
+  slug: rain_cabin
+  name: "Cabin Comforts"               # covers rain, storm AND snow (seasonal range)
+  focal_point: cabin                   # the fleet unit: one focal point = one channel
+  lane: rain_storm_cozy
+  youtube_handle: "@CabinComforts"     # confirm availability when creating; else @CabinComfortsTV etc
+  youtube_channel_id: ""
+  oauth_secret_env: YT_RAINCABIN_REFRESH_TOKEN   # separate Brand Account / email (hygiene)
+  language: en
+  audience_geo_hint: "US/UK/CA/AU"    # English metadata -> high-CPM markets
+  # Channel "About" / bio:
+  bio: "Cozy cabin ambience for sleep, study, and relaxation. Rain, thunderstorms, crackling fireplaces, and gentle snowfall from cabins tucked deep in the world's most beautiful forests. Dim the lights, get comfortable, and let the quiet take over. New ambiences every week."
+
+identity:
+  mood: "cozy, safe, sheltered-from-the-storm; warm cabin while it pours/snows outside"
+  palette: ["#0d1b2a", "#1b2a3a", "#3a2a1a", "#c8772b", "#e0a050"]   # storm-blue + firelight amber
+  # Chosen look: cinematic STYLIZED painterly realism (grounded but idealized — hides
+  # AI artifacts, more ownable/recognizable brand, cozier). Not photoreal, not cartoon.
+  film_look: "cinematic stylized painterly realism, idealized cozy, shot on film, warm window glow vs cool night, shallow depth of field, subtle grain, 16:9"
+  # KEEP SCENES SPARSE: few objects (object-heavy interiors produce gibberish text +
+  # fake-looking props). Favor exteriors + simple textures.
+  negative: "no people, no text on any surface, no signage, no books, no labels, no readable screens, no clutter, minimal objects, no foreground trees, no tree trunks in front of the cabin, no dark vertical trunks framing the shot, no silhouetted foreground branches, no bare tree bark in the foreground, no trees crowding or blocking the cabin, no warped geometry, no melting objects, no watermarks, no logos, no fast or jarring motion"
+  # MOTION PRINCIPLE (operator feedback): camera mostly LOCKED OFF — no push-in/out,
+  # at most the faintest pivot. The loop comes from the AMBIENT ELEMENT (falling snow,
+  # falling rain, dancing fire), not camera movement. Element motion loops seamlessly.
+  motion_principle: "camera locked and static; the falling snow / rain / fire is the motion that loops"
+
+# Scene pool — sparse, mostly EXTERIOR, locked camera, element-driven motion.
+# Each scene carries: weather (drives the matching Suno bed via audio_hint),
+# keyword (the title's leading search phrase, so titles match the weather).
+scene_pool:
+  - id: snowy_cabin_exterior            # the hero shot (operator's idea)
+    weather: snow
+    keyword: "Gentle Snowfall & Crackling Fireplace"
+    audio_hint: "soft winter wind + crackling fireplace, NO rain"
+    audio_layers: [{el: wind, gain: 0.55}, {el: fireplace, gain: 0.8}]
+    # PNW reference: log/A-frame cabin nestled in a DENSE snow-laden pine forest,
+    # actively snowing; windows read as flickering FIRELIGHT (not a steady bulb,
+    # the fire itself not the focus / not really visible).
+    still_prompt: "exterior of a cozy log cabin sitting in an open snowy clearing at night, a DENSE thick forest of snow-covered evergreen pine trees forming a full continuous backdrop behind and around the cabin, clean open fresh snow in the foreground with warm window light spilling and reflecting across it, absolutely no trees or trunks between the camera and the cabin, fresh snow actively falling, warm orange firelight flickering in the windows like a fire dancing inside (fire itself not visible), deep blue snowy night, {film_look}"
+    motion_prompt: "thick snow falling steadily and continuously across the whole frame, the warm window light noticeably flickering and pulsing like a real fire, casting dancing shifting warm glow and soft moving shadows across the snow and the cabin walls, distant forest still, {motion_principle}, no people"
+  - id: cabin_window_glow_rain          # exterior rain variant
+    weather: rain
+    keyword: "Heavy Rain & Distant Thunder"
+    audio_hint: "heavy rain + distant thunder + faint fireplace"
+    audio_layers: [{el: rain_heavy, gain: 1.0}, {el: thunder, gain: 0.5}, {el: fireplace, gain: 0.25}]
+    still_prompt: "exterior of a cozy log cabin in a clearing at night, a dense thick forest of tall pine trees forming a full continuous backdrop behind and around the cabin, heavy rain actively falling, warm orange firelight flickering in the windows like a fire dancing inside (fire itself not visible), the warm light spilling and reflecting on the wet ground in the open foreground, absolutely no trees or trunks between the camera and the cabin, dark wet evergreens, deep blue rainy night, {film_look}"
+    motion_prompt: "heavy rain falling steadily and continuously across the frame, the warm window light noticeably flickering and pulsing like a real fire, casting dancing warm glow and reflections on the wet ground, water dripping from the roof edge, occasional faint distant lightning glow, distant forest still, {motion_principle}, no people"
+  - id: frozen_lake_cabin               # sparse snowy vista
+    weather: snow
+    keyword: "Snowfall & Fireplace"
+    audio_hint: "gentle wind + crackling fire, NO rain"
+    audio_layers: [{el: wind, gain: 0.5}, {el: fireplace, gain: 0.75}]
+    still_prompt: "a lone cozy log cabin on the shore of a frozen lake at night, a dense thick forest of snow-covered pines forming a full backdrop behind the cabin, snow actively falling, warm orange firelight flickering in the windows like a fire dancing inside (fire itself not visible), the warm light reflecting across the open snowy foreground and the frozen lake, no trees between the camera and the cabin, deep blue snowy night, {film_look}"
+    motion_prompt: "snow falling steadily and continuously, the warm window light noticeably flickering and pulsing like firelight, its glow shimmering on the snow and the frozen lake, distant forest still, {motion_principle}, serene, no people"
+  - id: porch_storm                     # KEEPER (operator liked it)
+    weather: storm
+    keyword: "Rain & Thunderstorm"
+    audio_hint: "rain on porch roof + rolling thunder"
+    audio_layers: [{el: rain_heavy, gain: 1.0}, {el: thunder, gain: 0.7}]
+    still_prompt: "covered wooden cabin porch during a heavy thunderstorm at night, rain pouring off the roof eaves in even sheets, a single hanging lantern glowing warm, misty dark pine forest beyond, {film_look}"
+    motion_prompt: "rain pouring steadily off the eaves in even sheets, lantern swaying very slightly, puddles rippling from raindrops, occasional distant lightning, {motion_principle}, no people"
+  - id: fireplace_closeup               # KEEPER (operator liked it)
+    weather: fire
+    keyword: "Crackling Fireplace"
+    audio_hint: "crackling fire + faint rain outside"
+    audio_layers: [{el: fireplace, gain: 1.0}, {el: rain_light, gain: 0.2}]
+    still_prompt: "close-up of a stone fireplace with crackling burning logs in a dark cozy cabin at night, glowing embers, warm amber firelight on the stone, simple and uncluttered, {film_look}"
+    motion_prompt: "logs burning, flames dancing slowly and continuously, embers drifting upward, warm light pulsing on the stone, {motion_principle}, hypnotic, no people"
+
+# Named-location rotation. Per the geography research: location is per-video
+# VARIATION + SEO seasoning, NOT an RPM lever (RPM = viewer country, set by the
+# LANGUAGE of metadata). So: short evocative place names paired with the generic
+# keyword in titles; the descriptive `prompt` form drives the image only.
+# `title` = short (goes in the video title); `prompt` = descriptive (goes to Higgsfield).
+location_pool:
+  # Canadian / North American cozy
+  - {title: "Canadian Rockies Cabin",   prompt: "a snowbound log cabin in the Canadian Rockies near Banff"}
+  - {title: "British Columbia Cabin",    prompt: "a remote cabin in the snowy mountains of British Columbia, Canada"}
+  - {title: "Pacific Northwest Cabin",   prompt: "a log cabin in the rainy pine forests of the Pacific Northwest"}
+  # British Isles (high English affinity, NH winter)
+  - {title: "Scottish Highlands Cabin",  prompt: "a stone cottage in the Scottish Highlands during a storm"}
+  - {title: "Lake District Cottage",     prompt: "a cozy cottage in the English Lake District in the rain"}
+  # Alpine / European aesthetic (English titles — for the LOOK, not to capture EU viewers)
+  - {title: "Swiss Alps Cabin",          prompt: "a wooden chalet in the Swiss Alps during a snowfall"}
+  - {title: "Norwegian Fjord Cabin",     prompt: "a wooden cabin by a fjord in northern Norway"}
+
+# Weather drives season + which binge-playlist a video lands in (autoplay loops
+# them = stacked overnight watch-hours). The loop tags each video automatically.
+weather_map:
+  snow:  {season: winter, playlist: "Snowy Cabin Nights"}
+  rain:  {season: any,    playlist: "Rainy Cabin Nights"}
+  storm: {season: any,    playlist: "Cabin Thunderstorms"}
+  fire:  {season: any,    playlist: "Cabin & Fireplace"}
+playlists:
+  - "Snowy Cabin Nights"
+  - "Rainy Cabin Nights"
+  - "Cabin Thunderstorms"
+  - "Cabin & Fireplace"
+  - "8-Hour Cabin Ambience"
+
+audio:
+  # SOUNDSCAPE, not music or voice. Best source = layered royalty-free / CC0 real
+  # recordings (rain + distant thunder + fireplace crackle), looped with ffmpeg.
+  # Real foley beats AI for rain/fire authenticity and is free/ToS-safe.
+  #   - NOT Suno (that's music -> the sleep_ambient channel) and NOT ElevenLabs
+  #     (that's voice/TTS -> the future meditation/narration channel).
+  #   - audio_hint on each scene says which mix to build (rain vs snow-wind vs fire).
+  bed_source: file                    # 'file' bed.wav fallback, or SFX layers below
+  bed_file: ""
+  loudness_lufs: -14                  # consistent loudness; no spikes that wake sleepers
+  # Grab these 5 element files ONCE (Pixabay, see LAUNCH_PLAN.md) into sfx_dir.
+  # Each scene's `audio_layers` mixes them at sleep-safe levels into that video's bed.
+  sfx_dir: assets/sfx
+  sfx_library:
+    rain_heavy: rain_heavy.wav
+    rain_light: rain_light.wav
+    thunder: thunder_distant.wav
+    fireplace: fireplace.wav
+    wind: wind_winter.wav
+
+longform:
+  # Length ladder — round hours ARE the search convention here ("8 hours rain").
+  variants: ["1h", "3h", "8h"]
+  seamless_loop: true                 # crossfade the short clip end->start (invisible seam)
+
+metadata:
+  # Research title convention: [Sound + Benefit] | [short Location] | [Duration] [+ modifier].
+  # Generic high-volume keyword LEADS (first ~60 chars); the place name is seasoning.
+  # Modifiers reflect OUR edge (cinematic motion, crackling fire) — never "Black Screen"
+  # (we're the opposite) and never "No Ads" (we run pre-roll); "No Mid-Roll Ads" is honest.
+  # {keyword} comes from the chosen scene so the title matches the weather
+  # (snow scene -> "Gentle Snowfall…", rain scene -> "Heavy Rain…").
+  title_templates:
+    - "{keyword} for Deep Sleep | Cozy {location} | {dur}"
+    - "{keyword} Sounds for Sleeping | {location} | {dur}"
+    - "{keyword} | Cozy {location} | {dur} (No Mid-Roll Ads)"
+    - "{keyword} for Sleep & Relaxation | {location} | {dur} (Cinematic)"
+  description: |
+    Welcome to Cabin Comforts. 🌲🔥 Heavy rain, distant thunder, gentle snowfall, and a crackling fireplace at a cozy cabin in the woods — for deep sleep, studying, reading, or relaxing.
+
+    No interruptions while you drift off. New ambiences every week.
+
+    ▶ Playlists: Rain for Deep Sleep · 8-Hour Storms · Snowy Cabin Nights
+
+    #rain #rainsounds #fireplace #sleepsounds #thunderstorm #ambience #studymusic #cozy
+  tags: ["rain sounds", "rain and thunder", "fireplace sounds", "cozy cabin", "rain for sleeping", "thunderstorm sounds", "sleep sounds", "rain on window", "ambience", "study sounds"]
+  made_for_kids: false
+  ai_disclosure: false                # non-realistic ambient visuals; disclose if a scene ever reads as a real place/event
+
+ads:
+  # Deep-sleep/overnight length -> minimize interruptions (research ad table).
+  pre_roll: true
+  mid_rolls: false                    # 1h/3h/8h sleep lengths: off
+  post_roll: false                    # post-roll at end of a sleep journey = #1 complaint
+  note: "If a 20-60min focus cut is made, enable sparse mid-rolls (~every 12-15min) on THAT cut only."
+
+cadence:
+  uploads_per_week: 3                 # 2-3 distinct long-form + 4-5 Shorts/week (funnel)
+  shorts_per_week: 5
+
+# Discovery funnel (CK's 50+ hook library across curiosity/POV/bold/FOMO/comment-bait).
+funnel:
+  shorts_source: "10-30s vertical cut of the motion clip + hook overlay"
+  playlists: ["Rain for Deep Sleep", "8-Hour Storms", "Cozy Cabin Nights"]
