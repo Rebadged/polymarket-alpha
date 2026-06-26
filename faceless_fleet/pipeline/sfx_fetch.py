@@ -41,7 +41,7 @@ DEFAULT_SOURCES = {
     # campfire / camping focal points
     "crickets":        ("night crickets ambience", (120, 1800)),
     "lake_water":      ("gentle lake water lapping shore", (120, 1800)),
-    "rain_on_tent":    ("rain on tent", (60, 1200)),
+    "rain_on_tent":    ("rain on tent tarp canvas", (60, 1200)),  # the drumming sound, not generic rain
 }
 
 

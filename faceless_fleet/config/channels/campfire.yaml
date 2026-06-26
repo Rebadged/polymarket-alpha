@@ -35,8 +35,8 @@ scene_pool:
     keyword: "Campfire & Light Rain"
     audio_hint: "fire crackle + light rain sizzling on the fire"
     audio_layers: [{el: fireplace, gain: 1.0}, {el: rain_light, gain: 0.55}]
-    still_prompt: "a warm campfire burning in a forest clearing at night, light rain falling and sizzling on the flames, steam rising off the embers, tall dark wet pines set back, open foreground, deep blue rainy night, cozy, {film_look}"
-    motion_prompt: "the campfire flames dancing and flickering, light rain falling into the fire and sizzling, steam and embers rising, the warm light pulsing on the wet trees, {motion_principle}, no people"
+    still_prompt: "a warm campfire burning in a forest clearing at night, a light drizzle in the air with a few drops sizzling on the flames, faint steam rising off the embers, tall dark pines set back, open foreground, deep blue night, cozy, {film_look}"
+    motion_prompt: "the campfire flames dancing and flickering, only a light drizzle in the air, the occasional drop falling into the fire and sizzling with a wisp of steam, embers rising, warm light pulsing on the trees, {motion_principle}, no people"
   - id: campfire_snow
     weather: snow
     keyword: "Campfire in the Snow"

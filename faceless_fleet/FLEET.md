@@ -21,17 +21,25 @@ The vibe is the product. The **audio is the star**, the **visual is the hook**.
   autoplay = the whole night loops on your channel = stacked watch-hours.
 - **Meditation is its own lane** (narrated) — not in the focal-point group.
 
-## Channels (focal points)
+## The "Comforts" family + cross-linking
 
-| # | Channel | Focal point | Status |
-|---|---------|-------------|--------|
-| 1 | **Cabin Comforts** | cabin | LIVE — building |
-| 2 | (e.g. *Campfire Nights*) | campfire | template-ready |
-| 3 | (e.g. *Tent & Rain* / camping) | tent | template-ready |
-| — | meditation (narrated) | — | separate lane, later |
+All focal-point channels share the **"[Focal] Comforts"** brand so a viewer who
+finds one immediately recognizes the others — and each channel **cross-links** to
+its siblings (YouTube Settings → Customization → Featured sections → "Featured
+channels", + link them in each channel's About/links). Someone who loves Cabin
+Comforts discovers Campfire/Tent Comforts = shared, compounding audience. Win-win.
 
-Each new channel = copy `rain_cabin.yaml`, swap `focal_point` + the scene prompts
-(same engine: scenes = focal×weather, `audio_layers`, `weather_map` playlists).
+| # | Channel | Handle | Focal point | Status |
+|---|---------|--------|-------------|--------|
+| 1 | **Cabin Comforts** | @CabinComforts | cabin | LIVE — building |
+| 2 | **Campfire Comforts** | @CampfireComforts | campfire | config + look ready |
+| 3 | **Tent Comforts** | @TentComforts | tent | config + look ready |
+| 4+ | (Window / Forest / Beach Comforts…) | — | — | template |
+| — | meditation (narrated) | — | — | separate lane, later |
+
+Each new channel = copy a channel yaml, swap `focal_point` + scene prompts (same
+engine: scenes = focal×weather, `audio_layers`, `weather_map` playlists). Confirm
+each `@handle`'s availability when you create it.
 
 ## Token economy (keep it lean)
 
