@@ -56,11 +56,26 @@ We want Higgsfield's stylized image model (Soul family) and a cheap image-to-vid
 animator (Kling Turbo family). Get the exact Cloud-API slugs by, in order of preference:
 1. the model catalog / "Applications" list in the authenticated dashboard at
    https://cloud.higgsfield.ai (or its API docs), or
-2. trying candidate slugs with the Step-2 snippet (swap the application string) until one
-   returns 200, e.g. patterns like `higgsfield/soul-2/text-to-image`,
-   `higgsfield/kling-3-turbo/image-to-video` (image-to-video takes an `image_url` arg).
+2. trying the candidate slugs below with the Step-2 snippet (swap the `application`
+   string) until one returns 200.
 
-Record the two that work.
+**Candidate slugs to try (fal-style `provider/model/task`, NONE confirmed — a 200 is the
+only proof). Try top to bottom:**
+
+Image (Soul / stylized):
+- `higgsfield/soul/text-to-image`
+- `higgsfield/soul-id/text-to-image`
+- `higgsfield/soul/image`
+- *proven fallback (different look, but validates the pipeline):* `bytedance/seedream/v4/text-to-image`
+
+Image-to-video (Kling Turbo, takes an `image_url` arg):
+- `higgsfield/kling-3-turbo/image-to-video`
+- `kwaivgi/kling-v3-turbo/image-to-video`
+- `kling/v3-turbo/image-to-video`
+- `higgsfield/kling/image-to-video`
+
+Record the two that return 200. (Seedream is Bytedance, not the cozy Soul look — use it
+only to prove auth+download; swap to the confirmed Soul slug for production.)
 
 ## Step 4 — fill config + run ONE real clip
 
@@ -95,3 +110,40 @@ Check `balance` before/after to confirm the credit cost is sane (~8).
   pinned (bad key vs wrong slug vs sandbox egress) without guessing.
 
 Do NOT print the key value anywhere. Keep total spend to the ~8-credit single clip.
+
+---
+
+## Copy-paste runbook for the VPS / PC (real internet — clears the egress block)
+
+Both Claude sandboxes are denied egress to `platform.higgsfield.ai`, so this last mile
+must run somewhere with normal internet. On the VPS (or your PC), with the repo checked
+out on this branch and `HIGGSFIELD_API_KEY` exported:
+
+```bash
+pip install higgsfield-client
+export HF_KEY="$HIGGSFIELD_API_KEY"
+
+# 1) Auth proof (known-good slug). A JSON with an images[].url = auth works.
+python - <<'PY'
+import higgsfield_client as hf
+print(hf.subscribe("bytedance/seedream/v4/text-to-image",
+      arguments={"prompt":"cozy snowy cabin at night, warm windows","aspect_ratio":"16:9"}))
+PY
+
+# 2) Find the two slugs: swap the application string with the candidates in Step 3
+#    until each returns 200 (image, then image-to-video with an image_url arg).
+
+# 3) Put the two confirmed slugs into faceless_fleet/config/global.yaml:
+#      generation.rest_image_model / generation.rest_video_model
+
+# 4) Real end-to-end, one clip (~8 credits):
+python -m faceless_fleet.pipeline.run restock-run rain_cabin --budget 8
+ls -la faceless_fleet/assets/clips/rain_cabin/   # the MP4 should be here
+
+# 5) If good: commit the slugs, flip generation.backend: rest, uncomment the restock-run
+#    cron line in crontab.example. Done — restock is now fully unattended.
+```
+
+Until then, the **scheduled-session restock** (deploy/RESTOCK_SCHEDULE.md) is the working
+default: it needs no API key and no platform egress (it generates over the MCP connector
+and ships URLs through git), so it runs today the moment a VPS is up to fetch + publish.
