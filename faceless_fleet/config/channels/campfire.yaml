@@ -1,7 +1,7 @@
-# Fleet channel — Campfire (focal_point: campfire)
-# Same engine as Cabin Comforts: scene = campfire x weather, audio layered,
-# playlists by experience. The vibe: sitting by a fire under the trees.
-# NAME is a placeholder — confirm + check @handle availability before creating.
+# Fleet channel — Campfire Comforts (focal_point: campfire)
+# Engine: scene = campfire x weather/SEASON. The scene carries its FOCAL sound
+# (fire); the SEASON adds an ambient palette (summer=crickets/frogs, fall=rain/
+# wind/thunder, winter=wind). Same stylized look + playlists-by-season.
 
 channel:
   slug: campfire
@@ -11,7 +11,7 @@ channel:
   youtube_handle: "@CampfireComforts"
   youtube_channel_id: ""
   oauth_secret_env: YT_CAMPFIRE_REFRESH_TOKEN
-  bio: "Cozy campfire ambience for sleep, study, and relaxation. Crackling fires under the stars, gentle rain sizzling on the flames, and quiet nights deep in the forest. Get comfortable and let the fire carry you off. New ambiences every week."
+  bio: "Cozy campfire ambience for sleep, study, and relaxation. Crackling fires under summer stars with crickets and frogs, gentle rain on the flames in autumn, and quiet snowy nights deep in the forest. Get comfortable and let the fire carry you off. New ambiences every week."
   language: en
   audience_geo_hint: "US/UK/CA/AU"
 
@@ -22,34 +22,40 @@ identity:
   negative: "no people, no text on any surface, no signage, no labels, no clutter, minimal objects, no foreground tree trunks, no dark vertical trunks framing the shot, no warped geometry, no melting objects, no watermarks, no logos, no fast or jarring motion"
   motion_principle: "camera locked and static; the dancing fire + falling rain/snow are the motion that loops"
 
+# Season -> ambient palette (layered UNDER each scene's focal fire sound).
+season_audio:
+  summer: [{el: crickets, gain: 0.4}, {el: frogs, gain: 0.3}]
+  fall:   [{el: rain_light, gain: 0.6}, {el: wind, gain: 0.3}, {el: thunder, gain: 0.4}]
+  winter: [{el: wind, gain: 0.5}]
+
 scene_pool:
-  - id: campfire_clearing
+  - id: campfire_clearing             # summer night
     weather: clear
-    keyword: "Crackling Campfire & Nature Night"
-    audio_hint: "fire crackle + crickets + faint wind, NO rain"
-    audio_layers: [{el: fireplace, gain: 1.0}, {el: crickets, gain: 0.3}, {el: wind, gain: 0.25}]
-    still_prompt: "a warm campfire burning in an open forest clearing at night under a sky full of stars, glowing embers and dancing flames, tall dark pines set back around the clearing, open foreground, deep blue night, cozy, {film_look}"
+    keyword: "Crackling Campfire & Summer Night"
+    audio_hint: "fire + crickets + frogs (summer palette)"
+    audio_layers: [{el: fireplace, gain: 1.0}]
+    still_prompt: "a warm campfire burning in an open forest clearing at night under a sky full of stars, glowing embers and dancing flames, tall dark pines set back around the clearing, open foreground, deep blue summer night, cozy, {film_look}"
     motion_prompt: "the campfire flames dancing and flickering continuously, embers and sparks drifting upward, faint twinkle of stars, the warm firelight pulsing on the surrounding trees, {motion_principle}, no people"
-  - id: campfire_rain                   # the 'ptsss' sizzle idea
+  - id: campfire_rain                 # autumn drizzle
     weather: rain
-    keyword: "Campfire & Light Rain"
-    audio_hint: "fire crackle + light rain sizzling on the fire"
-    audio_layers: [{el: fireplace, gain: 1.0}, {el: rain_light, gain: 0.55}]
+    keyword: "Campfire & Light Autumn Rain"
+    audio_hint: "fire + light rain + wind + distant thunder (fall palette)"
+    audio_layers: [{el: fireplace, gain: 1.0}]
     still_prompt: "a warm campfire burning in a forest clearing at night, a light drizzle in the air with a few drops sizzling on the flames, faint steam rising off the embers, tall dark pines set back, open foreground, deep blue night, cozy, {film_look}"
     motion_prompt: "the campfire flames dancing and flickering, only a light drizzle in the air, the occasional drop falling into the fire and sizzling with a wisp of steam, embers rising, warm light pulsing on the trees, {motion_principle}, no people"
-  - id: campfire_snow
+  - id: campfire_snow                 # winter
     weather: snow
     keyword: "Campfire in the Snow"
-    audio_hint: "fire crackle + soft winter wind, NO rain"
-    audio_layers: [{el: fireplace, gain: 1.0}, {el: wind, gain: 0.4}]
+    audio_hint: "fire + soft winter wind"
+    audio_layers: [{el: fireplace, gain: 1.0}]
     still_prompt: "a warm campfire burning in a snowy forest clearing at night, snow falling softly around it, glowing embers, tall snow-laden pines set back, open snow foreground reflecting the firelight, deep blue night, cozy, {film_look}"
     motion_prompt: "the campfire flames dancing, snow falling steadily and softly around the fire, embers drifting up, warm firelight shimmering on the snow, {motion_principle}, no people"
-  - id: campfire_lakeside
+  - id: campfire_lakeside             # summer by the water
     weather: clear
     keyword: "Campfire by the Lake"
-    audio_hint: "fire crackle + gentle lake water + crickets"
-    audio_layers: [{el: fireplace, gain: 1.0}, {el: water, gain: 0.4}, {el: crickets, gain: 0.25}]
-    still_prompt: "a warm campfire on the shore of a calm lake at night, the fire's reflection shimmering on the still water, dark pine forest behind, stars above, open foreground, deep blue night, cozy, {film_look}"
+    audio_hint: "fire + lake water + crickets + frogs (summer)"
+    audio_layers: [{el: fireplace, gain: 1.0}, {el: water, gain: 0.45}]
+    still_prompt: "a warm campfire on the shore of a calm lake at night, the fire's reflection shimmering on the still water, dark pine forest behind, stars above, open foreground, deep blue summer night, cozy, {film_look}"
     motion_prompt: "the campfire flames dancing, its glow shimmering on the calm rippling lake, embers rising, faint star twinkle, {motion_principle}, serene, no people"
 
 location_pool:
@@ -59,12 +65,12 @@ location_pool:
   - {title: "Norwegian Forest", prompt: "in a remote Norwegian pine forest"}
 
 weather_map:
-  clear: {season: any,    playlist: "Campfire Under the Stars"}
-  rain:  {season: any,    playlist: "Campfire & Rain"}
+  clear: {season: summer, playlist: "Summer Campfire Nights"}
+  rain:  {season: fall,   playlist: "Rainy Campfire Nights"}
   snow:  {season: winter, playlist: "Snowy Campfire Nights"}
 playlists:
-  - "Campfire Under the Stars"
-  - "Campfire & Rain"
+  - "Summer Campfire Nights"
+  - "Rainy Campfire Nights"
   - "Snowy Campfire Nights"
   - "8-Hour Campfire Ambience"
 
@@ -77,7 +83,9 @@ audio:
     fireplace: fireplace.wav
     rain_light: rain_light.wav
     wind: wind_winter.wav
+    thunder: thunder_distant.wav
     crickets: crickets.wav
+    frogs: frogs.wav
     water: lake_water.wav
 
 longform:
@@ -94,10 +102,11 @@ metadata:
     Welcome to Campfire Comforts. 🔥✨ A crackling campfire under the trees — for deep sleep, studying, reading, or relaxing.
     No interruptions while you drift off. New ambiences every week.
 
-    ▶ Playlists: Campfire Under the Stars · Campfire & Rain · Snowy Campfire Nights
+    ▶ Playlists: Summer Campfire Nights · Rainy Campfire Nights · Snowy Campfire Nights
+    🌲 Sister channels: Cabin Comforts · Tent Comforts
 
     #campfire #firesounds #sleepsounds #ambience #studymusic #cozy #nature
-  tags: ["campfire sounds", "fire sounds", "crackling fire", "sleep sounds", "campfire ambience", "nature sounds", "fire for sleeping", "rain on fire"]
+  tags: ["campfire sounds", "fire sounds", "crackling fire", "sleep sounds", "campfire ambience", "nature sounds", "fire for sleeping", "crickets", "frogs"]
   made_for_kids: false
   ai_disclosure: false
 

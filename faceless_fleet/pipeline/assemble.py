@@ -102,6 +102,22 @@ def build_sfx_bed(layers: list[dict], library: dict, sfx_dir: Path, out: Path,
     return out
 
 
+def merge_audio_layers(cfg: dict, scene: dict) -> list[dict]:
+    """A scene's bed = its FOCAL sound(s) + its SEASON's ambient palette.
+    Season comes from weather_map[weather].season; palette from cfg.season_audio.
+    e.g. a summer campfire = fire (focal) + crickets/frogs/lake (summer palette).
+    Channels without season_audio just use the scene's explicit audio_layers."""
+    layers = list(scene.get("audio_layers") or [])
+    weather = scene.get("weather")
+    season = (cfg.get("weather_map", {}).get(weather, {}) or {}).get("season")
+    palette = (cfg.get("season_audio", {}) or {}).get(season, [])
+    have = {l["el"] for l in layers}
+    for p in palette:
+        if p["el"] not in have:
+            layers.append(p)
+    return layers
+
+
 def make_seamless_audio(bed: Path, out: Path, xfade: float, lufs: float) -> Path:
     """Seamless audio loop unit + loudness normalization. Wraps the bed's end into
     its start so a stream_loop has no audible seam: take tail=bed[X:D] and head=
@@ -211,7 +227,7 @@ def assemble(slug: str, variant: str = "3h") -> Path:
     bed = raw / "bed.wav"
     audio_cfg = cfg.get("audio", {})
     scene = next((s for s in cfg.get("scene_pool", []) if s["id"] == plan.get("scene_id")), {})
-    layers = scene.get("audio_layers")
+    layers = merge_audio_layers(cfg, scene)
     if layers and audio_cfg.get("sfx_library"):
         sfx_dir = ROOT / audio_cfg.get("sfx_dir", "assets/sfx")
         try:
