@@ -1,6 +1,8 @@
 # Faceless Fleet pipeline dependencies
 PyYAML>=6.0
 requests>=2.31
+# Unattended restock via the Higgsfield Cloud API (backend: rest only)
+higgsfield-client>=0.1
 # YouTube upload (install only where you run upload.py)
 google-api-python-client>=2.120
 google-auth>=2.29

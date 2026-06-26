@@ -20,8 +20,16 @@ generation:
   est_credits_per_clip: 8        # ~0.1 image + ~7.5 video; used for batch budgeting
   aspect_ratio: "16:9"
   # 'manifest' = emit a JSON job for a Claude Code/MCP session to fulfill (works today,
-  # MCP-only, no API key). 'rest' = call Higgsfield REST API unattended (needs key).
+  # MCP-only, no API key). 'rest' = call the Higgsfield Cloud API unattended (needs key).
   backend: manifest
+  # --- Cloud API (backend: rest) only --------------------------------------------
+  # The Cloud API uses fal-style slugs that DIFFER from the MCP names above. Confirm
+  # the exact slugs against the live key (one lookup), then set them here. When unset,
+  # rest.py falls back to image_model/video_model — which are MCP names and will NOT
+  # resolve on the Cloud API, so these must be filled before `restock-run` works.
+  rest_image_model:                # e.g. "higgsfield/soul/text-to-image" (CONFIRM)
+  rest_video_model:                # e.g. "higgsfield/kling-3-turbo/image-to-video" (CONFIRM)
+  rest_image_resolution: "2K"
 
 assembly:
   fps: 30

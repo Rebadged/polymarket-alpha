@@ -70,6 +70,10 @@ def main() -> None:
     prf = sub.add_parser("restock-fetch")    # VPS downloads recorded URLs into the library
     prf.add_argument("channel")
 
+    prn = sub.add_parser("restock-run")      # unattended: generate via Cloud API (needs key)
+    prn.add_argument("channel")
+    prn.add_argument("--budget", type=float, default=56)
+
     args = ap.parse_args()
     if args.cmd == "channels":
         print("\n".join(list_channels()))
@@ -101,6 +105,9 @@ def main() -> None:
     elif args.cmd == "restock-fetch":
         from . import restock
         restock.fetch_pending(args.channel)
+    elif args.cmd == "restock-run":
+        from . import rest
+        rest.fulfill(args.channel, args.budget)
 
 
 if __name__ == "__main__":
