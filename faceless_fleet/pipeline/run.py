@@ -6,9 +6,15 @@
   python -m faceless_fleet.pipeline.run approve <channel> --file X   # human gate
   python -m faceless_fleet.pipeline.run upload   <channel> [--dry-run]
   python -m faceless_fleet.pipeline.run channels                     # list configured channels
+  python -m faceless_fleet.pipeline.run auto      <channel> [--publish]   # zero-touch single run
+  python -m faceless_fleet.pipeline.run weekly    [--channels ...]        # set-and-forget weekly publish
+  python -m faceless_fleet.pipeline.run batch-plan <channel> [--budget N] # restock manifest (clips to gen)
+  python -m faceless_fleet.pipeline.run fetch-sfx [--only X] [--count N]  # auto-download CC0 audio
 
 The unattended loop on cron is just: generate (-> manifest) ; [Claude/MCP fills it] ;
 assemble ; then a SEPARATE jittered cron runs `upload` to drip the approved queue.
+`weekly` wraps the whole publish loop for every connected channel — that's the one
+cron line you actually need running. `batch-plan` is the periodic clip-restock.
 """
 from __future__ import annotations
 
@@ -47,6 +53,14 @@ def main() -> None:
     pf.add_argument("--only")
     pf.add_argument("--count", type=int, default=1)
 
+    pw = sub.add_parser("weekly")        # the set-and-forget weekly job
+    pw.add_argument("--channels", nargs="*")
+    pw.add_argument("--dry-run", action="store_true")
+
+    pb = sub.add_parser("batch-plan")    # budgeted restock manifest (clips to generate)
+    pb.add_argument("channel")
+    pb.add_argument("--budget", type=float, default=160)
+
     args = ap.parse_args()
     if args.cmd == "channels":
         print("\n".join(list_channels()))
@@ -66,6 +80,12 @@ def main() -> None:
     elif args.cmd == "fetch-sfx":
         from . import sfx_fetch
         sfx_fetch.fetch(args.only, args.count)
+    elif args.cmd == "weekly":
+        from . import weekly
+        weekly.run_week(args.channels, publish=not args.dry_run)
+    elif args.cmd == "batch-plan":
+        from . import batch_plan
+        batch_plan.plan(args.channel, args.budget)
 
 
 if __name__ == "__main__":

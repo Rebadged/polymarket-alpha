@@ -13,12 +13,11 @@ paths:
 generation:
   # Default Higgsfield models (verified live via models_explore, 2026-06).
   # Stills: z_image = fast/budget; recraft-v4-1 = photoreal premium.
-  image_model: z_image
-  # Image-to-video: grok_video_v15 (Grok Imagine 1.5, native audio, 2-15s) is the
-  # cheap cinematic workhorse; seedance_2_0 for hero shots / reference identity.
-  video_model: grok_video_v15
+  image_model: soul_2            # validated: stylized painterly cozy look
+  video_model: kling3_0_turbo    # validated: cheap (~7.5 cr) locked-camera animator
   video_resolution: 720p
-  clip_seconds: 10               # short source clip; ffmpeg loops it to long-form
+  clip_seconds: 10               # 10s source clip (less perceptible video loop); ffmpeg loops to hours
+  est_credits_per_clip: 8        # ~0.1 image + ~7.5 video; used for batch budgeting
   aspect_ratio: "16:9"
   # 'manifest' = emit a JSON job for a Claude Code/MCP session to fulfill (works today,
   # MCP-only, no API key). 'rest' = call Higgsfield REST API unattended (needs key).
