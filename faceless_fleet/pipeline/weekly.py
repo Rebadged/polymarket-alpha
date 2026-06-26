@@ -18,7 +18,7 @@ import argparse
 import os
 import traceback
 
-from . import auto
+from . import auto, restock
 from .config import list_channels, load_channel
 
 
@@ -36,6 +36,11 @@ def run_week(channels: list[str] | None = None, publish: bool = True) -> dict:
             print(f"[weekly] skip {slug}: not connected (no {cfg['channel']['oauth_secret_env']})")
             summary[slug] = "skipped (not connected)"
             continue
+        # First pull any clips the weekend's scheduled restock session generated.
+        try:
+            restock.fetch_pending(slug)
+        except Exception as e:
+            print(f"[weekly] {slug} restock-fetch failed (publishing from existing library): {e}")
         n = cfg.get("cadence", {}).get("uploads_per_week", 3)
         variant = cfg.get("auto", {}).get("default_variant", "8h")
         made = 0

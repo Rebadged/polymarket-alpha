@@ -61,6 +61,15 @@ def main() -> None:
     pb.add_argument("channel")
     pb.add_argument("--budget", type=float, default=160)
 
+    prr = sub.add_parser("restock-record")  # scheduled session logs a generated clip's URL
+    prr.add_argument("channel")
+    prr.add_argument("clip_name")
+    prr.add_argument("--video-url", required=True)
+    prr.add_argument("--image-url")
+
+    prf = sub.add_parser("restock-fetch")    # VPS downloads recorded URLs into the library
+    prf.add_argument("channel")
+
     args = ap.parse_args()
     if args.cmd == "channels":
         print("\n".join(list_channels()))
@@ -86,6 +95,12 @@ def main() -> None:
     elif args.cmd == "batch-plan":
         from . import batch_plan
         batch_plan.plan(args.channel, args.budget)
+    elif args.cmd == "restock-record":
+        from . import restock
+        restock.record(args.channel, args.clip_name, args.video_url, args.image_url)
+    elif args.cmd == "restock-fetch":
+        from . import restock
+        restock.fetch_pending(args.channel)
 
 
 if __name__ == "__main__":

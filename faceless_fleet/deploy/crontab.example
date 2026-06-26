@@ -17,20 +17,22 @@ REPO=/opt/comforts-fleet             # adjust to your checkout path
 PY=$REPO/venv/bin/python3            # the venv python
 
 # --- THE set-and-forget job: every connected channel, scheduled for the week -------
-# Sunday 03:10 server time. Each video gets its own jittered publishAt across the week,
-# so nothing bulk-drops. This is the only line you need running.
-10 3 * * 0  cd $REPO && $PY -m faceless_fleet.pipeline.run weekly >> /var/log/comforts.log 2>&1
+# Sunday 03:30 server time — ~20 min after the weekly Claude restock session pushes its
+# clip-URL manifests (deploy/RESTOCK_SCHEDULE.md). `git pull` picks those up; `weekly`
+# then auto-downloads the new clips (restock-fetch) before publishing. Each video gets a
+# jittered publishAt across the week, so nothing bulk-drops. The only line you need.
+30 3 * * 0  cd $REPO && git pull --rebase --autostash >> /var/log/comforts.log 2>&1 && $PY -m faceless_fleet.pipeline.run weekly >> /var/log/comforts.log 2>&1
 
 # --- audio: re-stock CC0 SFX occasionally for variety (optional) -------------------
 # 1st of the month, pull 3 fresh takes of each element so beds don't get stale.
 0 2 1 * *  cd $REPO && $PY -m faceless_fleet.pipeline.run fetch-sfx --count 3 >> /var/log/comforts.log 2>&1
 
 # --- clips: the ONE step that needs an agent / Higgsfield key -----------------------
-# `weekly` only CONSUMES the clip library (assets/clips/<channel>/). New clips are
-# generated in budgeted batches — that can't run headless on plain cron without an API
-# key. Two ways to restock:
-#   1) Cowork / Claude (today, MCP-only): run `batch-plan`, then have the agent fulfil
-#      the manifest. See deploy/COWORK_RESTOCK.md for the exact weekly prompt.
-#   2) Unattended (needs HIGGSFIELD_API_KEY): set generation.backend=rest, then the
-#      line below plans + generates + downloads with zero human touch.
-# 30 2 * * 6  cd $REPO && $PY -m faceless_fleet.pipeline.run batch-plan rain_cabin --budget 160 >> /var/log/comforts.log 2>&1
+# `weekly` only CONSUMES the clip library (assets/clips/<channel>/). Generating new clips
+# needs Higgsfield, which can't run on plain cron without an API key. Recommended:
+#   * A weekly Claude SCHEDULED SESSION (Sun 03:07) generates the week's clips and pushes
+#     URL manifests; the `weekly` line above pulls + fetches them. Set this up once in the
+#     web "Schedule" UI — see deploy/RESTOCK_SCHEDULE.md. No cron line here needed.
+# Fully unattended alternative (needs HIGGSFIELD_API_KEY): set generation.backend=rest and
+# uncomment — this plans + generates + downloads on the box with no Claude session:
+# 0 3 * * 0  cd $REPO && $PY -m faceless_fleet.pipeline.run batch-plan rain_cabin --budget 56 >> /var/log/comforts.log 2>&1

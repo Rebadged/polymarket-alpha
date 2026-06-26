@@ -9,13 +9,16 @@ AUTONOMY, FLEET, BRANDING, deploy/*) is detail you can dip into when a step says
 The system splits into two loops that meet at one folder — the clip library:
 
 ```
-   RESTOCK (occasional, needs an agent)            PUBLISH (forever, pure cron)
-   batch-plan -> Higgsfield -> download   ──▶   assets/clips/<slug>/   ──▶   weekly
-        a budgeted batch of silent clips          (the shared library)        pick clip
-        deploy/COWORK_RESTOCK.md                                              + seasonal bed
-                                                                             + assemble 8h
-                                                                             + upload private
-                                                                               @ jittered time
+   RESTOCK (weekly Claude session)                 PUBLISH (forever, VPS cron)
+   batch-plan -> Higgsfield -> record URL  ──▶  restock/<slug>.json ─(git)─▶  weekly
+        ~7 silent clips/week, budget-capped         (URLs only, no bytes)       git pull
+        deploy/RESTOCK_SCHEDULE.md                                              restock-fetch
+                                                  assets/clips/<slug>/  ◀───────  (downloads)
+                                                   (the shared library)  ──▶     pick clip
+                                                                                + seasonal bed
+                                                                                + assemble 8h
+                                                                                + upload private
+                                                                                  @ jittered time
 ```
 
 - **PUBLISH is 100% deterministic** — no tokens, no agent. One cron line (`weekly`) walks
@@ -113,11 +116,13 @@ That's the finish line: every Sunday it schedules the week for every connected c
 each video at its own jittered time so nothing bulk-drops. **You never touch the publish
 loop again.**
 
-The only recurring chore is **occasionally restocking clips** so visuals stay fresh:
-open **deploy/COWORK_RESTOCK.md**, paste the prompt into Cowork, name a channel. It runs
-`batch-plan` (a budgeted manifest — default ~20 clips for 160 credits) and generates +
-downloads them. Or, for fully unattended restock, set `generation.backend: rest` with a
-`HIGGSFIELD_API_KEY` and uncomment the `batch-plan` cron line.
+**Restock runs itself too.** Clip generation is the one step that needs an agent, so it
+runs as a **weekly Claude scheduled session** (Sunday, ~20 min before the VPS publish
+run): it generates ~7 fresh clips across the fleet and pushes their URLs; the VPS `weekly`
+job pulls and downloads them automatically before publishing. Set it up once — see
+**deploy/RESTOCK_SCHEDULE.md** for the exact schedule + paste-able prompt. (Manual
+one-offs: paste **deploy/COWORK_RESTOCK.md** into Cowork. Fully unattended, no session:
+`HIGGSFIELD_API_KEY` + `generation.backend: rest` + the commented cron line.)
 
 ---
 
