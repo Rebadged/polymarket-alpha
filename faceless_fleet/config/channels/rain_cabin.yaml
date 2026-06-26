@@ -11,6 +11,7 @@
 channel:
   slug: rain_cabin
   name: "Cabin Comforts"               # covers rain, storm AND snow (seasonal range)
+  focal_point: cabin                   # the fleet unit: one focal point = one channel
   lane: rain_storm_cozy
   youtube_handle: "@CabinComforts"     # confirm availability when creating; else @CabinComfortsTV etc
   youtube_channel_id: ""
@@ -93,6 +94,20 @@ location_pool:
   # Alpine / European aesthetic (English titles — for the LOOK, not to capture EU viewers)
   - {title: "Swiss Alps Cabin",          prompt: "a wooden chalet in the Swiss Alps during a snowfall"}
   - {title: "Norwegian Fjord Cabin",     prompt: "a wooden cabin by a fjord in northern Norway"}
+
+# Weather drives season + which binge-playlist a video lands in (autoplay loops
+# them = stacked overnight watch-hours). The loop tags each video automatically.
+weather_map:
+  snow:  {season: winter, playlist: "Snowy Cabin Nights"}
+  rain:  {season: any,    playlist: "Rainy Cabin Nights"}
+  storm: {season: any,    playlist: "Cabin Thunderstorms"}
+  fire:  {season: any,    playlist: "Cabin & Fireplace"}
+playlists:
+  - "Snowy Cabin Nights"
+  - "Rainy Cabin Nights"
+  - "Cabin Thunderstorms"
+  - "Cabin & Fireplace"
+  - "8-Hour Cabin Ambience"
 
 audio:
   # SOUNDSCAPE, not music or voice. Best source = layered royalty-free / CC0 real
