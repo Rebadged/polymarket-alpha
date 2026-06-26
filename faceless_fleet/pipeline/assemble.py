@@ -180,7 +180,7 @@ def assemble(slug: str, variant: str = "3h") -> Path:
     cfg = load_channel(slug)
     dirs = output_dirs(cfg)
     raw = dirs["raw"]
-    plan = json.loads((raw / "plan.json").read_text()) if (raw / "plan.json").exists() else {}
+    plan = json.loads((raw / "plan.json").read_text(encoding="utf-8-sig")) if (raw / "plan.json").exists() else {}
 
     seconds = _resolve_seconds(slug, cfg, variant)
     a = cfg["assembly"]

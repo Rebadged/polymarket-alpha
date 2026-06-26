@@ -17,7 +17,7 @@ def _state_path(slug: str) -> Path:
 def load(slug: str) -> dict:
     p = _state_path(slug)
     if p.exists():
-        return json.loads(p.read_text())
+        return json.loads(p.read_text(encoding="utf-8-sig"))
     return {"used_scenes": [], "used_titles": [], "history": []}
 
 

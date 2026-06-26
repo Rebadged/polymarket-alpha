@@ -69,7 +69,7 @@ class HiggsfieldClient:
 
     def load_manifest(self) -> dict | None:
         if self.manifest_path.exists():
-            return json.loads(self.manifest_path.read_text())
+            return json.loads(self.manifest_path.read_text(encoding="utf-8-sig"))
         return None
 
     # ---- rest backend (unattended) ---------------------------------------

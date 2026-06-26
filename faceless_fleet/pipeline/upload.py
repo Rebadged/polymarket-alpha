@@ -100,7 +100,7 @@ def _service(slug: str):
     refresh = os.environ.get(env_name)
     if not refresh:
         raise RuntimeError(f"Missing refresh token env var {env_name}. Run --auth first.")
-    secret = json.loads(_client_secret_path().read_text())["installed"]
+    secret = json.loads(_client_secret_path().read_text(encoding="utf-8-sig"))["installed"]
     creds = Credentials(
         token=None, refresh_token=refresh,
         token_uri=secret["token_uri"], client_id=secret["client_id"],
@@ -129,7 +129,7 @@ def _resumable_insert(youtube, body, media):
 def upload_one(slug: str, video: Path, dry_run: bool = False) -> str | None:
     cfg = load_channel(slug)
     plan_path = video.with_suffix(".plan.json")
-    plan = json.loads(plan_path.read_text()) if plan_path.exists() else {}
+    plan = json.loads(plan_path.read_text(encoding="utf-8-sig")) if plan_path.exists() else {}
     md = plan.get("metadata", cfg["metadata"])
     title = plan.get("title") or md.get("title_templates", ["untitled"])[0]
     # Fill the {dur} placeholder left by generate.py, from the filename's variant.
