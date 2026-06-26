@@ -25,16 +25,22 @@ from .config import ROOT, load_channel
 
 
 def _ensure_key() -> str:
-    """Accept our canonical name and bridge it to what the SDK expects."""
-    key = os.environ.get("HIGGSFIELD_API_KEY") or os.environ.get("HF_API_KEY") or os.environ.get("HF_KEY")
-    if not key:
+    """Bridge our canonical HIGGSFIELD_API_KEY to what the SDK reads.
+
+    The SDK accepts HF_KEY (a single credential — which may itself be "key:secret")
+    OR the pair HF_API_KEY + HF_API_SECRET. If the user already set a valid SDK
+    combination, leave it untouched; otherwise map HIGGSFIELD_API_KEY -> HF_KEY.
+    """
+    if os.environ.get("HF_KEY") or (os.environ.get("HF_API_KEY") and os.environ.get("HF_API_SECRET")):
+        return os.environ.get("HF_KEY", "<pair>")
+    canon = os.environ.get("HIGGSFIELD_API_KEY") or os.environ.get("HF_API_KEY")
+    if not canon:
         raise RuntimeError(
-            "No Higgsfield API key. Set HIGGSFIELD_API_KEY in the environment "
-            "(VPS .env or the web environment settings)."
+            "No Higgsfield API key. Set HIGGSFIELD_API_KEY (single key, or key:secret) "
+            "in the environment — or HF_API_KEY + HF_API_SECRET for a key/secret pair."
         )
-    os.environ.setdefault("HF_KEY", key)
-    os.environ.setdefault("HF_API_KEY", key)
-    return key
+    os.environ["HF_KEY"] = canon
+    return canon
 
 
 def _extract_url(result: dict, *candidates: str) -> str:
