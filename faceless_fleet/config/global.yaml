@@ -38,9 +38,18 @@ assembly:
   # end into its start so the loop seam is invisible/inaudible across hours.
   loop_video_xfade_seconds: 0.5   # ~short video crossfade masks the visual seam
   loop_audio_xfade_seconds: 0.4   # equal-power audio crossfade hides the bed seam
-  # Consistent loudness so no volume spike wakes a sleeper. Per-channel override
-  # via audio.loudness_lufs; this is the fleet default.
+  # LOUDNESS POLICY (startle-proof + consistent across every video):
+  #  - target -14 LUFS = YouTube's own normalization point, so our videos play at
+  #    the SAME loudness as everything else -> viewers never adjust volume between
+  #    videos (the thing that causes a later video to startle them awake).
+  #  - true-peak hard cap so no transient (a thunderclap) ever spikes.
+  #  - low loudness-range = tight dynamics, nothing swells louder than the bed.
   default_loudness_lufs: -14
+  loudness_true_peak: -1.5       # dBTP hard ceiling
+  loudness_range: 6              # LU; lower = flatter/more consistent (no swells)
+  # Loop illusion: the mixed bed unit is this long before it repeats. Longer +
+  # long source files (>40s) makes the loop point imperceptible over hours.
+  bed_unit_seconds: 480          # 8 min
 
 upload:
   # Anti-spam: drip-publish, never bulk-drop. publishAt gets per-video jitter.

@@ -64,7 +64,7 @@ def make_seamless_video(clip: Path, out: Path, xfade: float, fps: int) -> Path:
 
 
 def build_sfx_bed(layers: list[dict], library: dict, sfx_dir: Path, out: Path,
-                  unit_seconds: int = 90) -> Path:
+                  unit_seconds: int = 480) -> Path:
     """Mix reusable SFX elements (rain/thunder/fire/wind) into one bed at per-scene
     levels. Each layer = {el, gain}; el maps to a file via `library`. Every element
     is looped to a common unit length, gain-staged, mixed, and limited to avoid
@@ -118,7 +118,8 @@ def merge_audio_layers(cfg: dict, scene: dict) -> list[dict]:
     return layers
 
 
-def make_seamless_audio(bed: Path, out: Path, xfade: float, lufs: float) -> Path:
+def make_seamless_audio(bed: Path, out: Path, xfade: float, lufs: float,
+                        tp: float = -1.5, lra: float = 6) -> Path:
     """Seamless audio loop unit + loudness normalization. Wraps the bed's end into
     its start so a stream_loop has no audible seam: take tail=bed[X:D] and head=
     bed[0:X], acrossfade(tail, head) -> unit that starts AND ends on the sample @
@@ -127,7 +128,9 @@ def make_seamless_audio(bed: Path, out: Path, xfade: float, lufs: float) -> Path
     NOTE: acrossfade starves if both inputs are atrim branches of the same source,
     so head/tail are extracted to temp WAVs first (crossfading two files is robust)."""
     d = _probe_duration(bed)
-    norm = f"loudnorm=I={lufs}:TP=-1.5:LRA=11"
+    # I = consistent loudness target; TP = hard true-peak cap (no startling spikes);
+    # low LRA = tight dynamics so nothing swells louder than the rest.
+    norm = f"loudnorm=I={lufs}:TP={tp}:LRA={lra}"
     if xfade <= 0 or d <= 2 * xfade + 0.1:
         _run(["ffmpeg", "-y", "-i", str(bed), "-af", norm,
               "-c:a", "aac", "-b:a", "192k", str(out)])
@@ -231,7 +234,8 @@ def assemble(slug: str, variant: str = "3h") -> Path:
     if layers and audio_cfg.get("sfx_library"):
         sfx_dir = ROOT / audio_cfg.get("sfx_dir", "assets/sfx")
         try:
-            bed = build_sfx_bed(layers, audio_cfg["sfx_library"], sfx_dir, work / "bed_sfx.wav")
+            bed = build_sfx_bed(layers, audio_cfg["sfx_library"], sfx_dir, work / "bed_sfx.wav",
+                                unit_seconds=a.get("bed_unit_seconds", 480))
         except FileNotFoundError as e:
             if not bed.exists():
                 raise
@@ -240,7 +244,8 @@ def assemble(slug: str, variant: str = "3h") -> Path:
         raise FileNotFoundError(f"No SFX elements and no bed.wav in {raw}.")
     audio_unit = make_seamless_audio(
         bed, work / "audio_unit.m4a",
-        a["loop_audio_xfade_seconds"] if seamless else 0.0, lufs)
+        a["loop_audio_xfade_seconds"] if seamless else 0.0, lufs,
+        tp=a.get("loudness_true_peak", -1.5), lra=a.get("loudness_range", 6))
     looped_a = loop_to_length(audio_unit, work / "audio_long.m4a", seconds)
 
     if plan.get("narration_enabled") and (raw / "narration.wav").exists():
