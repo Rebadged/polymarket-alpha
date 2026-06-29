@@ -123,6 +123,43 @@ line.
 
 ---
 
+## Credit & cadence economics (the clips ≠ videos reframe)
+
+The worry "7 clips/week × N channels needs more credits" conflates two different things:
+
+- **Clips** = the visual source **library** (scene × location). Cost credits. Generated
+  occasionally; **reused** across many videos.
+- **Videos** = the assembled long-form uploads. **Cost ~zero credits** — ffmpeg picks an
+  existing clip, builds a fresh seasonal audio bed, adds a particle overlay + distinct
+  title, and loops losslessly. **Publishing more videos does NOT cost more credits.**
+
+So credits only buy **library breadth**, and `batch_plan` is **self-limiting** — it only
+plans scene×location combos you don't already have, so spend naturally tapers to zero once
+a channel's library is full.
+
+**Budget (Higgsfield Plus = 1,000 cr/mo; 5s clip ≈ 9 cr clean, ~14 cr at 1.5× iteration):**
+
+| Phase | Work | Credits |
+|---|---|---|
+| One-time build | 3 channels × ~12 clips = 36 clips | ~500 cr (~324 clean … ~970 worst-case) → **≈ ½–1 month of Plus** |
+| Ongoing freshness | +3 clips/channel/month = 9/mo | ~130 cr/mo (**trivial** vs 1,000) |
+| Plus monthly capacity | — | ~70 clean / ~36 worst-case **new** clips/mo |
+
+**Conclusion:** you do **not** need more credits to publish more videos, and you don't need
+7 new clips/week forever. Build each channel's library once (~12 clips), then Plus has large
+headroom. **Cadence (videos/week) is a growth question, not a credit question** — more
+uploads just cycle the library faster, so if you push a high cadence, spend the spare credits
+on **library breadth** (more scene×location) so visuals don't visibly repeat. Overlay + audio
++ season + title variation stretch each clip across several materially-distinct videos.
+
+**Open growth question (→ Backlog #3 deep-dive):** does the algorithm reward a *consistent*
+cadence (e.g. fixed days) over *frequent* (daily)? Interim read for ambient/AFK: watch-time
++ session time + search/suggested relevance dominate, NOT upload frequency; consistency
+beats volume, and burst-publishing reads as a content farm (inauthentic risk). Evergreen
+long-form keeps earning for months, so the catalog compounds without daily uploads. Lean
+**spaced + consistent** (≈3 long-form/week/channel on fixed days + Shorts as the funnel)
+until the deep-dive nails the exact numbers.
+
 ## Action summary
 
 | # | Item | State |
