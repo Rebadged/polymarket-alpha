@@ -65,6 +65,17 @@ assembly:
   # Loop illusion: the mixed bed unit is this long before it repeats. Longer +
   # long source files (>40s) makes the loop point imperceptible over hours.
   bed_unit_seconds: 480          # 8 min
+  # PARTICLE OVERLAY (material-variation lever, locked-camera era): composite a looping
+  # white-particles-on-black element (rain/snow/sparks) over the clip so no two videos are
+  # pixel-identical. Drop overlay files in assets/overlays/<name>.{mov,webm,mp4}, named by
+  # the scene's weather (e.g. snow.mov, rain.mov) or a scene's explicit `overlay:` field.
+  # Free CC0 overlays exist; `screen` blend makes the black transparent. Skipped silently
+  # if disabled or no matching file — so the pipeline runs fine before you add overlays.
+  particle_overlay:
+    enabled: true
+    dir: assets/overlays
+    opacity: 0.45                # 0..1; subtle so it reads as natural weather, not a filter
+    blend: screen                # screen/lighten for white-on-black overlays
 
 upload:
   # Anti-spam: drip-publish, never bulk-drop. publishAt gets per-video jitter.

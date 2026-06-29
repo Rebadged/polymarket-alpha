@@ -63,6 +63,43 @@ def make_seamless_video(clip: Path, out: Path, xfade: float, fps: int) -> Path:
     return out
 
 
+def apply_particle_overlay(base: Path, overlay: Path, out: Path,
+                           opacity: float, blend: str, fps: int) -> Path:
+    """Composite a looping particle element (rain / snow / sparks) over the base clip so
+    no two videos are pixel-identical — the chosen material-variation lever now that the
+    camera stays locked (see research/CROSS_REFERENCE_2026.md). The overlay is a white-
+    particles-on-black clip; a `screen`/`lighten` blend makes the black read as transparent.
+    It is stream-looped to the base length and scaled to match, then blended at `opacity`.
+
+    Applied to the SHORT unit before the seamless wrap + lossless loop, so it's encoded
+    once and stays cheap. If the overlay file is missing the caller skips this step."""
+    d = _probe_duration(base)
+    fc = (f"[1:v][0:v]scale2ref[ov][bse];"
+          f"[bse][ov]blend=all_mode={blend}:all_opacity={opacity},format=yuv420p[v]")
+    _run(["ffmpeg", "-y", "-i", str(base), "-stream_loop", "-1", "-i", str(overlay),
+          "-filter_complex", fc, "-map", "[v]", "-t", f"{d:.3f}",
+          "-r", str(fps), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "20", str(out)])
+    return out
+
+
+def _find_overlay(cfg: dict, scene: dict) -> Path | None:
+    """Resolve the particle-overlay file for a scene, if overlays are enabled and present.
+    Looks up scene['overlay'] (explicit) else the scene's weather, in the overlays dir,
+    extension-tolerant. Returns None (skip the step) when nothing is configured/found."""
+    a = cfg["assembly"].get("particle_overlay", {})
+    if not a.get("enabled"):
+        return None
+    name = scene.get("overlay") or scene.get("weather")
+    if not name:
+        return None
+    odir = ROOT / a.get("dir", "assets/overlays")
+    for ext in (".mov", ".webm", ".mp4", ".mkv"):
+        p = odir / f"{name}{ext}"
+        if p.exists():
+            return p
+    return None
+
+
 def build_sfx_bed(layers: list[dict], library: dict, sfx_dir: Path, out: Path,
                   unit_seconds: int = 480) -> Path:
     """Mix reusable SFX elements (rain/thunder/fire/wind) into one bed at per-scene
@@ -208,6 +245,7 @@ def assemble(slug: str, variant: str = "3h") -> Path:
 
     seamless = cfg.get("longform", {}).get("seamless_loop", False)
     lufs = cfg.get("audio", {}).get("loudness_lufs", a.get("default_loudness_lufs", -14))
+    scene = next((s for s in cfg.get("scene_pool", []) if s["id"] == plan.get("scene_id")), {})
 
     # --- video base: prefer the motion clip, else Ken Burns the still ---
     if (raw / "scene.mp4").exists():
@@ -218,6 +256,15 @@ def assemble(slug: str, variant: str = "3h") -> Path:
         raise FileNotFoundError(
             f"No scene.mp4 or scene.png in {raw}. Fulfill the generation manifest first."
         )
+    # Particle overlay (material variation, locked-camera era): composite a looping
+    # rain/snow/spark element onto the short unit if one is configured + present.
+    ov = _find_overlay(cfg, scene)
+    if ov:
+        po = cfg["assembly"].get("particle_overlay", {})
+        base_clip = apply_particle_overlay(
+            base_clip, ov, work / "video_overlaid.mp4",
+            po.get("opacity", 0.5), po.get("blend", "screen"), a["fps"])
+        print(f"[assemble] particle overlay: {ov.name} @ {po.get('opacity', 0.5)}")
     # Seamless loop unit: crossfade the wrap so the seam is invisible across hours.
     if seamless:
         base_clip = make_seamless_video(
@@ -229,8 +276,7 @@ def assemble(slug: str, variant: str = "3h") -> Path:
     # back to a ready-made bed.wav dropped in the raw dir.
     bed = raw / "bed.wav"
     audio_cfg = cfg.get("audio", {})
-    scene = next((s for s in cfg.get("scene_pool", []) if s["id"] == plan.get("scene_id")), {})
-    layers = merge_audio_layers(cfg, scene)
+    layers = merge_audio_layers(cfg, scene)   # `scene` resolved above
     if layers and audio_cfg.get("sfx_library"):
         sfx_dir = ROOT / audio_cfg.get("sfx_dir", "assets/sfx")
         try:

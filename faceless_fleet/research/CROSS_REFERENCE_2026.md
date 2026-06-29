@@ -132,7 +132,7 @@ line.
 | 3 | Clip length 10s vs 5s (budget) | ✅ **CK: 5s** — `clip_seconds: 5`, `est: 9` |
 | 4 | Locked camera vs add motion | ✅ **CK: keep essentially locked** (barely-perceptible drift max), motion on the scenery; particle overlays carry per-video variation |
 | 5 | Audio: Suno music vs pure CC0 ambience | ✅ **CK: no Suno** — pure ambience now; deep-dive re-scoped to *safe audio now + custom/original audio long-term* |
-| 6 | Particle-overlay variation step | 🔵 build (ffmpeg) for material variation — the chosen compliance lever now that camera stays locked |
+| 6 | Particle-overlay variation step | ✅ built in `assemble.py` (`apply_particle_overlay`); drop CC0 overlays in `assets/overlays/<weather>.mov` to activate |
 | 7 | 24/7 live-loop for watch-hours | 🔵 backlog → `deploy/live_loop.sh` (11.5h restart) |
 | 8 | Shorts → Facebook Reels Fast Track | 🔵 backlog (Canada-eligible $) |
 | 9 | W-8BEN + GST/HST + T2125 | 🔵 do before monetizing → monetization doc |
