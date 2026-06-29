@@ -118,6 +118,12 @@ lists the three channels.
 ### B. Branding (browser + MCP)
 For each channel: pull its avatar + banner from the Higgsfield library (§2), or regenerate
 weak ones with the `BRANDING.md` prompts. Save the files locally for upload in step C.
+Then read **`BRANDING.md` → "Thumbnail & brand system"** (distilled from
+`research/BRANDING_PLAYBOOK.md`) and build **2–3 thumbnail templates per channel**
+(1280×720, one fixed utility tag like "RAIN & THUNDER" / "10 HOURS" in a bold condensed
+font, image-forward, warm/cool contrast). Thumbnails are a **compositing step** (Pillow/
+ffmpeg/Canva over the scene still) — never an AI render with baked text. Pick the fleet
+font once (Bebas Neue / Anton / Oswald Bold / Montserrat ExtraBold).
 
 ### C. Create + brand the channels (browser) — **do Cabin Comforts fully first**, then clone
 1. Create the channel as a **Brand Account** (YouTube → Settings → Add/manage channels →
@@ -185,6 +191,13 @@ public key via the Hetzner web console, or enable password auth). Not needed to 
   `assembly` + `make_seamless_audio`. Do not loosen — a thunderclap must never spike.
 - **Loop illusion**: seamless xfade-wrap on both video and audio so the seam is invisible
   across hours; long source elements so nothing obvious repeats.
+- **Thumbnails & brand system** (see `BRANDING.md` → "Thumbnail & brand system"): locked
+  per-channel grade + ONE condensed font + object/glyph avatar (reads at 98px) + 2–3
+  reusable templates. Ambient = image-forward with ONE utility tag (declares format, not
+  mood), bottom-/top-left, never bottom-right. Banner safe area 1546×423 (wordmark to
+  1235×338), bottom-left clear. **Material-variation rule**: keep the frame consistent,
+  make every video's scene/audio/title genuinely distinct (the `review.py` gate enforces
+  this — it's the inauthentic-content compliance keystone).
 
 ---
 
@@ -229,7 +242,10 @@ public key via the Hetzner web console, or enable password auth). Not needed to 
 ## 9. Doc map
 
 - `START_HERE.md` — master runbook (two-loop model, connect a channel, go live, cron).
-- `BRANDING.md` — avatar/banner specs + per-channel prompts + Studio upload steps.
+- `BRANDING.md` — avatar/banner/thumbnail specs, the locked brand system, the
+  material-variation compliance checklist, per-channel prompts + Studio upload steps.
+- `research/BRANDING_PLAYBOOK.md` — full branding/visual-identity research (thumbnail
+  formulas by niche, naming, YouTube specs, inauthentic-vs-reused policy, RPM economics).
 - `deploy/GOOGLE_CLOUD_OAUTH_SETUP.md`, `deploy/YOUTUBE_AUTH_PHONE.md` — YouTube auth.
 - `deploy/RESTOCK_SCHEDULE.md` — weekly restock (scheduled session + git bridge).
 - `deploy/REST_SMOKE_TEST.md` + `deploy/probe_slugs.py` — confirm Cloud-API slugs (REST).
