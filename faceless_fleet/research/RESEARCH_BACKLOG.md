@@ -15,7 +15,18 @@ fold the actionable parts into the relevant doc (config/BRANDING/START_HERE/hand
 ## 1. Audio sourcing & licensing  — HIGHEST PRIORITY (the product + a risk landmine)
 
 Audio is the star (people sleep/study to it). Current plan is thin (layer CC0 rain from
-Freesound) and carries monetization risk. Answer:
+Freesound) and carries monetization risk. **CK decisions baked in (2026-06):** no Suno;
+pure ambience for now. **Two-horizon framing CK raised — research BOTH:**
+- **Now (safe audio):** the best *immediately usable, cleanly-licensed* sources for premium
+  ambient beds, with the explicit caveat that popular CC0 files are **already used by many
+  competitors** — so flag which sources are over-used and how to stay distinct.
+- **Long-term (custom/original audio):** as the fleet scales it will **exhaust the good safe
+  audio** and risk sounding like everyone else. So research a path to **custom/original
+  ambient audio** for unlimited supply + a sonic signature: recording/field capture,
+  procedural/generative ambient (non-Suno — e.g. granular/noise synthesis, dedicated SFX
+  models), layering many CC0 elements into unique blends, or commissioned/licensed packs.
+  Weigh cost vs differentiation vs the SOCAN human-authorship angle (custom = registrable).
+Then also answer:
 - **Best sources** for premium, **long, seamless, loopable** ambient at scale, ranked by
   quality + cost + license clarity: CC0 libraries (Freesound CC0, etc.), paid royalty-free
   libraries (Epidemic, Artlist, Storyblocks — do their licenses permit monetized YouTube +

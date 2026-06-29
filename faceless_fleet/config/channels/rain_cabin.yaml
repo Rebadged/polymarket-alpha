@@ -33,7 +33,7 @@ identity:
   # MOTION PRINCIPLE (operator feedback): camera mostly LOCKED OFF — no push-in/out,
   # at most the faintest pivot. The loop comes from the AMBIENT ELEMENT (falling snow,
   # falling rain, dancing fire), not camera movement. Element motion loops seamlessly.
-  motion_principle: "camera locked and static; the falling snow / rain / fire is the motion that loops"
+  motion_principle: "camera essentially locked, at most a barely-perceptible slow drift; the real motion is the falling snow / rain / dancing fire, which loops seamlessly"
 
 # Scene pool — sparse, mostly EXTERIOR, locked camera, element-driven motion.
 # Each scene carries: weather (drives the matching Suno bed via audio_hint),

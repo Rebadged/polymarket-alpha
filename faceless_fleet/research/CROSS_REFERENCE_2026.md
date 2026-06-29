@@ -129,12 +129,15 @@ line.
 |---|---|---|
 | 1 | Upload daily cap (avoid hidden 429) | ✅ `max_uploads_per_day: 5` + verify project to scale |
 | 2 | Higgsfield credit math (8→17 + iteration) | ✅ config + `batch_plan` fixed |
-| 3 | Clip length 10s vs 5s (budget) | 🟡 **CK decision** (5s halves cost, loops fine) |
-| 4 | Locked camera vs add motion | 🟡 **CK decision** (recommend: keep locked + particle overlays) |
-| 5 | Audio: Suno music vs pure CC0 ambience | 🟡 **CK decision** → audio deep-dive |
-| 6 | Particle-overlay variation step | 🔵 build (ffmpeg) for material variation |
+| 3 | Clip length 10s vs 5s (budget) | ✅ **CK: 5s** — `clip_seconds: 5`, `est: 9` |
+| 4 | Locked camera vs add motion | ✅ **CK: keep essentially locked** (barely-perceptible drift max), motion on the scenery; particle overlays carry per-video variation |
+| 5 | Audio: Suno music vs pure CC0 ambience | ✅ **CK: no Suno** — pure ambience now; deep-dive re-scoped to *safe audio now + custom/original audio long-term* |
+| 6 | Particle-overlay variation step | 🔵 build (ffmpeg) for material variation — the chosen compliance lever now that camera stays locked |
 | 7 | 24/7 live-loop for watch-hours | 🔵 backlog → `deploy/live_loop.sh` (11.5h restart) |
 | 8 | Shorts → Facebook Reels Fast Track | 🔵 backlog (Canada-eligible $) |
 | 9 | W-8BEN + GST/HST + T2125 | 🔵 do before monetizing → monetization doc |
 
-Decisions #3–5 are the ones I need from CK; everything else is built or backlogged.
+CK decisions #3–5 are **resolved** (2026-06). Particle-overlay step (#6) is now the primary
+inauthentic-policy differentiator since the camera stays locked — build it into `assemble.py`
+(layer a looping transparent rain/snow/spark element over the 5s unit before the lossless
+loop, so it's encoded once and cheap). Remaining 🔵 items are backlogged.

@@ -26,12 +26,12 @@ def _slug(s: str) -> str:
 
 def plan(slug: str, budget_credits: float = 160) -> dict:
     cfg = load_channel(slug)
-    per = cfg["generation"].get("est_credits_per_clip", 17)
-    # Reserve iteration headroom (2026 dossier: ~3 attempts to land one clean clip), so a
-    # budget never plans more usable clips than it can actually finish defect-free.
+    per = cfg["generation"].get("est_credits_per_clip", 9)
     iters = cfg["generation"].get("iteration_factor", 3)
-    effective = per * iters
-    max_new = max(1, int(budget_credits // effective))
+    # Plan on the RAW per-clip cost (optimistic): the fulfiller watches the live balance and
+    # stops re-rolling when it runs low, so we don't want to under-plan the work-list. The
+    # worst-case (with re-rolls) is reported below so spend never surprises.
+    max_new = max(1, int(budget_credits // per))
     clips_dir = ROOT / cfg.get("auto", {}).get("clips_dir", "assets/clips") / slug
     existing = {p.stem for p in clips_dir.glob("*.mp4")} if clips_dir.exists() else set()
     locs = cfg.get("location_pool") or [{"title": "", "prompt": ""}]
@@ -65,14 +65,14 @@ def plan(slug: str, budget_credits: float = 160) -> dict:
         "slug": slug, "budget_credits": budget_credits,
         "est_credits_per_clip": per, "iteration_factor": iters,
         "count": len(items),
-        "est_credits_raw": len(items) * per,                 # if every gen lands first try
-        "est_credits_budgeted": len(items) * effective,      # realistic, with iteration
+        "est_credits_clean": len(items) * per,               # if every gen lands first try
+        "est_credits_worst_case": len(items) * per * iters,  # with full re-rolls
         "target_dir": str(clips_dir), "items": items,
     }
     clips_dir.mkdir(parents=True, exist_ok=True)
     (clips_dir / "_to_generate.json").write_text(json.dumps(manifest, indent=2))
     print(f"[batch-plan] {slug}: {len(items)} clips to generate "
-          f"(~{len(items)*per} cr raw / ~{len(items)*effective} cr budgeted w/ {iters}x iteration) "
+          f"(~{len(items)*per} cr if clean / up to ~{len(items)*per*iters} cr with {iters}x re-rolls) "
           f"-> {clips_dir/'_to_generate.json'}")
     return manifest
 
