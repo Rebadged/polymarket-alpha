@@ -71,6 +71,15 @@ Freesound) and carries monetization risk. Answer:
 
 ---
 
+### Partially answered already
+A second-model 2026 validation dossier (`2026_strategic_validation_canada.md` +
+`2026_fleet_research_dossier.pdf`, reconciled in `CROSS_REFERENCE_2026.md`) already covers
+chunks of #1 (Suno/DDEX/SOCAN licensing, Spotify functional-noise rules), #3 (24/7 live
+loops, Facebook Reels Fast Track), and #4 (W-8BEN, GST/HST, sole-prop-vs-incorp). The deep
+dives should EXTEND these (sourcing/quality specifics, keyword data, exact cold-start
+playbook), not re-derive them.
+
 ### Not gaps (already handled)
 Pipeline/automation, the inauthentic-content compliance checklist (`BRANDING.md`), account
-hygiene (separate Brand Accounts), loudness/loop policy, the restock + weekly automation.
+hygiene (separate Brand Accounts), loudness/loop policy, the restock + weekly automation,
+the corrected Higgsfield credit math + hidden upload cap (`CROSS_REFERENCE_2026.md`).

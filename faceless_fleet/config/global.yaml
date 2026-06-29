@@ -16,8 +16,17 @@ generation:
   image_model: soul_2            # validated: stylized painterly cozy look
   video_model: kling3_0_turbo    # validated: cheap (~7.5 cr) locked-camera animator
   video_resolution: 720p
-  clip_seconds: 10               # 10s source clip (less perceptible video loop); ffmpeg loops to hours
-  est_credits_per_clip: 8        # ~0.1 image + ~7.5 video; used for batch budgeting
+  # CLIP LENGTH vs BUDGET (2026 dossier): Kling 3.0 720p ≈ 8.75 cr / 5s, so a 10s clip
+  # ≈ 17.5 cr. The seamless xfade-wrap hides the loop seam at ANY length, so a 5s master
+  # clip loops just as invisibly as 10s and HALVES credit cost — the dossier's budget-
+  # correct default. We keep 10s (CK's pick) but this is the #1 budget lever; drop to 5
+  # if the credit math gets tight. See research/CROSS_REFERENCE_2026.md.
+  clip_seconds: 10
+  est_credits_per_clip: 17       # ~0.1 image + ~17.5 video (Kling 720p, 10s). 5s ≈ 9.
+  # Iteration overhead: ~3 generations to yield 1 artifact free of AI geometry defects.
+  # batch_plan reserves this headroom so a budget doesn't plan more clips than it can
+  # actually finish clean. Effective planning cost = est_credits_per_clip * iteration_factor.
+  iteration_factor: 3
   aspect_ratio: "16:9"
   # 'manifest' = emit a JSON job for a Claude Code/MCP session to fulfill (works today,
   # MCP-only, no API key). 'rest' = call the Higgsfield Cloud API unattended (needs key).
@@ -66,6 +75,12 @@ upload:
   base_publish_hour_utc: 2       # nominal slot; jitter widens it
   jitter_minutes: 50             # +/- random offset around the base slot
   min_hours_between_uploads: 20  # human-plausible cadence per channel
+  # HIDDEN 2026 QUOTA (dossier): videos.insert now lives in a dedicated "Video Uploads"
+  # bucket. UNVERIFIED API projects are silently capped at ~7-11 uploads/day and throw
+  # HTTP 429 with quota headroom remaining. Stay at 5/day/project to never trip it;
+  # complete Google's project verification + compliance audit to lift the cap to 100/day.
+  # Also: search.list costs 100 units each — the pipeline must NOT call search at runtime.
+  max_uploads_per_day: 5         # per Google Cloud project; weekly.py + cron must honor
 
 # The zero-touch loop (pipeline/auto.py). Stocked occasionally (clip batch + SFX),
 # then runs itself on a jittered cron.

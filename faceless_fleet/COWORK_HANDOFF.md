@@ -250,6 +250,12 @@ public key via the Hetzner web console, or enable password auth). Not needed to 
   growth/live/Shorts, monetization + CA tax). Findings land in `research/` then fold into
   the relevant doc. **Weighting rule: back fleet/niche research; do NOT over-weight the
   old "2am" experiment's character-specific data.**
+- `research/CROSS_REFERENCE_2026.md` — **READ THIS** before generating/uploading: a second
+  model's 2026 validation reconciled against our build. Corrects the Higgsfield credit math
+  (now ~17 cr + 3× iteration per 10s clip, not 8), the hidden YouTube upload cap (≤5/day on
+  unverified projects → 429), and surfaces 3 open CK decisions (5s vs 10s clips; locked
+  camera + particle overlays vs added motion; Suno music vs pure CC0 ambience). Backs the
+  source dossiers `2026_strategic_validation_canada.md` + `2026_fleet_research_dossier.pdf`.
 - `deploy/GOOGLE_CLOUD_OAUTH_SETUP.md`, `deploy/YOUTUBE_AUTH_PHONE.md` — YouTube auth.
 - `deploy/RESTOCK_SCHEDULE.md` — weekly restock (scheduled session + git bridge).
 - `deploy/REST_SMOKE_TEST.md` + `deploy/probe_slugs.py` — confirm Cloud-API slugs (REST).

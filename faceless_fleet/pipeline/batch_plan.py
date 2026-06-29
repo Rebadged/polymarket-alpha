@@ -26,8 +26,12 @@ def _slug(s: str) -> str:
 
 def plan(slug: str, budget_credits: float = 160) -> dict:
     cfg = load_channel(slug)
-    per = cfg["generation"].get("est_credits_per_clip", 8)
-    max_new = max(1, int(budget_credits // per))
+    per = cfg["generation"].get("est_credits_per_clip", 17)
+    # Reserve iteration headroom (2026 dossier: ~3 attempts to land one clean clip), so a
+    # budget never plans more usable clips than it can actually finish defect-free.
+    iters = cfg["generation"].get("iteration_factor", 3)
+    effective = per * iters
+    max_new = max(1, int(budget_credits // effective))
     clips_dir = ROOT / cfg.get("auto", {}).get("clips_dir", "assets/clips") / slug
     existing = {p.stem for p in clips_dir.glob("*.mp4")} if clips_dir.exists() else set()
     locs = cfg.get("location_pool") or [{"title": "", "prompt": ""}]
@@ -58,14 +62,18 @@ def plan(slug: str, budget_credits: float = 160) -> dict:
             break
 
     manifest = {
-        "slug": slug, "budget_credits": budget_credits, "est_credits_per_clip": per,
-        "count": len(items), "est_credits": len(items) * per,
+        "slug": slug, "budget_credits": budget_credits,
+        "est_credits_per_clip": per, "iteration_factor": iters,
+        "count": len(items),
+        "est_credits_raw": len(items) * per,                 # if every gen lands first try
+        "est_credits_budgeted": len(items) * effective,      # realistic, with iteration
         "target_dir": str(clips_dir), "items": items,
     }
     clips_dir.mkdir(parents=True, exist_ok=True)
     (clips_dir / "_to_generate.json").write_text(json.dumps(manifest, indent=2))
     print(f"[batch-plan] {slug}: {len(items)} clips to generate "
-          f"(~{len(items)*per} credits) -> {clips_dir/'_to_generate.json'}")
+          f"(~{len(items)*per} cr raw / ~{len(items)*effective} cr budgeted w/ {iters}x iteration) "
+          f"-> {clips_dir/'_to_generate.json'}")
     return manifest
 
 
