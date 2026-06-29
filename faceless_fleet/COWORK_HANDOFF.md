@@ -246,6 +246,10 @@ public key via the Hetzner web console, or enable password auth). Not needed to 
   material-variation compliance checklist, per-channel prompts + Studio upload steps.
 - `research/BRANDING_PLAYBOOK.md` — full branding/visual-identity research (thumbnail
   formulas by niche, naming, YouTube specs, inauthentic-vs-reused policy, RPM economics).
+- `research/RESEARCH_BACKLOG.md` — open deep-dives (audio sourcing/licensing, SEO,
+  growth/live/Shorts, monetization + CA tax). Findings land in `research/` then fold into
+  the relevant doc. **Weighting rule: back fleet/niche research; do NOT over-weight the
+  old "2am" experiment's character-specific data.**
 - `deploy/GOOGLE_CLOUD_OAUTH_SETUP.md`, `deploy/YOUTUBE_AUTH_PHONE.md` — YouTube auth.
 - `deploy/RESTOCK_SCHEDULE.md` — weekly restock (scheduled session + git bridge).
 - `deploy/REST_SMOKE_TEST.md` + `deploy/probe_slugs.py` — confirm Cloud-API slugs (REST).
