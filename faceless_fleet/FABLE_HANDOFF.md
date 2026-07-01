@@ -9,7 +9,8 @@ committed clearly, and flag rather than rewrite.
 
 **Orient first (5 min):** read `WHATS_WHERE.md` (map + changelog), `COWORK_HANDOFF.md`
 (mission + playbook), `research/CROSS_REFERENCE_2026.md` (resolved decisions + corrected
-math), `BRANDING.md` (brand/thumbnail system). Branch: `claude/faceless-ai-youtube-channels-74t0he`.
+math), `BRANDING.md` (brand/thumbnail system). Repo: `Rebadged/Faceless_fleet`, branch `main`
+(the `faceless_fleet/` package is at the repo root).
 
 ---
 

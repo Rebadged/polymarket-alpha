@@ -46,8 +46,8 @@ You have both: **MCP generation** AND a **machine to realize it on**. That's the
   **not set up** — SSH is key-only (password disabled) and CK couldn't get in from mobile.
   Leave it for last; it's only needed for hands-off scheduling, and your PC can do
   everything else now.
-- **Repo**: `rebadged/polymarket-alpha`, branch **`claude/faceless-ai-youtube-channels-74t0he`**.
-  All pipeline code + configs + docs live under `faceless_fleet/`.
+- **Repo**: `Rebadged/Faceless_fleet` (default branch `main`). The `faceless_fleet/`
+  package sits at the repo root, so all commands run as `python -m faceless_fleet.pipeline.run …`.
 - **Branding already generated** (in the Higgsfield library — verify/re-display with
   `show_generations` or `job_display`, then download from the browser):
   - Tent banner `150bbf37-932c-442d-98a2-edbdf23e291d`, Tent avatar `23c21ead-efec-46d3-9247-1135d870b2bf`
@@ -62,8 +62,8 @@ You have both: **MCP generation** AND a **machine to realize it on**. That's the
 ## 3. The repo
 
 ```bash
-git clone https://<GITHUB_READ_TOKEN>@github.com/rebadged/polymarket-alpha.git
-cd polymarket-alpha && git checkout claude/faceless-ai-youtube-channels-74t0he
+git clone https://<GITHUB_READ_TOKEN>@github.com/Rebadged/Faceless_fleet.git
+cd Faceless_fleet
 python3 -m venv venv && ./venv/bin/pip install -U pip -r faceless_fleet/requirements.txt
 # ffmpeg must be on PATH (winget install Gyan.FFmpeg on Windows; apt install ffmpeg on Linux)
 ```

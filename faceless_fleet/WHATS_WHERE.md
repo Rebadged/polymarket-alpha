@@ -1,8 +1,10 @@
 # What changed & where everything lives
 
 A map of the whole `faceless_fleet/` project + a changelog of this session, so any new
-session (Cowork especially) can orient fast. Everything is on branch
-**`claude/faceless-ai-youtube-channels-74t0he`** in `rebadged/polymarket-alpha`.
+session (Cowork especially) can orient fast. Repo: **`Rebadged/Faceless_fleet`**, default
+branch **`main`**, with the `faceless_fleet/` package at the repo root (so commands run as
+`python -m faceless_fleet.pipeline.run …`). *(Migrated 2026-07 out of a feature branch of
+`polymarket-alpha`, where it was easy to lose — see note at the bottom.)*
 
 ## Read in this order
 1. **`COWORK_HANDOFF.md`** — mission, what Cowork unblocks, accounts/assets, the ordered playbook.
@@ -118,3 +120,12 @@ the repo, so a clone has them.
 - ✅ Decisions resolved: 5s clips, locked camera + overlays, no Suno. Credit math corrected.
 - ⏳ **Pending (needs Cowork/PC/VPS):** create + brand the 3 channels; add SFX (`assets/sfx/`) + overlay (`assets/overlays/`) assets; generate the first clip library; YouTube OAuth + first upload; confirm the 2 Cloud-API slugs (`probe_slugs.py`); set up the VPS for unattended scheduling.
 - ⏳ **Open deep-dives** (`research/RESEARCH_BACKLOG.md`): audio (safe + custom), SEO, growth/live/Shorts, monetization + CA tax.
+
+## Repo migration note (2026-07)
+This project was moved from a feature branch of `Rebadged/polymarket-alpha` (a wallet-tracker
+repo — where an agent once thought the fleet was "lost") into its own repo
+**`Rebadged/Faceless_fleet`** (default branch `main`). The `faceless_fleet/` package is kept
+at the repo root so every `python -m faceless_fleet.pipeline.run …` command and import still
+works unchanged — the only difference is the clone URL. Point Cowork, Fable, and the VPS at
+`Rebadged/Faceless_fleet` going forward; the old branch is retired. Live assets (Higgsfield
+clips, branding, sample video) and `CK.env` were never in git and don't move with the repo.

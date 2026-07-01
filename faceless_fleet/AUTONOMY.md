@@ -72,8 +72,8 @@ channel policy-safe — not human review.
 ## VPS deploy (the always-on home)
 
 ```bash
-# one time on the Chicago VPS
-git clone -b <branch> <repo> && cd polymarket-alpha
+# one time on the VPS
+git clone https://github.com/Rebadged/Faceless_fleet.git && cd Faceless_fleet
 sudo apt-get install -y ffmpeg && pip install -r faceless_fleet/requirements.txt
 # secrets/env: client_secret.json, YT_RAINCABIN_REFRESH_TOKEN, FREESOUND_API_KEY
 python -m faceless_fleet.pipeline.run fetch-sfx          # stock audio
