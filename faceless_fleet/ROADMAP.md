@@ -101,6 +101,19 @@ Ads: pre-roll on, mid/post-roll off. Goal: **1,000 subs (via Shorts) + 4,000 wat
 Facebook pages + Reels cross-posting toward ~10k followers.
 - *Advance when:* Channel 1 stable + 90 days strike-free; each new channel clears its own YPP.
 
+### Channel-launch staging — two gates, not a 90-day freeze
+Create + brand **all 3 channels now** (aging + ready), but ramp *uploads* off Cabin's
+health, not the calendar. The "90 days" guards full scaling, not every upload:
+- **Gate A — formula-safe (~2–4 weeks):** Cabin publishing cleanly, not flagged, retaining.
+  → THEN start a **light trickle on Channels 2 & 3 (~1–2 long-form/week each)** to age them
+  and start their watch-hour clock (4,000 hrs is the slow pole — bank it early on all three).
+- **Gate B — monetization-proven (~90 days / YPP + stable):** → open Channels 2 & 3 to
+  **full cadence.**
+Do **not** flood all three from day one (replicates an unproven, possibly-flaggable formula
+across a network = correlated-ban risk), and do **not** leave 2 & 3 fully dormant for 90 days
+(an empty channel that then floods is a worse organic signal than a steady trickle). Branding
+prep for all three is encouraged immediately.
+
 **Stage 3 (Mo 6–12): optimize ad load empirically + consider Channel 4.**
 A/B sparse mid-rolls vs none on study/focus cuts (compare AVD + revenue/session).
 - *Thresholds that change the plan:* mid-rolls drop AVD >5 pts → pre-roll only;

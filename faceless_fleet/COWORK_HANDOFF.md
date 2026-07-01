@@ -126,6 +126,11 @@ ffmpeg/Canva over the scene still) — never an AI render with baked text. Pick 
 font once (Bebas Neue / Anton / Oswald Bold / Montserrat ExtraBold).
 
 ### C. Create + brand the channels (browser) — **do Cabin Comforts fully first**, then clone
+> **Launch staging (see ROADMAP → "Channel-launch staging"):** create + brand **all 3 now**
+> (they age + are ready), but only Cabin **uploads at full cadence** at first. Start a light
+> trickle (~1–2/wk) on Campfire + Tent once Cabin is ~2–4 weeks clean/unflagged (Gate A);
+> full cadence on them after Cabin proves monetization (Gate B, ~90 days/YPP). Don't flood
+> all three day one; don't freeze 2 & 3 fully dormant either.
 1. Create the channel as a **Brand Account** (YouTube → Settings → Add/manage channels →
    Create a channel). Name from the config (`channel.name`).
 2. **Handle**: try `@CabinComforts`; if taken use `@CabinComfortsTV` / `…ASMR` / `The…`.
