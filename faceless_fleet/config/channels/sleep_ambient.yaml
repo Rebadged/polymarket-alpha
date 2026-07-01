@@ -1,0 +1,73 @@
+# Channel 2 — Sleep / Ambient Music
+# Largest absolute audience; pure overnight watch-time engine. Most saturated ->
+# leans hardest on the Shorts funnel. Original Suno music + motion dreamscapes.
+# Original composition is the #1 authenticity signal for music channels.
+
+channel:
+  slug: sleep_ambient
+  name: "Drift — Ambient Sleep Music"
+  lane: sleep_ambient_music
+  youtube_handle: ""
+  youtube_channel_id: ""
+  oauth_secret_env: YT_SLEEP_REFRESH_TOKEN
+  language: en
+  audience_geo_hint: "US/UK/CA/AU"
+
+identity:
+  mood: "weightless, dreamlike, deeply calm; floating into sleep"
+  palette: ["#070b1a", "#10204a", "#27406b", "#5a6fa3", "#9fb6d6"]
+  film_look: "cinematic dreamscape, soft ethereal light, gentle haze, slow, 16:9, subtle grain"
+  negative: "no people, no text, no readable signage, no warped geometry, no harsh contrast, no fast motion, no watermarks, no logos"
+
+scene_pool:
+  - id: moonlit_clouds
+    still_prompt: "endless soft clouds drifting under a full moon, deep blue and silver, dreamlike and serene, vast and calm, {film_look}"
+    motion_prompt: "extremely slow drift through soft moonlit clouds, faint shimmer of moonlight, weightless and peaceful, no people"
+  - id: still_lake_stars
+    still_prompt: "a perfectly still mountain lake at night mirroring a sky full of stars, soft mist on the water, deep calm blues, {film_look}"
+    motion_prompt: "barely-perceptible drift over the still lake, gentle mist moving, faint twinkle of stars and their reflection, deeply tranquil"
+  - id: aurora_valley
+    still_prompt: "a quiet snowy valley under a soft aurora, gentle greens and blues across the night sky, serene and remote, {film_look}"
+    motion_prompt: "slow shimmering aurora rippling across the sky, faint drifting snow, calm and hypnotic, no people, no fast movement"
+  - id: ocean_moon_path
+    still_prompt: "a calm dark ocean at night with a silver moonlit path across gentle swells, soft low clouds, peaceful, {film_look}"
+    motion_prompt: "very slow gentle ocean swells under moonlight, the moon's path shimmering, soft clouds drifting, soothing and endless"
+
+audio:
+  bed_source: file                    # original Suno track per video (distinct each upload)
+  bed_file: ""
+  bed_prompt: "Ambient sleep music, ~60 BPM, warm evolving pads, soft piano or rhodes, heavy reverb, no drums or percussion, no melody hooks, seamless and loopable, deeply calming, around -14 LUFS feel"
+  loudness_lufs: -14
+
+longform:
+  variants: ["1h", "3h", "8h"]
+  seamless_loop: true
+
+metadata:
+  title_templates:
+    - "Ambient Sleep Music | {scene_human} for Deep Sleep & Relaxation ({dur})"
+    - "Fall Asleep Fast | Calm Ambient Music & {scene_human} ({dur})"
+    - "Deep Sleep Music | Weightless Ambient {scene_human} ({dur})"
+  description: |
+    Original ambient music for deep sleep, relaxation, and letting go of the day.
+    No drums, no interruptions — just slow, weightless sound to drift away to.
+
+    ▶ Playlists: Deep Sleep Music · 8-Hour Ambient · Calm Before Sleep
+
+    #sleepmusic #ambientmusic #relaxingmusic #deepsleep #meditation #calm
+  tags: ["sleep music", "ambient music", "relaxing music", "deep sleep music", "calming music", "music for sleeping", "meditation music", "8 hours sleep music"]
+  made_for_kids: false
+  ai_disclosure: false
+
+ads:
+  pre_roll: true
+  mid_rolls: false
+  post_roll: false
+
+cadence:
+  uploads_per_week: 3
+  shorts_per_week: 5
+
+funnel:
+  shorts_source: "10-30s vertical dreamscape clip + hook overlay"
+  playlists: ["Deep Sleep Music", "8-Hour Ambient", "Calm Before Sleep"]

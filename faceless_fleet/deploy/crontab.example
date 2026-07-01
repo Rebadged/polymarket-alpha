@@ -1,0 +1,38 @@
+# "Comforts" fleet — VPS crontab (Chicago box).  Install:  crontab crontab.example
+# Times are server-local.
+#
+# ONE line does the whole week: `weekly` walks every CONNECTED channel (one whose
+# refresh-token env var is set) and, cadence.uploads_per_week times each, runs the
+# zero-touch loop: pick an unused clip -> mix the seasonal audio bed -> assemble the
+# long-form -> approve -> upload PRIVATE with a jittered publishAt. Channels with no
+# token are skipped, so you can leave all three wired and just connect them as you go.
+#
+# Put these in the cron environment (an .env the box sources, or export them here):
+#   YT_RAINCABIN_REFRESH_TOKEN=...   (Cabin Comforts)
+#   YT_CAMPFIRE_REFRESH_TOKEN=...    (Campfire Comforts)
+#   YT_TENT_REFRESH_TOKEN=...        (Tent Comforts)
+#   FREESOUND_API_KEY=...            (only needed when (re)stocking audio)
+
+REPO=/opt/comforts-fleet             # adjust to your checkout path
+PY=$REPO/venv/bin/python3            # the venv python
+
+# --- THE set-and-forget job: every connected channel, scheduled for the week -------
+# Sunday 03:30 server time — ~20 min after the weekly Claude restock session pushes its
+# clip-URL manifests (deploy/RESTOCK_SCHEDULE.md). `git pull` picks those up; `weekly`
+# then auto-downloads the new clips (restock-fetch) before publishing. Each video gets a
+# jittered publishAt across the week, so nothing bulk-drops. The only line you need.
+30 3 * * 0  cd $REPO && git pull --rebase --autostash >> /var/log/comforts.log 2>&1 && $PY -m faceless_fleet.pipeline.run weekly >> /var/log/comforts.log 2>&1
+
+# --- audio: re-stock CC0 SFX occasionally for variety (optional) -------------------
+# 1st of the month, pull 3 fresh takes of each element so beds don't get stale.
+0 2 1 * *  cd $REPO && $PY -m faceless_fleet.pipeline.run fetch-sfx --count 3 >> /var/log/comforts.log 2>&1
+
+# --- clips: the ONE step that needs an agent / Higgsfield key -----------------------
+# `weekly` only CONSUMES the clip library (assets/clips/<channel>/). Generating new clips
+# needs Higgsfield, which can't run on plain cron without an API key. Recommended:
+#   * A weekly Claude SCHEDULED SESSION (Sun 03:07) generates the week's clips and pushes
+#     URL manifests; the `weekly` line above pulls + fetches them. Set this up once in the
+#     web "Schedule" UI — see deploy/RESTOCK_SCHEDULE.md. No cron line here needed.
+# Fully unattended alternative (needs HIGGSFIELD_API_KEY): set generation.backend=rest and
+# uncomment — this plans + generates + downloads on the box with no Claude session:
+# 0 3 * * 0  cd $REPO && $PY -m faceless_fleet.pipeline.run batch-plan rain_cabin --budget 56 >> /var/log/comforts.log 2>&1
