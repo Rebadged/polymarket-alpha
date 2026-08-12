@@ -1,0 +1,107 @@
+# Global fleet settings shared by every channel.
+# Channel-specific files in config/channels/*.yaml override these.
+
+paths:
+  # All work happens under faceless_fleet/output (gitignored).
+  output_root: output
+  # Stage folders (the human review gate lives between pending_review and approved).
+  raw: output/raw                 # fresh model outputs (stills, clips, audio)
+  pending_review: output/pending_review  # assembled videos awaiting your approval
+  approved: output/approved       # approved, queued for upload
+  published: output/published     # uploaded, with the YouTube video id recorded
+
+generation:
+  # Default Higgsfield models (verified live via models_explore, 2026-06).
+  # Stills: z_image = fast/budget; recraft-v4-1 = photoreal premium.
+  image_model: soul_2            # validated: stylized painterly cozy look
+  video_model: kling3_0_turbo    # validated: cheap (~7.5 cr) locked-camera animator
+  video_resolution: 720p
+  # CLIP LENGTH (CK decision 2026-06): 5s master clips. Video isn't the star; the seamless
+  # xfade-wrap hides the loop seam at ANY length, so a 5s clip loops just as invisibly as
+  # 10s and HALVES credit cost (Kling 3.0 720p ≈ 8.75 cr / 5s). Element motion + particle
+  # overlays carry the visual; the camera stays essentially locked (see motion_principle).
+  clip_seconds: 5
+  est_credits_per_clip: 9        # ~0.1 image + ~8.75 video (Kling 720p, 5s)
+  # Iteration overhead: ~3 generations to yield 1 artifact free of AI geometry defects.
+  # Informational — batch_plan plans on the raw cost (the fulfiller stops re-rolling when
+  # the balance runs low) but reports the worst-case with re-rolls so spend never surprises.
+  iteration_factor: 3
+  aspect_ratio: "16:9"
+  # 'manifest' = emit a JSON job for a Claude Code/MCP session to fulfill (works today,
+  # MCP-only, no API key). 'rest' = call the Higgsfield Cloud API unattended (needs key).
+  backend: manifest
+  # --- Cloud API (backend: rest) only --------------------------------------------
+  # The Cloud API uses fal-style slugs that DIFFER from the MCP names above. Confirm
+  # the exact slugs against the live key (one lookup), then set them here. When unset,
+  # rest.py falls back to image_model/video_model — which are MCP names and will NOT
+  # resolve on the Cloud API, so these must be filled before `restock-run` works.
+  rest_image_model:                # e.g. "higgsfield/soul/text-to-image" (CONFIRM)
+  rest_video_model:                # e.g. "higgsfield/kling-3-turbo/image-to-video" (CONFIRM)
+  rest_image_resolution: "2K"
+
+assembly:
+  fps: 30
+  width: 1920
+  height: 1080
+  # Ken Burns slow-zoom applied to stills before/instead of motion clips.
+  kenburns_zoom_per_frame: 0.0005
+  kenburns_max_zoom: 1.5
+  crossfade_seconds: 3
+  # Narration mixed over the music bed at this gain (0.35 works for sleep).
+  bed_gain_under_narration: 0.35
+  # Seamless looping (research's #1 retention lever): crossfade the short clip's
+  # end into its start so the loop seam is invisible/inaudible across hours.
+  loop_video_xfade_seconds: 0.5   # ~short video crossfade masks the visual seam
+  loop_audio_xfade_seconds: 0.4   # equal-power audio crossfade hides the bed seam
+  # LOUDNESS POLICY (startle-proof + consistent across every video):
+  #  - target -14 LUFS = YouTube's own normalization point, so our videos play at
+  #    the SAME loudness as everything else -> viewers never adjust volume between
+  #    videos (the thing that causes a later video to startle them awake).
+  #  - true-peak hard cap so no transient (a thunderclap) ever spikes.
+  #  - low loudness-range = tight dynamics, nothing swells louder than the bed.
+  default_loudness_lufs: -14
+  loudness_true_peak: -1.5       # dBTP hard ceiling
+  loudness_range: 6              # LU; lower = flatter/more consistent (no swells)
+  # Loop illusion: the mixed bed unit is this long before it repeats. Longer +
+  # long source files (>40s) makes the loop point imperceptible over hours.
+  bed_unit_seconds: 480          # 8 min
+  # PARTICLE OVERLAY (material-variation lever, locked-camera era): composite a looping
+  # white-particles-on-black element (rain/snow/sparks) over the clip so no two videos are
+  # pixel-identical. Drop overlay files in assets/overlays/<name>.{mov,webm,mp4}, named by
+  # the scene's weather (e.g. snow.mov, rain.mov) or a scene's explicit `overlay:` field.
+  # Free CC0 overlays exist; `screen` blend makes the black transparent. Skipped silently
+  # if disabled or no matching file — so the pipeline runs fine before you add overlays.
+  particle_overlay:
+    enabled: true
+    dir: assets/overlays
+    opacity: 0.45                # 0..1; subtle so it reads as natural weather, not a filter
+    blend: screen                # screen/lighten for white-on-black overlays
+
+upload:
+  # Anti-spam: drip-publish, never bulk-drop. publishAt gets per-video jitter.
+  privacy_status: private        # flips public automatically at publishAt
+  notify_subscribers: false
+  category_id: "10"              # Music
+  base_publish_hour_utc: 2       # nominal slot; jitter widens it
+  jitter_minutes: 50             # +/- random offset around the base slot
+  min_hours_between_uploads: 20  # human-plausible cadence per channel
+  # HIDDEN 2026 QUOTA (dossier): videos.insert now lives in a dedicated "Video Uploads"
+  # bucket. UNVERIFIED API projects are silently capped at ~7-11 uploads/day and throw
+  # HTTP 429 with quota headroom remaining. Stay at 5/day/project to never trip it;
+  # complete Google's project verification + compliance audit to lift the cap to 100/day.
+  # Also: search.list costs 100 units each — the pipeline must NOT call search at runtime.
+  max_uploads_per_day: 5         # per Google Cloud project; weekly.py + cron must honor
+
+# The zero-touch loop (pipeline/auto.py). Stocked occasionally (clip batch + SFX),
+# then runs itself on a jittered cron.
+auto:
+  clips_dir: assets/clips        # per-channel subfolder of pre-generated clips
+  default_variant: "8h"
+  auto_approve: true             # skip the manual gate; uploads go private+publishAt
+                                 # (the scheduled-private window is your safety net)
+  publish: true                  # actually upload in the loop
+
+policy:
+  # YouTube July 2025 "inauthentic content" guardrails enforced by review.py.
+  require_distinct_from_last: true   # block near-duplicate scene+track+title
+  ai_disclosure_default: false       # ambient art is exempt; narration w/ real-looking people = true
