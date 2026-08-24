@@ -1,13 +1,13 @@
 {
   "metadata": {
-    "scraped_at": "2026-08-23T23:22:48.238215+00:00",
+    "scraped_at": "2026-08-24T01:21:05.783774+00:00",
     "category": "OVERALL",
     "time_period": "ALL",
     "activity_filter_hours": 24,
-    "total_wallets": 25,
-    "enriched_wallets": 25,
+    "total_wallets": 26,
+    "enriched_wallets": 26,
     "leaderboard_pulled": 100,
-    "active_after_filter": 25
+    "active_after_filter": 26
   },
   "wallets": [
     {
@@ -18,7 +18,7 @@
       "xUsername": "",
       "verifiedBadge": false,
       "pnl": 1639978.551059138,
-      "vol": 8660932.219162,
+      "vol": 8660932.219161998,
       "enriched": {
         "winRate": 100.0,
         "roi": 65.0,
@@ -48,7 +48,7 @@
         "totalInvested": 3947219.09,
         "lastTradeTimestamp": 1787510568,
         "tradesInWindow": 30,
-        "lastTradeAge": "4.7h ago"
+        "lastTradeAge": "6.6h ago"
       },
       "scoredRank": 1
     },
@@ -60,7 +60,7 @@
       "xUsername": "",
       "verifiedBadge": false,
       "pnl": 2179588.0665413956,
-      "vol": 12705234.238338998,
+      "vol": 12705234.238339001,
       "enriched": {
         "winRate": 96.1,
         "roi": 59.8,
@@ -93,7 +93,7 @@
         "totalInvested": 5021733.67,
         "lastTradeTimestamp": 1787502769,
         "tradesInWindow": 3,
-        "lastTradeAge": "6.8h ago"
+        "lastTradeAge": "8.8h ago"
       },
       "scoredRank": 2
     },
@@ -104,8 +104,8 @@
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 4231742.081581438,
-      "vol": 214195358.31683704,
+      "pnl": 4231231.776515285,
+      "vol": 214195358.316837,
       "enriched": {
         "winRate": 86.0,
         "roi": 56.5,
@@ -139,7 +139,7 @@
         "totalInvested": 47803868.79,
         "lastTradeTimestamp": 1787524707,
         "tradesInWindow": 50,
-        "lastTradeAge": "0.7h ago"
+        "lastTradeAge": "2.7h ago"
       },
       "scoredRank": 3
     },
@@ -150,8 +150,8 @@
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 1939554.780541397,
-      "vol": 58563745.40430401,
+      "pnl": 1939472.0089509478,
+      "vol": 58564040.96737902,
       "enriched": {
         "winRate": 78.7,
         "roi": 39.0,
@@ -181,9 +181,9 @@
         "hasCrypto": false,
         "totalPnlFromPositions": 6173885.44,
         "totalInvested": 15815922.82,
-        "lastTradeTimestamp": 1787526787,
+        "lastTradeTimestamp": 1787534296,
         "tradesInWindow": 50,
-        "lastTradeAge": "0.2h ago"
+        "lastTradeAge": "0.0h ago"
       },
       "scoredRank": 4
     },
@@ -194,39 +194,39 @@
       "profileImage": "https://polymarket-upload.s3.us-east-2.amazonaws.com/profile-image-508970.png",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 2073991.1848830914,
-      "vol": 120813336.41339101,
+      "pnl": 2073281.8888303756,
+      "vol": 120813580.54614799,
       "enriched": {
-        "winRate": 86.4,
-        "roi": 16.1,
+        "winRate": 86.0,
+        "roi": 15.5,
         "totalTrades": 250,
-        "wins": 216,
-        "losses": 34,
+        "wins": 215,
+        "losses": 35,
         "categories": [
           "Crypto"
         ],
-        "sharpe": 0.21,
+        "sharpe": 0.2,
         "consistency": 90.0,
         "maxDrawdown": -22210.43,
         "sparkline": [
-          384.76,
-          -1048.24,
-          -966.71,
-          10197.96,
-          10214.3,
-          10560.0,
-          12668.85,
-          15717.63,
-          27925.64
+          -704.47,
+          -47.31,
+          32.9,
+          141.83,
+          189.12,
+          247.67,
+          25238.57,
+          25282.54,
+          25329.57
         ],
         "openPositions": 50,
         "closedPositions": 250,
         "hasCrypto": true,
-        "totalPnlFromPositions": 247854.63,
-        "totalInvested": 1542862.27,
-        "lastTradeTimestamp": 1787526319,
+        "totalPnlFromPositions": 233544.41,
+        "totalInvested": 1511143.22,
+        "lastTradeTimestamp": 1787534091,
         "tradesInWindow": 50,
-        "lastTradeAge": "0.3h ago"
+        "lastTradeAge": "0.1h ago"
       },
       "scoredRank": 5
     },
@@ -237,8 +237,8 @@
       "profileImage": "https://polymarket-upload.s3.us-east-2.amazonaws.com/profile-image-117964-17fe5149-f238-4d6e-8b47-49fee9159b3e.png",
       "xUsername": "elm_cap",
       "verifiedBadge": false,
-      "pnl": 2084550.0533137217,
-      "vol": 289832854.94999,
+      "pnl": 2084888.6872526705,
+      "vol": 289832882.94999003,
       "enriched": {
         "winRate": 90.0,
         "roi": 0.2,
@@ -274,57 +274,11 @@
         "hasCrypto": true,
         "totalPnlFromPositions": 58948.31,
         "totalInvested": 24085396.1,
-        "lastTradeTimestamp": 1787518668,
+        "lastTradeTimestamp": 1787527768,
         "tradesInWindow": 50,
-        "lastTradeAge": "2.4h ago"
+        "lastTradeAge": "1.9h ago"
       },
       "scoredRank": 6
-    },
-    {
-      "rank": "83",
-      "proxyWallet": "0xfe787d2da716d60e8acff57fb87eb13cd4d10319",
-      "userName": "ferrariChampions2026",
-      "profileImage": "",
-      "xUsername": "",
-      "verifiedBadge": false,
-      "pnl": 1957291.231472192,
-      "vol": 942810224.1248654,
-      "enriched": {
-        "winRate": 65.2,
-        "roi": 21.9,
-        "totalTrades": 250,
-        "wins": 163,
-        "losses": 87,
-        "categories": [
-          "Crypto",
-          "Sports",
-          "Tech",
-          "Weather"
-        ],
-        "sharpe": 0.16,
-        "consistency": 76.0,
-        "maxDrawdown": -34820.71,
-        "sparkline": [
-          17.48,
-          -139.1,
-          -290.14,
-          -295.02,
-          1558.69,
-          1774.12,
-          3054.35,
-          3148.66,
-          3131.57
-        ],
-        "openPositions": 50,
-        "closedPositions": 250,
-        "hasCrypto": true,
-        "totalPnlFromPositions": 219126.43,
-        "totalInvested": 1001751.46,
-        "lastTradeTimestamp": 1787527282,
-        "tradesInWindow": 50,
-        "lastTradeAge": "0.0h ago"
-      },
-      "scoredRank": 7
     },
     {
       "rank": "65",
@@ -333,14 +287,14 @@
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 2303206.0967035643,
-      "vol": 41986159.710383,
+      "pnl": 2303153.1991065526,
+      "vol": 41986547.67280801,
       "enriched": {
-        "winRate": 58.0,
-        "roi": 17.0,
+        "winRate": 58.8,
+        "roi": 16.8,
         "totalTrades": 250,
-        "wins": 145,
-        "losses": 105,
+        "wins": 147,
+        "losses": 103,
         "categories": [
           "Crypto"
         ],
@@ -348,42 +302,42 @@
         "consistency": 73.0,
         "maxDrawdown": -110.8,
         "sparkline": [
-          -32.74,
-          -75.14,
-          -105.46,
-          -111.79,
-          -128.39,
-          -110.59,
-          -89.96,
-          -153.36,
-          -152.86
+          2.38,
+          1.83,
+          17.72,
+          -3.52,
+          -2.3,
+          -1.95,
+          1.95,
+          2.63,
+          2.53
         ],
         "openPositions": 50,
         "closedPositions": 250,
         "hasCrypto": true,
-        "totalPnlFromPositions": 1081.11,
-        "totalInvested": 6351.84,
-        "lastTradeTimestamp": 1787527099,
+        "totalPnlFromPositions": 1058.81,
+        "totalInvested": 6296.23,
+        "lastTradeTimestamp": 1787534248,
         "tradesInWindow": 50,
         "lastTradeAge": "0.1h ago"
       },
-      "scoredRank": 8
+      "scoredRank": 7
     },
     {
-      "rank": "13",
+      "rank": "12",
       "proxyWallet": "0x2c335066fe58fe9237c3d3dc7b275c2a034a0563",
       "userName": "0x2c335066FE58fe9237c3d3Dc7b275C2a034a0563-1759935795465",
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 7773241.722459805,
-      "vol": 954801421.4502037,
+      "pnl": 7832195.582461746,
+      "vol": 955077657.8102039,
       "enriched": {
-        "winRate": 72.0,
-        "roi": 8.8,
+        "winRate": 71.6,
+        "roi": 8.1,
         "totalTrades": 250,
-        "wins": 180,
-        "losses": 70,
+        "wins": 179,
+        "losses": 71,
         "categories": [
           "Finance",
           "Geopolitics",
@@ -391,28 +345,76 @@
           "Sports",
           "Weather"
         ],
-        "sharpe": 0.06,
-        "consistency": 71.0,
+        "sharpe": 0.05,
+        "consistency": 69.0,
         "maxDrawdown": -671081.19,
         "sparkline": [
-          188.73,
-          60.77,
-          15688.12,
-          19451.3,
-          19532.69,
-          -927.19,
-          -427.19,
-          274654.91,
-          300614.39
+          89372.19,
+          95544.51,
+          95593.8,
+          96143.65,
+          104532.98,
+          105866.29,
+          106573.44,
+          107878.08,
+          97529.58
         ],
         "openPositions": 50,
         "closedPositions": 250,
         "hasCrypto": false,
-        "totalPnlFromPositions": 1098498.08,
-        "totalInvested": 12454216.74,
-        "lastTradeTimestamp": 1787526936,
+        "totalPnlFromPositions": 962567.4,
+        "totalInvested": 11834118.58,
+        "lastTradeTimestamp": 1787533128,
         "tradesInWindow": 50,
-        "lastTradeAge": "0.1h ago"
+        "lastTradeAge": "0.4h ago"
+      },
+      "scoredRank": 8
+    },
+    {
+      "rank": "80",
+      "proxyWallet": "0xfe787d2da716d60e8acff57fb87eb13cd4d10319",
+      "userName": "ferrariChampions2026",
+      "profileImage": "",
+      "xUsername": "",
+      "verifiedBadge": false,
+      "pnl": 2020073.579618296,
+      "vol": 943686133.1465402,
+      "enriched": {
+        "winRate": 64.0,
+        "roi": 11.3,
+        "totalTrades": 250,
+        "wins": 160,
+        "losses": 90,
+        "categories": [
+          "Crypto",
+          "Economics",
+          "Finance",
+          "Sports",
+          "Tech",
+          "Weather"
+        ],
+        "sharpe": 0.1,
+        "consistency": 73.0,
+        "maxDrawdown": -34820.71,
+        "sparkline": [
+          2.28,
+          5575.73,
+          8064.08,
+          7907.51,
+          7937.11,
+          7937.36,
+          7724.18,
+          7736.01,
+          15194.61
+        ],
+        "openPositions": 50,
+        "closedPositions": 250,
+        "hasCrypto": true,
+        "totalPnlFromPositions": 130195.03,
+        "totalInvested": 1149269.89,
+        "lastTradeTimestamp": 1787534368,
+        "tradesInWindow": 50,
+        "lastTradeAge": "0.0h ago"
       },
       "scoredRank": 9
     },
@@ -423,8 +425,8 @@
       "profileImage": "https://polymarket-upload.s3.us-east-2.amazonaws.com/profile-image-82662-8ddbc8e8-0500-44b7-bb13-c0b32a40a45d.jpg",
       "xUsername": "Domahhhh",
       "verifiedBadge": true,
-      "pnl": 3412679.5835584397,
-      "vol": 498604095.06867206,
+      "pnl": 3410976.750048449,
+      "vol": 498609093.40105003,
       "enriched": {
         "winRate": 66.8,
         "roi": 7.9,
@@ -447,25 +449,71 @@
         "maxDrawdown": -125359.5,
         "sparkline": [
           12626.97,
-          13018.43,
-          60905.04,
-          60954.99,
-          61001.99,
-          61016.84,
-          61065.5,
-          61052.42,
-          61052.42
+          12976.9,
+          10746.29,
+          -1020.49,
+          -995.04,
+          -992.64,
+          -991.32,
+          -478.91,
+          11.93
         ],
         "openPositions": 50,
         "closedPositions": 250,
         "hasCrypto": true,
-        "totalPnlFromPositions": 255737.69,
-        "totalInvested": 3248020.07,
-        "lastTradeTimestamp": 1787526849,
+        "totalPnlFromPositions": 255846.24,
+        "totalInvested": 3252359.56,
+        "lastTradeTimestamp": 1787533945,
         "tradesInWindow": 50,
         "lastTradeAge": "0.1h ago"
       },
       "scoredRank": 10
+    },
+    {
+      "rank": "88",
+      "proxyWallet": "0x6db568e61e5e3de7d87f831431b673f38ce2e279",
+      "userName": "",
+      "profileImage": "",
+      "xUsername": "",
+      "verifiedBadge": false,
+      "pnl": 1850087.4893627567,
+      "vol": 25692208.770826,
+      "enriched": {
+        "winRate": 51.6,
+        "roi": 24.4,
+        "totalTrades": 250,
+        "wins": 129,
+        "losses": 121,
+        "categories": [
+          "Finance",
+          "Sports",
+          "Tech",
+          "Weather"
+        ],
+        "sharpe": 0.07,
+        "consistency": 67.0,
+        "maxDrawdown": -236342.42,
+        "sparkline": [
+          726.77,
+          16504.25,
+          14712.62,
+          14683.1,
+          14661.52,
+          14334.09,
+          14396.7,
+          14400.05,
+          17252.1
+        ],
+        "openPositions": 8,
+        "closedPositions": 250,
+        "hasCrypto": false,
+        "totalPnlFromPositions": 1079094.67,
+        "totalInvested": 4426959.6,
+        "lastTradeTimestamp": 1787532919,
+        "tradesInWindow": 38,
+        "lastTradeAge": "0.4h ago"
+      },
+      "scoredRank": 11
     },
     {
       "rank": "52",
@@ -474,8 +522,8 @@
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 2756439.6527789864,
-      "vol": 109562630.51047002,
+      "pnl": 2756180.885044486,
+      "vol": 109562686.97046994,
       "enriched": {
         "winRate": 73.2,
         "roi": 2.0,
@@ -511,53 +559,7 @@
         "totalInvested": 12822636.23,
         "lastTradeTimestamp": 1787526547,
         "tradesInWindow": 50,
-        "lastTradeAge": "0.2h ago"
-      },
-      "scoredRank": 11
-    },
-    {
-      "rank": "89",
-      "proxyWallet": "0x6db568e61e5e3de7d87f831431b673f38ce2e279",
-      "userName": "",
-      "profileImage": "",
-      "xUsername": "",
-      "verifiedBadge": false,
-      "pnl": 1843381.8674109108,
-      "vol": 25666220.472231008,
-      "enriched": {
-        "winRate": 51.6,
-        "roi": 24.4,
-        "totalTrades": 250,
-        "wins": 129,
-        "losses": 121,
-        "categories": [
-          "Finance",
-          "Sports",
-          "Tech",
-          "Weather"
-        ],
-        "sharpe": 0.07,
-        "consistency": 67.0,
-        "maxDrawdown": -236342.42,
-        "sparkline": [
-          -1676.2,
-          2002.87,
-          1992.83,
-          877.54,
-          38926.33,
-          38889.67,
-          39086.15,
-          -109283.1,
-          -111403.59
-        ],
-        "openPositions": 8,
-        "closedPositions": 250,
-        "hasCrypto": false,
-        "totalPnlFromPositions": 1081149.28,
-        "totalInvested": 4429157.25,
-        "lastTradeTimestamp": 1787527129,
-        "tradesInWindow": 18,
-        "lastTradeAge": "0.1h ago"
+        "lastTradeAge": "2.2h ago"
       },
       "scoredRank": 12
     },
@@ -568,91 +570,43 @@
       "profileImage": "https://polymarket-upload.s3.us-east-2.amazonaws.com/profile-image-1567750-84001aec-310a-470f-9584-67dfcaa61267.png",
       "xUsername": "RN1polymarket",
       "verifiedBadge": false,
-      "pnl": 12706348.155836057,
-      "vol": 1099245364.25775,
+      "pnl": 12699531.13011831,
+      "vol": 1099628559.622799,
       "enriched": {
-        "winRate": 60.0,
-        "roi": 12.2,
+        "winRate": 60.8,
+        "roi": 10.9,
         "totalTrades": 250,
-        "wins": 150,
-        "losses": 100,
+        "wins": 152,
+        "losses": 98,
         "categories": [
-          "Crypto",
+          "Finance",
           "Sports",
           "Tech"
         ],
         "sharpe": 0.04,
-        "consistency": 67.0,
-        "maxDrawdown": -19113.57,
+        "consistency": 70.0,
+        "maxDrawdown": -14124.16,
         "sparkline": [
-          -1.51,
-          78.37,
-          732.22,
-          -1424.51,
-          -2563.99,
-          -2562.04,
-          -2544.11,
-          1001.29,
-          1674.36
+          -0.54,
+          11.46,
+          11.47,
+          18.47,
+          160.72,
+          251.38,
+          -1786.3,
+          -1095.49,
+          947.98
         ],
         "openPositions": 50,
         "closedPositions": 250,
-        "hasCrypto": true,
-        "totalPnlFromPositions": 44174.24,
-        "totalInvested": 363568.08,
-        "lastTradeTimestamp": 1787527264,
+        "hasCrypto": false,
+        "totalPnlFromPositions": 45835.88,
+        "totalInvested": 422280.76,
+        "lastTradeTimestamp": 1787534329,
         "tradesInWindow": 50,
         "lastTradeAge": "0.0h ago"
       },
       "scoredRank": 13
-    },
-    {
-      "rank": "19",
-      "proxyWallet": "0x6d20c35f65d9899b6d6b74f8466e824580f9a165",
-      "userName": "Djdjdjekekek",
-      "profileImage": "",
-      "xUsername": "",
-      "verifiedBadge": false,
-      "pnl": 5874684.98615218,
-      "vol": 130191811.16587001,
-      "enriched": {
-        "winRate": 50.0,
-        "roi": 18.4,
-        "totalTrades": 250,
-        "wins": 125,
-        "losses": 125,
-        "categories": [
-          "Crypto",
-          "Finance",
-          "Geopolitics",
-          "Sports",
-          "Tech",
-          "Weather"
-        ],
-        "sharpe": 0.1,
-        "consistency": 68.0,
-        "maxDrawdown": -997063.86,
-        "sparkline": [
-          269884.39,
-          235386.2,
-          292580.71,
-          316210.56,
-          225215.96,
-          406331.65,
-          406378.79,
-          409982.31,
-          272921.46
-        ],
-        "openPositions": 6,
-        "closedPositions": 250,
-        "hasCrypto": true,
-        "totalPnlFromPositions": 8102475.63,
-        "totalInvested": 43961220.5,
-        "lastTradeTimestamp": 1787492976,
-        "tradesInWindow": 50,
-        "lastTradeAge": "9.5h ago"
-      },
-      "scoredRank": 14
     },
     {
       "rank": "63",
@@ -661,8 +615,8 @@
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 2332377.4554687813,
-      "vol": 88477698.146951,
+      "pnl": 2326723.657586091,
+      "vol": 88496921.74134997,
       "enriched": {
         "winRate": 46.8,
         "roi": 16.2,
@@ -691,57 +645,58 @@
         "hasCrypto": true,
         "totalPnlFromPositions": 250757.32,
         "totalInvested": 1550666.08,
-        "lastTradeTimestamp": 1787527252,
+        "lastTradeTimestamp": 1787531736,
         "tradesInWindow": 50,
-        "lastTradeAge": "0.0h ago"
+        "lastTradeAge": "0.7h ago"
       },
-      "scoredRank": 15
+      "scoredRank": 14
     },
     {
-      "rank": "67",
-      "proxyWallet": "0x5268527977f700f9bf9b6d5cd843859e4e70135d",
-      "userName": "HomeRunHazard",
+      "rank": "19",
+      "proxyWallet": "0x6d20c35f65d9899b6d6b74f8466e824580f9a165",
+      "userName": "Djdjdjekekek",
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 2263125.2071090555,
-      "vol": 261197790.415618,
+      "pnl": 5875628.720300333,
+      "vol": 130365012.869497,
       "enriched": {
-        "winRate": 54.8,
-        "roi": 5.4,
+        "winRate": 49.2,
+        "roi": 10.4,
         "totalTrades": 250,
-        "wins": 137,
-        "losses": 113,
+        "wins": 123,
+        "losses": 127,
         "categories": [
           "Crypto",
+          "Geopolitics",
           "Sports",
           "Tech",
           "Weather"
         ],
-        "sharpe": 0.03,
-        "consistency": 52.0,
-        "maxDrawdown": -31202.76,
+        "sharpe": 0.06,
+        "consistency": 65.0,
+        "maxDrawdown": -1142095.82,
         "sparkline": [
-          9.1,
-          26.25,
-          29.75,
-          3810.72,
-          5282.59,
-          5273.69,
-          5272.49,
-          296.74,
-          293.99
+          5.1,
+          51987.22,
+          369348.72,
+          381116.99,
+          371364.47,
+          392665.12,
+          385682.02,
+          387571.32,
+          362951.53
         ],
-        "openPositions": 50,
+        "openPositions": 1,
         "closedPositions": 250,
         "hasCrypto": true,
-        "totalPnlFromPositions": 30513.32,
-        "totalInvested": 564863.5,
-        "lastTradeTimestamp": 1787527288,
+        "totalPnlFromPositions": 4784162.33,
+        "totalInvested": 45868871.33,
+        "lastTradeTimestamp": 1787533197,
         "tradesInWindow": 50,
-        "lastTradeAge": "0.0h ago"
+        "lastTradeAge": "0.3h ago"
       },
-      "scoredRank": 16
+      "scoredRank": 15
     },
     {
       "rank": "74",
@@ -750,7 +705,7 @@
       "profileImage": "https://polymarket-upload.s3.us-east-2.amazonaws.com/profile-image-154436-a84dabd0-06ee-40d3-be95-e454283cdfc0.jpg",
       "xUsername": "aenews",
       "verifiedBadge": false,
-      "pnl": 2133086.126417257,
+      "pnl": 2131834.2456892524,
       "vol": 250771853.312311,
       "enriched": {
         "winRate": 73.6,
@@ -789,53 +744,57 @@
         "totalInvested": 8851723.0,
         "lastTradeTimestamp": 1787470686,
         "tradesInWindow": 2,
-        "lastTradeAge": "15.7h ago"
+        "lastTradeAge": "17.7h ago"
       },
-      "scoredRank": 17
+      "scoredRank": 16
     },
     {
-      "rank": "1",
-      "proxyWallet": "0x204f72f35326db932158cba6adff0b9a1da95e14",
-      "userName": "swisstony",
-      "profileImage": "",
-      "xUsername": "",
+      "rank": "97",
+      "proxyWallet": "0x84dbb7103982e3617704a2ed7d5b39691952aeeb",
+      "userName": "Soarin22",
+      "profileImage": "https://polymarket-upload.s3.us-east-2.amazonaws.com/profile-image-768787-934019d8-03f3-4151-8c35-86ab0ccae428.png",
+      "xUsername": "Soarin22",
       "verifiedBadge": false,
-      "pnl": 23485012.229409073,
-      "vol": 1845224728.818953,
+      "pnl": 1689257.2887569766,
+      "vol": 81475979.06563504,
       "enriched": {
-        "winRate": 60.4,
-        "roi": -2.1,
+        "winRate": 56.4,
+        "roi": 4.2,
         "totalTrades": 250,
-        "wins": 151,
-        "losses": 99,
+        "wins": 141,
+        "losses": 109,
         "categories": [
+          "Crypto",
+          "Finance",
+          "Geopolitics",
           "Sports",
-          "Tech"
+          "Tech",
+          "Weather"
         ],
-        "sharpe": -0.02,
-        "consistency": 53.0,
-        "maxDrawdown": -5077.28,
+        "sharpe": 0.03,
+        "consistency": 60.0,
+        "maxDrawdown": -150750.75,
         "sparkline": [
-          4.83,
-          -1.92,
-          -5.72,
-          5.21,
-          22.34,
-          -181.35,
-          -178.78,
-          -178.68,
-          -623.53
+          353.07,
+          5532.81,
+          9666.49,
+          2177.59,
+          1915.64,
+          44989.24,
+          36061.0,
+          44742.45,
+          55687.49
         ],
-        "openPositions": 50,
+        "openPositions": 6,
         "closedPositions": 250,
-        "hasCrypto": false,
-        "totalPnlFromPositions": -4370.05,
-        "totalInvested": 210919.55,
-        "lastTradeTimestamp": 1787527245,
-        "tradesInWindow": 50,
-        "lastTradeAge": "0.0h ago"
+        "hasCrypto": true,
+        "totalPnlFromPositions": 218004.71,
+        "totalInvested": 5154100.86,
+        "lastTradeTimestamp": 1787529487,
+        "tradesInWindow": 16,
+        "lastTradeAge": "1.4h ago"
       },
-      "scoredRank": 18
+      "scoredRank": 17
     },
     {
       "rank": "23",
@@ -844,8 +803,8 @@
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 5114705.539572052,
-      "vol": 234777940.594959,
+      "pnl": 5053591.270472324,
+      "vol": 234820883.16495892,
       "enriched": {
         "winRate": 53.1,
         "roi": 2.8,
@@ -880,7 +839,54 @@
         "totalInvested": 127729910.1,
         "lastTradeTimestamp": 1787526228,
         "tradesInWindow": 50,
-        "lastTradeAge": "0.3h ago"
+        "lastTradeAge": "2.3h ago"
+      },
+      "scoredRank": 18
+    },
+    {
+      "rank": "36",
+      "proxyWallet": "0x076daa87c4fe1a85402a9b6b8e0a866224388d4c",
+      "userName": "",
+      "profileImage": "",
+      "xUsername": "",
+      "verifiedBadge": false,
+      "pnl": 3697959.72830001,
+      "vol": 87719247.34045504,
+      "enriched": {
+        "winRate": 70.4,
+        "roi": -17.7,
+        "totalTrades": 250,
+        "wins": 176,
+        "losses": 74,
+        "categories": [
+          "Finance",
+          "Geopolitics",
+          "Sports",
+          "Tech",
+          "Weather"
+        ],
+        "sharpe": -0.04,
+        "consistency": 51.0,
+        "maxDrawdown": -65922.57,
+        "sparkline": [
+          626.96,
+          748.83,
+          749.97,
+          1178.46,
+          1175.67,
+          1705.74,
+          1700.38,
+          1706.25,
+          1711.35
+        ],
+        "openPositions": 50,
+        "closedPositions": 250,
+        "hasCrypto": false,
+        "totalPnlFromPositions": -42033.43,
+        "totalInvested": 237387.38,
+        "lastTradeTimestamp": 1787534323,
+        "tradesInWindow": 50,
+        "lastTradeAge": "0.0h ago"
       },
       "scoredRank": 19
     },
@@ -891,8 +897,8 @@
       "profileImage": "",
       "xUsername": "denizz_poly",
       "verifiedBadge": false,
-      "pnl": 2465158.7766422215,
-      "vol": 99858517.890701,
+      "pnl": 2465768.2149732565,
+      "vol": 99858517.89070106,
       "enriched": {
         "winRate": 62.4,
         "roi": 10.1,
@@ -928,7 +934,7 @@
         "totalInvested": 7335095.93,
         "lastTradeTimestamp": 1787506104,
         "tradesInWindow": 2,
-        "lastTradeAge": "5.9h ago"
+        "lastTradeAge": "7.9h ago"
       },
       "scoredRank": 20
     },
@@ -940,7 +946,7 @@
       "xUsername": "",
       "verifiedBadge": false,
       "pnl": 2368566.995185902,
-      "vol": 90377903.73625898,
+      "vol": 90377903.73625904,
       "enriched": {
         "winRate": 42.8,
         "roi": 6.9,
@@ -975,53 +981,53 @@
         "totalInvested": 1215937.2,
         "lastTradeTimestamp": 1787503273,
         "tradesInWindow": 50,
-        "lastTradeAge": "6.7h ago"
+        "lastTradeAge": "8.7h ago"
       },
       "scoredRank": 21
     },
     {
-      "rank": "36",
-      "proxyWallet": "0x076daa87c4fe1a85402a9b6b8e0a866224388d4c",
-      "userName": "",
+      "rank": "67",
+      "proxyWallet": "0x5268527977f700f9bf9b6d5cd843859e4e70135d",
+      "userName": "HomeRunHazard",
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 3696082.226294976,
-      "vol": 87680685.750271,
+      "pnl": 2267865.6044163187,
+      "vol": 261706508.976024,
       "enriched": {
-        "winRate": 71.2,
-        "roi": -23.3,
+        "winRate": 54.8,
+        "roi": 1.1,
         "totalTrades": 250,
-        "wins": 178,
-        "losses": 72,
+        "wins": 137,
+        "losses": 113,
         "categories": [
-          "Geopolitics",
+          "Crypto",
           "Sports",
           "Tech",
           "Weather"
         ],
-        "sharpe": -0.04,
-        "consistency": 52.0,
-        "maxDrawdown": -65922.57,
+        "sharpe": 0.01,
+        "consistency": 33.0,
+        "maxDrawdown": -31202.76,
         "sparkline": [
-          1936.45,
-          1995.5,
-          3142.15,
-          -2765.63,
-          -2380.6,
-          -2299.12,
-          -2283.92,
-          -2327.73,
-          -1722.81
+          -6996.88,
+          -6998.38,
+          -7110.4,
+          -8947.98,
+          -3787.42,
+          -7204.1,
+          -7198.1,
+          -7320.51,
+          -7319.55
         ],
         "openPositions": 50,
         "closedPositions": 250,
-        "hasCrypto": false,
-        "totalPnlFromPositions": -43176.44,
-        "totalInvested": 185533.26,
-        "lastTradeTimestamp": 1787527279,
+        "hasCrypto": true,
+        "totalPnlFromPositions": 6925.43,
+        "totalInvested": 642648.81,
+        "lastTradeTimestamp": 1787534184,
         "tradesInWindow": 50,
-        "lastTradeAge": "0.0h ago"
+        "lastTradeAge": "0.1h ago"
       },
       "scoredRank": 22
     },
@@ -1032,7 +1038,7 @@
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 1661161.062590092,
+      "pnl": 1660701.2917423875,
       "vol": 71429252.480766,
       "enriched": {
         "winRate": 50.0,
@@ -1067,7 +1073,7 @@
         "totalInvested": 3887720.74,
         "lastTradeTimestamp": 1787511819,
         "tradesInWindow": 5,
-        "lastTradeAge": "4.3h ago"
+        "lastTradeAge": "6.3h ago"
       },
       "scoredRank": 23
     },
@@ -1078,8 +1084,8 @@
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 2572985.5312712053,
-      "vol": 213738469.78253716,
+      "pnl": 2572985.531271212,
+      "vol": 213738469.78253707,
       "enriched": {
         "winRate": 42.8,
         "roi": -0.4,
@@ -1115,9 +1121,53 @@
         "totalInvested": 11678265.15,
         "lastTradeTimestamp": 1787462568,
         "tradesInWindow": 50,
-        "lastTradeAge": "18.0h ago"
+        "lastTradeAge": "20.0h ago"
       },
       "scoredRank": 24
+    },
+    {
+      "rank": "1",
+      "proxyWallet": "0x204f72f35326db932158cba6adff0b9a1da95e14",
+      "userName": "swisstony",
+      "profileImage": "",
+      "xUsername": "",
+      "verifiedBadge": false,
+      "pnl": 23498008.83163295,
+      "vol": 1845743433.7201865,
+      "enriched": {
+        "winRate": 47.2,
+        "roi": -18.9,
+        "totalTrades": 250,
+        "wins": 118,
+        "losses": 132,
+        "categories": [
+          "Sports",
+          "Tech"
+        ],
+        "sharpe": -0.1,
+        "consistency": 62.0,
+        "maxDrawdown": -12829.91,
+        "sparkline": [
+          3.0,
+          3.03,
+          -24.82,
+          -30.97,
+          -39.5,
+          -36.96,
+          225.74,
+          226.7,
+          353.42
+        ],
+        "openPositions": 50,
+        "closedPositions": 250,
+        "hasCrypto": false,
+        "totalPnlFromPositions": -38753.38,
+        "totalInvested": 204787.26,
+        "lastTradeTimestamp": 1787534331,
+        "tradesInWindow": 50,
+        "lastTradeAge": "0.0h ago"
+      },
+      "scoredRank": 25
     },
     {
       "rank": "68",
@@ -1126,8 +1176,8 @@
       "profileImage": "",
       "xUsername": "",
       "verifiedBadge": false,
-      "pnl": 2235923.8329346916,
-      "vol": 129351573.42705499,
+      "pnl": 2236003.620201557,
+      "vol": 129351579.03705497,
       "enriched": {
         "winRate": 40.8,
         "roi": -75.3,
@@ -1163,11 +1213,11 @@
         "hasCrypto": true,
         "totalPnlFromPositions": -20188992.45,
         "totalInvested": 26801487.86,
-        "lastTradeTimestamp": 1787525910,
+        "lastTradeTimestamp": 1787532087,
         "tradesInWindow": 50,
-        "lastTradeAge": "0.4h ago"
+        "lastTradeAge": "0.7h ago"
       },
-      "scoredRank": 25
+      "scoredRank": 26
     }
   ]
 }
