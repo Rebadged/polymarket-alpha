@@ -1,0 +1,72 @@
+# Channel 2 — meditation / sleep-story narration  (the next lane)
+# Reuses the whole ambient stack and ADDS a scripted voiced layer. The narration
+# is what makes it "transformative" under YouTube's inauthentic-content rule.
+# Placeholder name — rename freely before you create the channel.
+
+channel:
+  slug: midnight_meditations
+  name: "Midnight Meditations"
+  lane: meditation_sleepstory
+  youtube_handle: ""
+  youtube_channel_id: ""
+  oauth_secret_env: YT_MEDITATION_REFRESH_TOKEN
+  language: en
+  audience_geo_hint: "US/UK/CA/AU"
+
+identity:
+  mood: "calm, safe, slow, reassuring; a voice guiding you down into sleep"
+  palette: ["#06121f", "#123047", "#2a5d73", "#7fb0a3", "#d9c9a3"]
+  visual_motifs:
+    - "slow drifting clouds over a moonlit sea"
+    - "a quiet forest clearing under stars"
+    - "soft candlelit room, blurred and dreamlike"
+  negative: "no people's faces, no text, no jarring motion, no warped objects"
+
+# For narration lanes, the 'script' drives the video length, not a loop.
+scene_pool:
+  - id: moonlit_sea
+    still_prompt: "cinematic photoreal calm moonlit sea, low soft clouds drifting, deep blues and silver, serene, dreamlike, 16:9, film grain"
+    motion_prompt: "extremely slow drift over calm water, gentle cloud movement, moon reflection shimmering, deeply peaceful"
+  - id: starlit_forest
+    still_prompt: "cinematic photoreal quiet forest clearing at night under a sky full of stars, soft mist, cool calm palette, 16:9, film grain"
+    motion_prompt: "very slow push through the clearing, mist drifting low, faint twinkle of stars, serene and safe"
+
+narration:
+  enabled: true
+  # Higgsfield Audio TTS (call list_voices for ids) or your own cloned voice.
+  # Cloned voice strengthens the "authentic/transformative" case — prefer it.
+  voice_id: ""                    # fill from mcp list_voices, or your clone id
+  wpm: 110                        # slow, sleepy pacing
+  bed_gain: 0.35                  # music ducked under the voice
+  script_pool:
+    - id: body_scan_01
+      title_human: "a body-scan to fall asleep"
+      script: |
+        Let your eyes close. There is nothing to do now but rest.
+        Feel the weight of your body sinking, slowly, into the bed beneath you...
+        (full script lives in prompts/midnight_meditations/body_scan_01.md)
+
+audio:
+  bed_source: higgsfield_native
+  bed_prompt: "ambient sleep drone, warm pads, very slow, no rhythm, seamless and calming, 432hz feel"
+  bed_file: ""
+
+longform:
+  target_hours: 1                 # narration sets length; optional silent-ambient tail to extend
+  variants: ["script", "script+30m_ambient_tail"]
+
+metadata:
+  title_templates:
+    - "guided meditation to fall asleep fast ~ {scene_human} | spoken sleep story"
+    - "{scene_human} ~ a calm voice to help you sleep tonight"
+  description: |
+    A slow guided meditation to help you let go of the day and drift into deep sleep.
+    Find a comfortable position, lower your volume, and let the voice carry you down.
+
+    #guidedmeditation #sleepmeditation #sleepstory #insomnia #calm
+  tags: ["guided meditation", "sleep meditation", "sleep story", "meditation for sleep", "insomnia", "calm", "deep sleep"]
+  made_for_kids: false
+  ai_disclosure: false
+
+cadence:
+  uploads_per_week: 2

@@ -1,0 +1,81 @@
+# Channel 3 — Pet-Calming (Dog-Focused)
+# Proven, less saturated than human sleep, emotionally sticky. DAYTIME watch
+# occasion (owner leaves for work) complements nighttime sleep content ->
+# smooths fleet revenue across the day. Rotate musical character every few days
+# (Bowman et al. 2015: dogs habituate to the same music within ~7 days).
+
+channel:
+  slug: pet_calming_dogs
+  name: "Calm Canine — Music for Dogs"
+  lane: pet_calming_dog
+  youtube_handle: ""
+  youtube_channel_id: ""
+  oauth_secret_env: YT_PETDOG_REFRESH_TOKEN
+  language: en
+  audience_geo_hint: "US/UK/CA/AU"
+
+identity:
+  mood: "safe, reassuring, gentle; a calm companion while the owner is away"
+  palette: ["#1a2a1f", "#2f4a36", "#6a8f5f", "#bcd0a0", "#e8e0c0"]
+  film_look: "soft natural daylight, gentle pastoral, calm, 16:9, mild grain"
+  # Dogs perceive simple gentle visuals; keep scenes soft and slow.
+  negative: "no people, no other animals that could agitate, no text, no fast motion, no flashing, no harsh contrast, no watermarks, no logos"
+
+scene_pool:
+  - id: sunny_meadow
+    still_prompt: "a soft sunlit meadow with gently swaying grass and wildflowers, calm pastoral daylight, simple and soothing, {film_look}"
+    motion_prompt: "grass and wildflowers swaying gently in a soft breeze, slow drifting light, calm and steady, no animals, no people"
+  - id: quiet_garden
+    still_prompt: "a peaceful shaded garden with soft dappled light, gentle green foliage, a calm pond, restful, {film_look}"
+    motion_prompt: "leaves and foliage swaying softly, dappled light shifting gently, calm pond rippling lightly, soothing and slow"
+  - id: cozy_dog_room
+    still_prompt: "a cozy living room in soft daytime light with a comfortable dog bed by a window, warm and safe, calm domestic scene, {film_look}"
+    motion_prompt: "soft daylight shifting gently through the window, faint dust motes drifting, very calm and still, no people, no animals"
+  - id: lakeside_calm
+    still_prompt: "a gentle lakeside on a soft overcast day, calm water and soft reeds, muted greens, restful, {film_look}"
+    motion_prompt: "calm water rippling gently, reeds swaying slowly, soft light, peaceful and steady, no animals, no people"
+
+audio:
+  bed_source: file
+  bed_file: ""
+  # No percussion, simple tones, regular rhythm, NO human voice; exclude ultra-high/sub-low.
+  bed_prompt: "Calming music for dogs, slow simple piano and soft strings, ~50-60 BPM, regular gentle rhythm, no percussion, no human voice, warm midrange only (avoid very high or sub-bass frequencies), seamless and loopable, reassuring"
+  loudness_lufs: -16                  # gentler for pets
+  rotate_character_every_days: 5      # vary musical character to prevent habituation
+
+longform:
+  # Genre norm 2-4h; plus a 12h "while you're at work" version.
+  variants: ["1h", "3h", "8h"]
+  seamless_loop: true
+
+metadata:
+  title_templates:
+    - "Calming Music for Dogs | {scene_human} for Anxiety & Sleep ({dur})"
+    - "Music for Dogs Home Alone | Relaxing {scene_human} ({dur})"
+    - "Dog Separation Anxiety Relief | Calm {scene_human} Music ({dur})"
+    - "Thunderstorm Anxiety Relief for Dogs | Soothing Music ({dur})"
+  description: |
+    Calming music to help dogs relax, reduce separation anxiety, and feel safe while you're away or during storms and fireworks.
+    No percussion, no sudden sounds — gentle and steady for sensitive ears.
+
+    ▶ Playlists: Dogs Home Alone · Storm & Fireworks Anxiety · Puppy Sleep
+
+    #dogmusic #calmingmusic #doganxiety #musicfordogs #relaxmydog #petcare
+  tags: ["music for dogs", "calming music for dogs", "dog anxiety", "dog separation anxiety", "relax my dog", "music for dogs home alone", "dog sleep music", "puppy calming music"]
+  made_for_kids: false
+  ai_disclosure: false
+
+ads:
+  # Daytime, owner often present -> sparse mid-rolls acceptable (research table).
+  pre_roll: true
+  mid_rolls: true
+  mid_roll_every_minutes: 15
+  post_roll: false
+
+cadence:
+  uploads_per_week: 3
+  shorts_per_week: 4
+
+funnel:
+  shorts_source: "10-30s gentle nature clip + breed/occasion hook overlay"
+  playlists: ["Dogs Home Alone", "Storm & Fireworks Anxiety", "Puppy Sleep"]
